@@ -1,3 +1,4 @@
+
 // src/components/layout/app-shell.tsx
 "use client";
 import Link from "next/link";
@@ -101,16 +102,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </Sheet>
       </div>
       
-      <SidebarInset className="flex-1 overflow-y-auto relative"> {/* Added 'relative' for positioning context */}
-        
-        {/* "Developed by" tag */}
-        <div className="absolute top-[calc(theme(spacing.16)_+_theme(spacing.2))] right-4 
-                        lg:top-2 lg:right-4 
-                        text-xs text-muted-foreground z-30">
-          Developed by bfam, Inc.
-        </div>
-        
-        <main className="p-4 pt-20 lg:pt-6 md:p-6 lg:p-8 max-w-full mx-auto"> {/* Adjusted padding for mobile header */}
+      {/* "Developed by" tag - Moved outside SidebarInset for fixed positioning relative to viewport */}
+      <div className="fixed top-3 right-4 z-50 px-3 py-1.5 rounded-md shadow-lg bg-card text-accent-foreground text-xs font-medium">
+        Developed by bfam, Inc.
+      </div>
+
+      <SidebarInset className="flex-1 overflow-y-auto"> 
+        <main className="p-4 pt-20 lg:pt-6 md:p-6 lg:p-8 max-w-full mx-auto"> {/* Adjusted padding for mobile header and potential fixed tag */}
           {children}
         </main>
       </SidebarInset>
