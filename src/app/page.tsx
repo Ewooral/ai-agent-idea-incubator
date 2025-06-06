@@ -4,7 +4,7 @@
 import type { GenerateNovelIdeaInput } from '@/ai/flows/generate-novel-idea';
 import { generateNovelIdea } from '@/ai/flows/generate-novel-idea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Lightbulb } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
