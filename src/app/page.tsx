@@ -4,13 +4,27 @@
 import type { GenerateNovelIdeaInput } from '@/ai/flows/generate-novel-idea';
 import { generateNovelIdea } from '@/ai/flows/generate-novel-idea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, Lightbulb } from 'lucide-react';
-import { useState, type ReactNode } from 'react';
+import { 
+  Loader2, 
+  Lightbulb, 
+  HeartPulse, 
+  Leaf, 
+  Zap, 
+  BookOpenText, 
+  Users, 
+  Home, 
+  ChefHat, 
+  Laptop, 
+  Landmark, 
+  Paintbrush,
+  Sparkles
+} from 'lucide-react';
+import { useState, type ReactNode, type ElementType } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -23,6 +37,28 @@ const generateIdeaSchema = z.object({
 });
 
 type GenerateIdeaFormValues = z.infer<typeof generateIdeaSchema>;
+
+interface TopicCardProps {
+  title: string;
+  Icon: ElementType;
+  keywords?: string;
+  problemArea?: string;
+  description: string;
+}
+
+const topicCardsData: TopicCardProps[] = [
+  { title: "Health & Wellness", Icon: HeartPulse, keywords: "mental health, physical fitness, well-being, preventative care, mindfulness apps, personalized nutrition", problemArea: "improving daily well-being and access to healthcare", description: "Innovate for healthier lifestyles." },
+  { title: "Sustainable Living", Icon: Leaf, keywords: "eco-friendly products, renewable energy solutions, waste reduction tech, conservation efforts, circular economy", problemArea: "creating a more environmentally conscious future", description: "Ideas for a greener planet." },
+  { title: "Personal Productivity", Icon: Zap, keywords: "time management tools, focus techniques, efficiency software, goal setting platforms, workflow automation", problemArea: "helping individuals achieve more with less stress", description: "Boost efficiency and focus." },
+  { title: "Education & Learning", Icon: BookOpenText, keywords: "online learning platforms, skill development apps, lifelong learning resources, AI tutors, immersive education", problemArea: "making education more accessible and engaging", description: "Shape the future of learning." },
+  { title: "Community Building", Icon: Users, keywords: "social connection apps, local event platforms, volunteer coordination, neighborhood improvement initiatives, digital communities", problemArea: "fostering stronger communities and connections", description: "Connect and engage people." },
+  { title: "Smart Home Tech", Icon: Home, keywords: "home automation systems, IoT devices, energy-efficient appliances, smart security, connected living", problemArea: "enhancing comfort, security, and efficiency in homes", description: "Revolutionize home living." },
+  { title: "Future of Food", Icon: ChefHat, keywords: "sustainable agriculture, food tech innovations, personalized nutrition plans, alternative protein sources, urban farming", problemArea: "addressing food security and sustainability", description: "Reimagine food production & consumption." },
+  { title: "Remote Work Solutions", Icon: Laptop, keywords: "work-from-home tools, virtual collaboration software, distributed team management, freelance platforms, digital nomad support", problemArea: "optimizing the remote work experience", description: "Empower the modern workforce." },
+  { title: "Personal Finance", Icon: Landmark, keywords: "budgeting apps, investment tools, financial literacy platforms, savings strategies, micro-lending", problemArea: "improving financial well-being and accessibility", description: "Innovate in financial management." },
+  { title: "Creative Hobbies", Icon: Paintbrush, keywords: "DIY project platforms, arts and crafts marketplaces, skill-sharing apps, creative expression tools, hobbyist communities", problemArea: "enabling creative pursuits and skill development", description: "Inspire creativity and new skills." },
+];
+
 
 export default function GenerateIdeaPage(): ReactNode {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -37,14 +73,17 @@ export default function GenerateIdeaPage(): ReactNode {
     },
   });
 
-  const onSubmit: SubmitHandler<GenerateIdeaFormValues> = async (data) => {
+  const processIdeaGeneration = async (input: GenerateNovelIdeaInput) => {
     setIsLoading(true);
     setGeneratedIdeas([]);
+    // Scroll to results or a noticeable position
+    const resultsSection = document.getElementById('results-section');
+    if (resultsSection) {
+      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+
     try {
-      const input: GenerateNovelIdeaInput = {
-        problemArea: data.problemArea || undefined,
-        keywords: data.keywords || undefined,
-      };
       if (!input.problemArea && !input.keywords) {
         toast({
           title: "Input Required",
@@ -77,16 +116,35 @@ export default function GenerateIdeaPage(): ReactNode {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  const onSubmit: SubmitHandler<GenerateIdeaFormValues> = async (data) => {
+    const input: GenerateNovelIdeaInput = {
+      problemArea: data.problemArea || undefined,
+      keywords: data.keywords || undefined,
+    };
+    processIdeaGeneration(input);
+  };
+
+  const handleTopicCardClick = (topic: TopicCardProps) => {
+    form.reset(); // Clear the manual input form
+    const input: GenerateNovelIdeaInput = {
+      problemArea: topic.problemArea || undefined,
+      keywords: topic.keywords || undefined,
+    };
+    processIdeaGeneration(input);
   };
 
   return (
     <div className="container mx-auto py-8 px-4">
       <Card className="mb-8 shadow-xl bg-card">
         <CardHeader>
-          <CardTitle className="font-headline text-3xl">Spark Your Next Big Idea</CardTitle>
+          <CardTitle className="font-headline text-3xl flex items-center">
+            <Sparkles className="mr-2 text-primary" />
+            Spark Your Next Big Idea
+          </CardTitle>
           <CardDescription>
-            Unleash the power of AI to discover truly novel business concepts.
-            Input a problem area or some keywords, or leave it open-ended for surprising results.
+            Unleash the power of AI. Input a problem area or keywords, or select a topic below to discover novel business concepts.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -132,13 +190,13 @@ export default function GenerateIdeaPage(): ReactNode {
                 )}
               />
               <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
-                {isLoading ? (
+                {isLoading && form.formState.isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating...
+                    Generating from form...
                   </>
                 ) : (
-                  "Generate Novel Ideas"
+                  "Generate With My Input"
                 )}
               </Button>
             </form>
@@ -146,38 +204,80 @@ export default function GenerateIdeaPage(): ReactNode {
         </CardContent>
       </Card>
 
-      {isLoading && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-          {[...Array(3)].map((_, i) => (
-            <Card key={i} className="animate-pulse bg-card">
-              <CardHeader>
-                <div className="h-6 bg-muted rounded w-3/4"></div>
+      <div className="mb-12">
+        <h2 className="font-headline text-2xl mb-2 text-center">Or, Explore Ideas by Topic</h2>
+        <p className="text-muted-foreground text-center mb-6">Click a card to generate ideas for a specific theme.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+          {topicCardsData.map((topic) => (
+            <Card 
+              key={topic.title} 
+              className="shadow-lg hover:shadow-xl transition-shadow duration-300 bg-card cursor-pointer flex flex-col text-center group"
+              onClick={() => !isLoading && handleTopicCardClick(topic)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') !isLoading && handleTopicCardClick(topic)}}
+              aria-disabled={isLoading}
+            >
+              <CardHeader className="items-center pb-2">
+                <topic.Icon size={36} className="mb-2 text-primary group-hover:scale-110 transition-transform" />
+                <CardTitle className="font-headline text-lg">{topic.title}</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="h-4 bg-muted rounded w-full mb-2"></div>
-                <div className="h-4 bg-muted rounded w-5/6"></div>
+              <CardContent className="flex-grow pb-3">
+                <p className="text-sm text-muted-foreground">{topic.description}</p>
               </CardContent>
+               {isLoading && !form.formState.isSubmitting && (form.getValues().keywords === topic.keywords || form.getValues().problemArea === topic.problemArea) ? (
+                 <CardFooter className="pt-0 pb-4 justify-center">
+                    <Button variant="outline" size="sm" disabled className="w-full text-xs">
+                      <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                      Generating...
+                    </Button>
+                 </CardFooter>
+               ) : (
+                 <CardFooter className="pt-0 pb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <Button variant="outline" size="sm" className="w-full text-xs">
+                      Generate Ideas
+                    </Button>
+                 </CardFooter>
+               )}
             </Card>
           ))}
         </div>
-      )}
-
-      {!isLoading && generatedIdeas.length > 0 && (
-        <div>
-          <h2 className="font-headline text-2xl mb-6 mt-8">Generated Ideas</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {generatedIdeas.map((idea, index) => (
-               <IdeaDisplayCard key={index} idea={idea} />
+      </div>
+      
+      <div id="results-section">
+        {isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            {[...Array(3)].map((_, i) => (
+              <Card key={i} className="animate-pulse bg-card">
+                <CardHeader>
+                  <div className="h-6 bg-muted rounded w-3/4"></div>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-4 bg-muted rounded w-full mb-2"></div>
+                  <div className="h-4 bg-muted rounded w-5/6"></div>
+                </CardContent>
+              </Card>
             ))}
           </div>
-        </div>
-      )}
-       {!isLoading && generatedIdeas.length === 0 && !form.formState.isSubmitted && (
-        <div className="text-center py-10 text-muted-foreground">
-            <Lightbulb size={48} className="mx-auto mb-4" />
-            <p>Enter a problem or keywords to start generating ideas.</p>
-        </div>
-      )}
+        )}
+
+        {!isLoading && generatedIdeas.length > 0 && (
+          <div>
+            <h2 className="font-headline text-2xl mb-6 mt-8">Generated Ideas</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {generatedIdeas.map((idea, index) => (
+                 <IdeaDisplayCard key={index} idea={idea} />
+              ))}
+            </div>
+          </div>
+        )}
+         {!isLoading && generatedIdeas.length === 0 && (!form.formState.isSubmitted && !topicCardsData.some(topic => form.getValues().keywords === topic.keywords || form.getValues().problemArea === topic.problemArea)) && (
+          <div className="text-center py-10 text-muted-foreground min-h-[200px] flex flex-col justify-center items-center">
+              <Lightbulb size={48} className="mx-auto mb-4 text-primary/70" />
+              <p>Enter a problem or keywords above, or select a topic to start generating ideas.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
