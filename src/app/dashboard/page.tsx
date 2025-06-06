@@ -25,6 +25,9 @@ export default async function DashboardPage() {
                 <h2 className="font-headline text-2xl mb-4">My Saved Ideas</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {savedIdeas.map((item) => (
+                    // For dashboard, savedIdea.refinedIdea is displayed.
+                    // The link to validation should use savedIdea.originalIdea.
+                    // IdeaDisplayCard handles this internally when savedIdea prop is passed.
                     <IdeaDisplayCard key={item.id} savedIdea={item} />
                   ))}
                 </div>
@@ -51,3 +54,5 @@ export default async function DashboardPage() {
     </div>
   );
 }
+
+    

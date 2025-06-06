@@ -5,24 +5,24 @@
 import type { GenerateNovelIdeaInput } from '@/ai/flows/generate-novel-idea';
 import { generateNovelIdea } from '@/ai/flows/generate-novel-idea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { 
-  Loader2, 
-  Lightbulb, 
-  HeartPulse, 
-  Leaf, 
-  Zap, 
-  BookOpenText, 
-  Users, 
-  Home, 
-  ChefHat, 
-  Laptop, 
-  Landmark, 
+import {
+  Loader2,
+  Lightbulb,
+  HeartPulse,
+  Leaf,
+  Zap,
+  BookOpenText,
+  Users,
+  Home,
+  ChefHat,
+  Laptop,
+  Landmark,
   Paintbrush,
   Sparkles,
-  Award, // Replaced SoccerBall with Award
+  Award,
   Music
 } from 'lucide-react';
-import { useState, type ReactNode, type ElementType } from 'react';
+import { useState, type ReactNode, type ElementType, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -33,6 +33,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { IdeaDisplayCard } from '@/components/idea-display-card';
+import { useLanguage } from '@/contexts/language-context';
+import { translateTextAction } from '@/app/actions/translationActions';
 
 const generateIdeaSchema = z.object({
   problemArea: z.string().optional().describe("A specific problem you want to solve or explore."),
@@ -67,9 +69,12 @@ const topicCardsData: TopicCardProps[] = [
 
 
 export default function GenerateIdeaPage(): ReactNode {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [generatedIdeas, setGeneratedIdeas] = useState<string[]>([]);
+  const [isGeneratingAiIdeas, setIsLoadingAiIdeas] = useState<boolean>(false);
+  const [generatedIdeas, setGeneratedIdeas] = useState<string[]>([]); // Stores original English ideas
+  const [translatedGeneratedIdeas, setTranslatedGeneratedIdeas] = useState<string[] | null>(null);
+  const [isTranslatingIdeas, setIsTranslatingIdeas] = useState<boolean>(false);
   const { toast } = useToast();
+  const { selectedLanguage, getLanguageName } = useLanguage();
 
   const form = useForm<GenerateIdeaFormValues>({
     resolver: zodResolver(generateIdeaSchema),
@@ -79,15 +84,57 @@ export default function GenerateIdeaPage(): ReactNode {
     },
   });
 
+  // Effect for translating generated ideas
+  useEffect(() => {
+    if (selectedLanguage === 'en' || generatedIdeas.length === 0) {
+      setTranslatedGeneratedIdeas(null);
+      return;
+    }
+
+    const translateIdeas = async () => {
+      setIsTranslatingIdeas(true);
+      try {
+        const languageName = getLanguageName(selectedLanguage);
+        if (!languageName) throw new Error("Invalid language selected");
+
+        const translationPromises = generatedIdeas.map(idea =>
+          translateTextAction({ textToTranslate: idea, targetLanguage: languageName })
+        );
+        const results = await Promise.all(translationPromises);
+
+        const successfullyTranslatedIdeas = results.map((result, index) => {
+          if (result.success && result.translatedText) {
+            return result.translatedText;
+          }
+          // Fallback to original idea if translation failed for this specific idea
+          toast({ title: `Translation Warning`, description: `Could not translate one of the ideas to ${languageName}. Showing original.`, variant: "default" });
+          return generatedIdeas[index];
+        });
+
+        setTranslatedGeneratedIdeas(successfullyTranslatedIdeas);
+        toast({ title: `Ideas Translated!`, description: `Ideas translated to ${languageName}.` });
+
+      } catch (error: any) {
+        console.error("Error translating ideas array:", error);
+        setTranslatedGeneratedIdeas(null); // Fallback to original ideas on general error
+        toast({ title: "Translation Error", description: `Could not translate ideas. ${error.message}`, variant: "destructive" });
+      } finally {
+        setIsTranslatingIdeas(false);
+      }
+    };
+
+    translateIdeas();
+  }, [selectedLanguage, generatedIdeas, getLanguageName, toast]);
+
+
   const processIdeaGeneration = async (input: GenerateNovelIdeaInput) => {
-    setIsLoading(true);
+    setIsLoadingAiIdeas(true);
     setGeneratedIdeas([]);
-    // Scroll to results or a noticeable position
+    setTranslatedGeneratedIdeas(null);
     const resultsSection = document.getElementById('results-section');
     if (resultsSection) {
       resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-
 
     try {
       if (!input.problemArea && !input.keywords) {
@@ -96,11 +143,11 @@ export default function GenerateIdeaPage(): ReactNode {
           description: "Please provide either a problem area or some keywords.",
           variant: "destructive",
         });
-        setIsLoading(false);
+        setIsLoadingAiIdeas(false);
         return;
       }
       const result = await generateNovelIdea(input);
-      setGeneratedIdeas(result.novelIdeas);
+      setGeneratedIdeas(result.novelIdeas); // This will trigger the translation useEffect
       if (result.novelIdeas.length === 0) {
         toast({
           title: "No Ideas Generated",
@@ -120,7 +167,7 @@ export default function GenerateIdeaPage(): ReactNode {
         variant: "destructive",
       });
     } finally {
-      setIsLoading(false);
+      setIsLoadingAiIdeas(false);
     }
   }
 
@@ -133,13 +180,16 @@ export default function GenerateIdeaPage(): ReactNode {
   };
 
   const handleTopicCardClick = (topic: TopicCardProps) => {
-    form.reset(); // Clear the manual input form
+    form.reset();
     const input: GenerateNovelIdeaInput = {
       problemArea: topic.problemArea || undefined,
       keywords: topic.keywords || undefined,
     };
     processIdeaGeneration(input);
   };
+  
+  const ideasToDisplay = selectedLanguage !== 'en' && translatedGeneratedIdeas ? translatedGeneratedIdeas : generatedIdeas;
+  const isLoading = isGeneratingAiIdeas || isTranslatingIdeas;
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -150,7 +200,7 @@ export default function GenerateIdeaPage(): ReactNode {
             Spark Your Next Big Idea
           </CardTitle>
           <CardDescription>
-            Unleash the power of AI. Input a problem area or keywords, or select a topic below to discover novel business concepts.
+            Unleash the power of AI. Input a problem area or keywords, or select a topic below to discover novel business concepts. Use the language selector in the sidebar to translate generated ideas.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -167,6 +217,7 @@ export default function GenerateIdeaPage(): ReactNode {
                         placeholder="e.g., Reducing food waste in urban areas, improving remote team collaboration"
                         {...field}
                         rows={3}
+                        disabled={isLoading}
                       />
                     </FormControl>
                     <FormDescription>
@@ -186,6 +237,7 @@ export default function GenerateIdeaPage(): ReactNode {
                       <Input
                         placeholder="e.g., Sustainable energy, AI in education, personalized healthcare"
                         {...field}
+                        disabled={isLoading}
                       />
                     </FormControl>
                     <FormDescription>
@@ -195,7 +247,7 @@ export default function GenerateIdeaPage(): ReactNode {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
+              <Button type="submit" disabled={isLoading || (form.formState.isSubmitting && isGeneratingAiIdeas)} className="w-full sm:w-auto">
                 {isLoading && form.formState.isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -215,13 +267,13 @@ export default function GenerateIdeaPage(): ReactNode {
         <p className="text-muted-foreground text-center mb-6">Click a card to generate ideas for a specific theme.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {topicCardsData.map((topic) => (
-            <Card 
-              key={topic.title} 
-              className="shadow-lg hover:shadow-xl transition-shadow duration-300 bg-card cursor-pointer flex flex-col text-center group"
+            <Card
+              key={topic.title}
+              className={`shadow-lg hover:shadow-xl transition-shadow duration-300 bg-card flex flex-col text-center group ${isLoading ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}`}
               onClick={() => !isLoading && handleTopicCardClick(topic)}
               role="button"
-              tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') !isLoading && handleTopicCardClick(topic)}}
+              tabIndex={isLoading ? -1 : 0}
+              onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && !isLoading) handleTopicCardClick(topic)}}
               aria-disabled={isLoading}
             >
               <CardHeader className="items-center pb-2">
@@ -240,7 +292,7 @@ export default function GenerateIdeaPage(): ReactNode {
                  </CardFooter>
                ) : (
                  <CardFooter className="pt-0 pb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <Button variant="outline" size="sm" className="w-full text-xs">
+                    <Button variant="outline" size="sm" className="w-full text-xs" disabled={isLoading}>
                       Generate Ideas
                     </Button>
                  </CardFooter>
@@ -249,7 +301,7 @@ export default function GenerateIdeaPage(): ReactNode {
           ))}
         </div>
       </div>
-      
+
       <div id="results-section">
         {isLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
@@ -267,17 +319,23 @@ export default function GenerateIdeaPage(): ReactNode {
           </div>
         )}
 
-        {!isLoading && generatedIdeas.length > 0 && (
+        {!isLoading && ideasToDisplay.length > 0 && (
           <div>
-            <h2 className="font-headline text-2xl mb-6 mt-8">Generated Ideas</h2>
+            <h2 className="font-headline text-2xl mb-6 mt-8">
+              Generated Ideas {selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {generatedIdeas.map((idea, index) => (
-                 <IdeaDisplayCard key={index} idea={idea} />
+              {ideasToDisplay.map((displayIdea, index) => (
+                 <IdeaDisplayCard
+                    key={index}
+                    idea={displayIdea} // The idea to display (could be translated)
+                    originalIdeaForQuery={generatedIdeas[index]} // Always the original English idea for the link
+                  />
               ))}
             </div>
           </div>
         )}
-         {!isLoading && generatedIdeas.length === 0 && (!form.formState.isSubmitted && !topicCardsData.some(topic => form.getValues().keywords === topic.keywords || form.getValues().problemArea === topic.problemArea)) && (
+         {!isLoading && ideasToDisplay.length === 0 && (!form.formState.isSubmitted && !topicCardsData.some(topic => form.getValues().keywords === topic.keywords || form.getValues().problemArea === topic.problemArea)) && (
           <div className="text-center py-10 text-muted-foreground min-h-[200px] flex flex-col justify-center items-center">
               <Lightbulb size={48} className="mx-auto mb-4 text-primary/70" />
               <p>Enter a problem or keywords above, or select a topic to start generating ideas.</p>
@@ -287,3 +345,5 @@ export default function GenerateIdeaPage(): ReactNode {
     </div>
   );
 }
+
+    
