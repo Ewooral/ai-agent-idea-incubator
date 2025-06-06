@@ -101,7 +101,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </Sheet>
       </div>
       
-      <SidebarInset className="flex-1 overflow-y-auto">
+      <SidebarInset className="flex-1 overflow-y-auto relative"> {/* Added 'relative' for positioning context */}
+        
+        {/* "Developed by" tag */}
+        <div className="absolute top-[calc(theme(spacing.16)_+_theme(spacing.2))] right-4 
+                        lg:top-2 lg:right-4 
+                        text-xs text-muted-foreground z-30">
+          Developed by bfam, Inc.
+        </div>
+        
         <main className="p-4 pt-20 lg:pt-6 md:p-6 lg:p-8 max-w-full mx-auto"> {/* Adjusted padding for mobile header */}
           {children}
         </main>
