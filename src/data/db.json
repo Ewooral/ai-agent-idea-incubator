@@ -1,4 +1,25 @@
-
 {
-  "savedIdeas": []
+  "savedIdeas": [
+    {
+      "id": "1749247428179k9bvb3a",
+      "originalIdea": "AI-powered personal stylist app that curates outfits from users' existing wardrobes.",
+      "refinedIdea": "A mobile app that uses AI to analyze a user's wardrobe, suggest outfits, and provide personalized style advice, promoting sustainable fashion and efficient wardrobe utilization.",
+      "marketPotentialScore": 78,
+      "swotSnippet": "Opportunity: Growing consumer interest in sustainable fashion and minimizing clothing waste.",
+      "competitorTeaser": "The market has existing styling apps, but lacks solutions that deeply leverage existing wardrobe data for sustainable and personalized recommendations.",
+      "associatedConcepts": [
+        "Image Recognition",
+        "Personalized Recommendations",
+        "E-commerce Integration",
+        "Subscription Services",
+        "Style Guides"
+      ],
+      "potentialPivots": [
+        "Focus on a specific demographic (e.g., working professionals, students) for targeted styling.",
+        "Partner with clothing rental services to offer 'try before you buy' options based on AI styling.",
+        "Develop an API for e-commerce sites to integrate personalized outfit recommendations directly into product pages."
+      ],
+      "createdAt": "2025-06-06T22:03:48.179Z"
+    }
+  ]
 }
