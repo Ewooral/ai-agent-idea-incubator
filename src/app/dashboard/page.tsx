@@ -25,14 +25,14 @@ export default async function DashboardPage() {
                 <h2 className="font-headline text-2xl mb-4">My Saved Ideas</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {savedIdeas.map((item) => (
-                    <IdeaDisplayCard key={item.id} idea={item.refinedIdea} />
+                    <IdeaDisplayCard key={item.id} savedIdea={item} />
                   ))}
                 </div>
               </div>
               <div className="mt-8 p-6 border rounded-lg bg-muted/30">
                  <h3 className="text-lg font-semibold mb-2 text-foreground">Dashboard Features</h3>
                  <p className="text-muted-foreground">
-                   This dashboard now displays your ideas saved from the validation page. In the future, you could add features like editing notes, tracking validation status, and more detailed views for each idea.
+                   This dashboard displays your saved ideas. From here, you can re-validate them or start developing them further in the Build Studio.
                  </p>
               </div>
             </div>
