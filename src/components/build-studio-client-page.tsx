@@ -17,6 +17,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, FileText, Users, Activity, DollarSign, Save, Wand2, AlertTriangle } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { MarkdownDisplay } from './markdown-display';
+
 
 interface BuildStudioClientPageProps {
   ideaId: string;
@@ -75,7 +77,8 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
       if (result.success && result.project) {
         toast({ title: "Success!", description: result.message });
         form.setValue('id', result.project.id);
-        // Manually trigger revalidation or update local state if needed for initialBuildProject
+        form.reset(form.getValues(), { keepValues: true, keepDirty: false, keepDefaultValues: false });
+
         startTransition(() => {
             router.refresh();
         });
@@ -95,7 +98,6 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
   };
 
   const handleGenerateGuide = async () => {
-    // Ensure latest details are saved before generating
     if (form.formState.isDirty) {
          toast({ title: "Unsaved Changes", description: "Please save the project details before generating the guide.", variant: "destructive" });
          return;
@@ -106,14 +108,19 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
     }
 
     setIsGenerating(true);
-    setGeneratedGuide(undefined); // Clear previous guide
+    setGeneratedGuide(undefined); 
+    const guideSection = document.getElementById('ai-guide-section');
+    if (guideSection) {
+        guideSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     try {
       const result = await generateDevelopmentGuideAction(ideaId);
       if (result.success && result.guideMarkdown) {
         setGeneratedGuide(result.guideMarkdown);
         toast({ title: "Guide Generated!", description: "AI has crafted your development guide." });
          startTransition(() => {
-            router.refresh(); // To fetch the updated buildProject with the saved guide
+            router.refresh(); 
         });
       } else {
         toast({ title: "Generation Failed", description: result.message || "Could not generate the guide.", variant: "destructive" });
@@ -293,47 +300,44 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
         </form>
       </Form>
 
-      {(isGenerating || generatedGuide) && <Separator className="my-12" />}
+      <div id="ai-guide-section">
+        {(isGenerating || generatedGuide) && <Separator className="my-12" />}
 
-      {isGenerating && (
-        <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <p className="text-lg text-muted-foreground">AI is crafting your development guide, please wait...</p>
-            </div>
-            <Card className="animate-pulse">
-                <CardHeader><div className="h-6 bg-muted rounded w-1/2"></div></CardHeader>
-                <CardContent className="space-y-3">
-                    <div className="h-4 bg-muted rounded w-3/4"></div>
-                    <div className="h-4 bg-muted rounded w-full"></div>
-                    <div className="h-4 bg-muted rounded w-5/6"></div>
-                    <div className="h-4 bg-muted rounded w-full mt-4"></div>
-                    <div className="h-4 bg-muted rounded w-1/2"></div>
-                </CardContent>
-            </Card>
-        </div>
-      )}
+        {isGenerating && (
+          <div className="space-y-4">
+              <div className="flex items-center space-x-2">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  <p className="text-lg text-muted-foreground">AI is crafting your development guide, please wait...</p>
+              </div>
+              <Card className="animate-pulse">
+                  <CardHeader><div className="h-6 bg-muted rounded w-1/2"></div></CardHeader>
+                  <CardContent className="space-y-3">
+                      <div className="h-4 bg-muted rounded w-3/4"></div>
+                      <div className="h-4 bg-muted rounded w-full"></div>
+                      <div className="h-4 bg-muted rounded w-5/6"></div>
+                      <div className="h-4 bg-muted rounded w-full mt-4"></div>
+                      <div className="h-4 bg-muted rounded w-1/2"></div>
+                  </CardContent>
+              </Card>
+          </div>
+        )}
 
-      {!isGenerating && generatedGuide && (
-        <Card className="mt-8 border-primary/70 shadow-lg">
-          <CardHeader>
-            <CardTitle className="font-headline text-2xl flex items-center text-primary">
-              <Wand2 className="mr-3 h-7 w-7" /> Your AI-Generated Development Guide
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Textarea
-              readOnly
-              value={generatedGuide}
-              className="min-h-[500px] text-sm bg-muted/20 font-mono whitespace-pre-wrap"
-              rows={30}
-            />
-            <p className="text-xs text-muted-foreground mt-2">
-              This guide is in Markdown format. You can copy and paste it into a Markdown editor for better readability.
-            </p>
-          </CardContent>
-        </Card>
-      )}
+        {!isGenerating && generatedGuide && (
+          <Card className="mt-8 border-primary/70 shadow-lg">
+            <CardHeader>
+              <CardTitle className="font-headline text-2xl flex items-center text-primary">
+                <Wand2 className="mr-3 h-7 w-7" /> Your AI-Generated Development Guide
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <MarkdownDisplay content={generatedGuide} />
+              <p className="text-xs text-muted-foreground mt-4">
+                This guide is AI-generated. Always review and adapt it to your specific needs and context.
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </>
   );
 }
