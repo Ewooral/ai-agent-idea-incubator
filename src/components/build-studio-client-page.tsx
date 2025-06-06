@@ -1,3 +1,4 @@
+
 // src/components/build-studio-client-page.tsx
 "use client";
 
@@ -6,7 +7,8 @@ import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { SavedIdea, BuildProject } from '@/lib/db';
-import { saveBuildProjectAction, BuildProjectDataSchema, type BuildProjectFormValues } from '@/app/actions/buildActions';
+import { saveBuildProjectAction } from '@/app/actions/buildActions';
+import { BuildProjectDataSchema, type BuildProjectFormValues } from '@/app/schemas/build.schemas';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
