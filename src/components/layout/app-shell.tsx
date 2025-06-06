@@ -13,7 +13,7 @@ import {
   SidebarInset,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu } from "lucide-react";
+import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer } from "lucide-react";
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ const navItems = [
   { href: "/", label: "Generate Idea", icon: Lightbulb, tooltip: "Generate New Ideas" },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, tooltip: "Your Idea Dashboard" },
   { href: "/validation", label: "Idea Validation", icon: CheckCircle, tooltip: "Validate Your Ideas" },
+  { href: "/build-studio", label: "Build Studio", icon: Hammer, tooltip: "Develop Your Ideas" },
   { href: "/community", label: "Community Forum", icon: Users, tooltip: "Connect with Others" },
 ];
 
