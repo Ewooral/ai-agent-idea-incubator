@@ -331,11 +331,24 @@ export default function ValidationPage(): ReactNode {
                     </CardContent>
                 </Card>
 
-                <div className="border rounded-lg p-4 flex flex-col justify-center items-center bg-muted/30 min-h-[150px] text-center">
-                    <BarChart3 size={36} className="text-primary/50 mb-2"/>
-                    <h4 className="font-semibold text-muted-foreground">Deeper Market Viability Charts & Trend Analysis</h4>
-                    <p className="text-xs text-muted-foreground mt-1">Full premium reports include visualizations of market trends, TAM/SAM/SOM estimates, and more.</p>
-                </div>
+                <Card className="bg-card/80 backdrop-blur-sm">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center"><BarChart3 size={20} className="mr-2 text-primary"/>Market Viability Charts (Preview)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden bg-muted/30 border border-dashed">
+                       <Image 
+                        src="https://placehold.co/600x400.png" 
+                        alt="Placeholder chart showing market viability trends" 
+                        layout="fill"
+                        objectFit="contain"
+                        className="opacity-75"
+                        data-ai-hint="market trend chart"
+                       />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">Full premium reports include interactive charts with market trends, TAM/SAM/SOM estimates, and more.</p>
+                  </CardContent>
+                </Card>
             </CardContent>
             <CardFooter className="flex-col items-start space-y-2 sm:flex-row sm:justify-between sm:items-center pt-4">
                 <p className="text-sm text-muted-foreground max-w-md">
@@ -359,3 +372,4 @@ export default function ValidationPage(): ReactNode {
     </div>
   );
 }
+
