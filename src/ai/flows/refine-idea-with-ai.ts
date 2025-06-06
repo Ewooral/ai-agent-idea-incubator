@@ -1,3 +1,4 @@
+
 // 'use server'
 'use server';
 
@@ -50,8 +51,8 @@ const refineIdeaPrompt = ai.definePrompt({
   The user will provide an idea, optional market data, and optional focus keywords.
 
   Original Idea: {{{idea}}}
-  {% if marketData %}Market Data: {{{marketData}}}{% endif %}
-  {% if focusKeywords %}Focus Keywords: {{{focusKeywords}}}{% endif %}
+  {{#if marketData}}Market Data: {{{marketData}}}{{/if}}
+  {{#if focusKeywords}}Focus Keywords: {{{focusKeywords}}}{{/if}}
 
   Based on the input, provide the following:
   Refined Idea: (Provide a concise, actionable, and refined version of the original idea. Focus on a clear value proposition.)

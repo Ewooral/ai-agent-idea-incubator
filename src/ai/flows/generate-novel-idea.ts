@@ -1,3 +1,4 @@
+
 // src/ai/flows/generate-novel-idea.ts
 'use server';
 
@@ -45,8 +46,8 @@ const prompt = ai.definePrompt({
   Based on the provided keywords and problem areas, generate a list of truly novel business ideas.
   Avoid ideas that are commonly suggested or already saturated in the market.
 
-  {% if keywords %}Keywords: {{{keywords}}}{% endif %}
-  {% if problemArea %}Problem Area: {{{problemArea}}}{% endif %}
+  {{#if keywords}}Keywords: {{{keywords}}}{{/if}}
+  {{#if problemArea}}Problem Area: {{{problemArea}}}{{/if}}
 
   Focus on ideas with the potential to generate significant revenue daily.
 

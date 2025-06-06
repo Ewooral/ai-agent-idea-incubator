@@ -1,10 +1,12 @@
+
 // src/app/validation/page.tsx
 "use client";
 
 import type { RefineIdeaInput, RefineIdeaOutput } from '@/ai/flows/refine-idea-with-ai';
 import { refineIdea } from '@/ai/flows/refine-idea-with-ai';
+import { saveValidatedIdeaAction } from '@/app/actions/ideaActions';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CheckCircle, Loader2, BarChart3, Tag, Lightbulb, TrendingUp, ShieldCheck, Target, Search, Zap } from 'lucide-react';
+import { CheckCircle, Loader2, BarChart3, Tag, Lightbulb, TrendingUp, ShieldCheck, Target, Search, Zap, Save } from 'lucide-react';
 import Image from 'next/image';
 import { useState, type ReactNode, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
@@ -30,6 +32,7 @@ type ValidationFormValues = z.infer<typeof validationSchema>;
 
 export default function ValidationPage(): ReactNode {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [validationResult, setValidationResult] = useState<RefineIdeaOutput | null>(null);
   const { toast } = useToast();
   const searchParams = useSearchParams();
@@ -54,7 +57,6 @@ export default function ValidationPage(): ReactNode {
   const onSubmit: SubmitHandler<ValidationFormValues> = async (data) => {
     setIsLoading(true);
     setValidationResult(null);
-    // Scroll to results section if it exists
     const resultsSection = document.getElementById('validation-results-section');
     if (resultsSection) {
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -81,6 +83,42 @@ export default function ValidationPage(): ReactNode {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSaveIdea = async () => {
+    if (!validationResult || !form.getValues('idea')) {
+      toast({
+        title: "Cannot Save",
+        description: "No idea or validation result to save.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const result = await saveValidatedIdeaAction(form.getValues('idea'), validationResult);
+      if (result.success) {
+        toast({
+          title: "Idea Saved!",
+          description: result.message || "Your idea has been saved to the dashboard.",
+        });
+      } else {
+        toast({
+          title: "Save Failed",
+          description: result.message || "Could not save the idea.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error saving idea via action:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred while saving.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
     }
   };
   
@@ -159,7 +197,7 @@ export default function ValidationPage(): ReactNode {
                   )}
                 />
               </div>
-              <Button type="submit" disabled={isLoading} className="w-full sm:w-auto" size="lg">
+              <Button type="submit" disabled={isLoading || isSaving} className="w-full sm:w-auto" size="lg">
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -207,10 +245,20 @@ export default function ValidationPage(): ReactNode {
         {!isLoading && validationResult && (
           <>
           <Card className="mt-8 shadow-xl bg-card border-primary/50">
-            <CardHeader>
-              <CardTitle className="font-headline text-2xl flex items-center text-primary">
-                <Lightbulb size={28} className="mr-3"/> AI Refinement & Strategic Insights
-              </CardTitle>
+            <CardHeader className="flex flex-row justify-between items-start">
+              <div>
+                <CardTitle className="font-headline text-2xl flex items-center text-primary">
+                  <Lightbulb size={28} className="mr-3"/> AI Refinement & Strategic Insights
+                </CardTitle>
+                <CardDescription>Review the AI's analysis of your idea below.</CardDescription>
+              </div>
+              <Button onClick={handleSaveIdea} disabled={isSaving || isLoading} size="lg">
+                {isSaving ? (
+                  <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Saving...</>
+                ) : (
+                  <><Save className="mr-2 h-5 w-5" />Save to Dashboard</>
+                )}
+              </Button>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
@@ -283,7 +331,6 @@ export default function ValidationPage(): ReactNode {
                     </CardContent>
                 </Card>
 
-                {/* Placeholder for more premium features like mock charts */}
                 <div className="border rounded-lg p-4 flex flex-col justify-center items-center bg-muted/30 min-h-[150px] text-center">
                     <BarChart3 size={36} className="text-primary/50 mb-2"/>
                     <h4 className="font-semibold text-muted-foreground">Deeper Market Viability Charts & Trend Analysis</h4>
