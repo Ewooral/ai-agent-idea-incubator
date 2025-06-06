@@ -1,4 +1,3 @@
-
 {
   "savedIdeas": [
     {
@@ -23,5 +22,17 @@
       "createdAt": "2025-06-06T22:03:48.179Z"
     }
   ],
-  "buildProjects": []
+  "buildProjects": [
+    {
+      "id": "1749249833565dp4ij4d",
+      "ideaId": "1749247428179k9bvb3a",
+      "valueProposition": "    Smart Outfit Planning: AI analyzes clothing items to suggest stylish combinations.\n\n    Sustainability: Reduces overconsumption by promoting reuse of existing clothes.\n\n    Personalization: Learns user preferences (e.g., colors, fits, occasions).\n\n    Time-Saving: Eliminates \"what to wear\" stress with instant recommendations.",
+      "customerSegments": "Primary Audience:\n\n    Eco-Conscious Millennials/Gen Z: Users who care about sustainability but struggle with wardrobe efficiency.\n\n    Busy Professionals: Time-strapped individuals who want quick, stylish outfit choices.\n\n    Fashion Newbies: People lacking confidence in styling their own clothes.\n\n    Minimalists: Those aiming to own fewer, more versatile clothing items.\n\nSecondary Audience:\n\n    Online Shoppers: Integrate with e-commerce to suggest sustainable purchases.",
+      "keyActivities": "Critical Actions for Your Business:\n\n    AI Training: Develop algorithms to analyze clothing attributes (color, fabric, season).\n\n    App Development: Build intuitive mobile interfaces (e.g., outfit visualizations, closet scanning).\n\n    Data Collection: Crowdsource user preferences to refine recommendations.\n\n    Partnerships: Collaborate with sustainable brands for affiliate marketing.\n\n    Community Building: Add social features (e.g., outfit sharing, voting).",
+      "revenueStreams": "Monetization Strategies:\n\n    Freemium Model:\n\n        Free: Basic outfit suggestions.\n\n        Premium ($5–10/month): Advanced features (e.g., seasonal trend reports, VIP stylist access).\n\n    Affiliate Marketing: Earn commissions by linking to sustainable brands.\n\n    Sponsored Content: Partner with ethical fashion labels for promoted placements.\n\n    White-Label Solutions: License AI to clothing retailers for their apps.\n\n",
+      "notes": "Unstructured Ideas:\n\n    AR Try-On: Virtual fitting room using phone cameras.\n\n    Wardrobe Analytics: Track cost-per-wear to highlight underused items.\n\n    Integration: Sync with smart closets (e.g., IoT hangers).\n\n    Gamification: Reward users for re-wearing clothes (e.g., \"Sustainability Score\").\n\nPotential Challenges:\n\n    Data Privacy: Secure user wardrobe images/preferences.\n\n    Bias in AI: Ensure inclusive recommendations (body types, cultures).",
+      "createdAt": "2025-06-06T22:43:53.565Z",
+      "updatedAt": "2025-06-06T22:44:24.265Z"
+    }
+  ]
 }

@@ -1,73 +1,66 @@
-// src/app/build-studio/page.tsx
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Hammer, Lightbulb, Construction } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
 
-export default function BuildStudioPage() {
+// src/app/build-studio/page.tsx (Main Build Studio Landing Page)
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Hammer, Lightbulb, ListChecks, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { getSavedIdeas, type SavedIdea } from "@/lib/db";
+
+export default async function BuildStudioLandingPage() {
+  const savedIdeas: SavedIdea[] = await getSavedIdeas();
+
   return (
     <div className="container mx-auto py-8 px-4">
       <Card className="shadow-xl bg-card">
         <CardHeader>
           <CardTitle className="font-headline text-3xl flex items-center">
-            <Hammer className="mr-3 text-primary" size={32} /> Idea Build Studio
+            <Hammer className="mr-3 text-primary" size={32} /> Idea Development Guides
           </CardTitle>
           <CardDescription>
-            Transform your validated concepts into actionable plans. This is where your ideas take shape! (Full features coming soon)
+            Select one of your saved ideas to begin planning its development and generate an AI-powered step-by-step guide.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
-          
-          <div className="text-center py-10 border-t mt-6">
-            <Construction size={64} className="mx-auto mb-6 text-primary/70" />
-            <h3 className="text-2xl font-semibold mb-3 text-foreground">Under Construction!</h3>
-            <p className="text-muted-foreground max-w-lg mx-auto mb-6">
-              The Build Studio is where you'll be able to develop your ideas further. 
-              Imagine tools for business model canvassing, feature planning, milestone tracking, and more. 
-              We're working hard to bring these features to you!
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8 max-w-3xl mx-auto">
-              <Card className="bg-muted/30">
-                <CardHeader>
-                  <CardTitle className="text-lg">Example: Business Model Canvas</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">Outline key partners, activities, value propositions, customer relationships, and more.</p>
-                  <Image 
-                    src="https://placehold.co/600x400.png" 
-                    alt="Placeholder Business Model Canvas" 
-                    width={600} 
-                    height={400} 
-                    className="mt-4 rounded-md shadow-md"
-                    data-ai-hint="business model canvas"
-                  />
-                </CardContent>
-              </Card>
-              <Card className="bg-muted/30">
-                <CardHeader>
-                  <CardTitle className="text-lg">Example: Feature Prioritization</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">List, prioritize, and manage the features for your minimum viable product (MVP).</p>
-                  <Image 
-                    src="https://placehold.co/600x400.png" 
-                    alt="Placeholder Feature List" 
-                    width={600} 
-                    height={400} 
-                    className="mt-4 rounded-md shadow-md"
-                    data-ai-hint="feature list planning"
-                  />
-                </CardContent>
-              </Card>
+          {savedIdeas.length > 0 ? (
+            <div className="space-y-4">
+              <h2 className="font-headline text-2xl">Your Saved Ideas</h2>
+              {savedIdeas.map((idea) => (
+                <Card key={idea.id} className="bg-muted/30 hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center">
+                      <Lightbulb className="mr-2 h-5 w-5 text-accent" />
+                      {idea.refinedIdea.length > 100 ? `${idea.refinedIdea.substring(0, 100)}...` : idea.refinedIdea}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pb-4">
+                    <p className="text-sm text-muted-foreground">
+                      Original: {idea.originalIdea.length > 150 ? `${idea.originalIdea.substring(0, 150)}...` : idea.originalIdea}
+                    </p>
+                  </CardContent>
+                  <CardFooter>
+                    <Button asChild>
+                      <Link href={`/build-studio/${idea.id}`}>
+                        Develop Guide <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
             </div>
-            <Button asChild size="lg">
-              <Link href="/">
-                <Lightbulb className="mr-2 h-5 w-5" /> Back to Idea Generation
-              </Link>
-            </Button>
-          </div>
-
+          ) : (
+            <div className="text-center py-10 border rounded-lg bg-muted/20">
+              <ListChecks size={48} className="mx-auto mb-4 text-primary/50" />
+              <h3 className="text-xl font-semibold mb-2 text-foreground">No Saved Ideas Yet</h3>
+              <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                You need to save some ideas from the validation page before you can develop guides for them.
+              </p>
+              <Button asChild>
+                <Link href="/">
+                  <Lightbulb className="mr-2 h-5 w-5" /> Generate & Validate Ideas
+                </Link>
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

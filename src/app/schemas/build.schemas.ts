@@ -8,9 +8,11 @@ export const BuildProjectDataSchema = z.object({
   keyActivities: z.string().min(1, "Key Activities are required.").max(1000, "Too long"),
   revenueStreams: z.string().min(1, "Revenue Streams are required.").max(1000, "Too long"),
   notes: z.string().max(5000, "Too long").optional(),
-  // The 'id' field is optional because it might not exist for new projects.
-  // It will be used by the upsert logic if present.
   id: z.string().optional(),
+  targetPlatform: z.string().max(200, "Too long").optional(),
+  coreFeaturesMVP: z.string().max(2000, "Too long").optional(),
+  techStackSuggestion: z.string().max(1000, "Too long").optional(),
+  // generatedGuideMarkdown is not part of form submission, it's an output
 });
 
 export type BuildProjectFormValues = z.infer<typeof BuildProjectDataSchema>;
