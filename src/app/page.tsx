@@ -19,7 +19,7 @@ import {
   Landmark, 
   Paintbrush,
   Sparkles,
-  SoccerBall,
+  Award, // Replaced SoccerBall with Award
   Music
 } from 'lucide-react';
 import { useState, type ReactNode, type ElementType } from 'react';
@@ -60,7 +60,7 @@ const topicCardsData: TopicCardProps[] = [
   { title: "Remote Work Solutions", Icon: Laptop, keywords: "work-from-home tools, virtual collaboration software, distributed team management, freelance platforms, digital nomad support", problemArea: "optimizing the remote work experience", description: "Empower the modern workforce." },
   { title: "Personal Finance", Icon: Landmark, keywords: "budgeting apps, investment tools, financial literacy platforms, savings strategies, micro-lending", problemArea: "improving financial well-being and accessibility", description: "Innovate in financial management." },
   { title: "Creative Hobbies", Icon: Paintbrush, keywords: "DIY project platforms, arts and crafts marketplaces, skill-sharing apps, creative expression tools, hobbyist communities", problemArea: "enabling creative pursuits and skill development", description: "Inspire creativity and new skills." },
-  { title: "Sports & Fan Engagement", Icon: SoccerBall, keywords: "sports tech, fan experiences, athlete performance, sports media, esports, fantasy sports, memorabilia, community leagues", problemArea: "enhancing fan interaction and modernizing sports participation", description: "Innovate in the world of sports." },
+  { title: "Sports & Fan Engagement", Icon: Award, keywords: "sports tech, fan experiences, athlete performance, sports media, esports, fantasy sports, memorabilia, community leagues", problemArea: "enhancing fan interaction and modernizing sports participation", description: "Innovate in the world of sports." },
   { title: "Music & Audio Innovation", Icon: Music, keywords: "music creation tools, streaming platforms, live event tech, artist discovery, audio production, sound therapy, AI music generation", problemArea: "transforming how music is created, consumed, and experienced", description: "Ideas for the future of sound." },
   { title: "Faith & Spiritual Connection", Icon: Users, keywords: "faith-based community platforms, digital ministry tools, religious education resources, virtual congregations, charity & outreach tech, spiritual wellness apps, interfaith dialogue", problemArea: "leveraging technology to support spiritual practice and community connection", description: "Tech for faith and community." },
 ];
