@@ -1,4 +1,3 @@
-
 // src/components/build-studio-client-page.tsx
 "use client";
 
@@ -18,6 +17,8 @@ import { Loader2, FileText, Users, Activity, DollarSign, Save, Wand2, AlertTrian
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { MarkdownDisplay } from './markdown-display';
+import { useLanguage } from '@/contexts/language-context'; // Import useLanguage
+import { translateTextAction } from '@/app/actions/translationActions'; // Import translation action
 
 
 interface BuildStudioClientPageProps {
@@ -33,6 +34,10 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedGuide, setGeneratedGuide] = useState<string | undefined>(initialBuildProject?.generatedGuideMarkdown);
   const [_, startTransition] = useTransition();
+
+  const { selectedLanguage, getLanguageName } = useLanguage();
+  const [translatedGuideMarkdown, setTranslatedGuideMarkdown] = useState<string | null>(null);
+  const [isTranslatingGuide, setIsTranslatingGuide] = useState<boolean>(false);
 
 
   const form = useForm<BuildProjectFormValues>({
@@ -66,6 +71,53 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
     });
     setGeneratedGuide(initialBuildProject?.generatedGuideMarkdown);
   }, [ideaId, initialBuildProject, form]);
+
+  useEffect(() => {
+    if (!generatedGuide) {
+      setTranslatedGuideMarkdown(null);
+      return;
+    }
+
+    if (selectedLanguage === 'en') {
+      setTranslatedGuideMarkdown(null); // Clear translation if English
+      return;
+    }
+
+    const translateGuide = async () => {
+      setIsTranslatingGuide(true);
+      try {
+        const languageName = getLanguageName(selectedLanguage);
+        if (!languageName) {
+          throw new Error("Invalid language selected for translation.");
+        }
+        const translationInput = {
+          textToTranslate: generatedGuide,
+          targetLanguage: languageName,
+        };
+        const result = await translateTextAction(translationInput);
+        if (result.success && result.translatedText) {
+          setTranslatedGuideMarkdown(result.translatedText);
+          toast({
+            title: `Guide translated to ${languageName}!`,
+          });
+        } else {
+          throw new Error(result.message || "Guide translation failed.");
+        }
+      } catch (error: any) {
+        console.error("Guide translation error:", error);
+        setTranslatedGuideMarkdown(null); // Clear on error
+        toast({
+          title: "Guide Translation Error",
+          description: error.message || "Could not translate the development guide.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsTranslatingGuide(false);
+      }
+    };
+
+    translateGuide();
+  }, [selectedLanguage, generatedGuide, getLanguageName, toast]);
 
 
   const onSubmit: SubmitHandler<BuildProjectFormValues> = async (data) => {
@@ -109,6 +161,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
 
     setIsGenerating(true);
     setGeneratedGuide(undefined); 
+    setTranslatedGuideMarkdown(null); // Clear previous translation
     const guideSection = document.getElementById('ai-guide-section');
     if (guideSection) {
         guideSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -117,7 +170,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
     try {
       const result = await generateDevelopmentGuideAction(ideaId);
       if (result.success && result.guideMarkdown) {
-        setGeneratedGuide(result.guideMarkdown);
+        setGeneratedGuide(result.guideMarkdown); // This will trigger the translation useEffect
         toast({ title: "Guide Generated!", description: "AI has crafted your development guide." });
          startTransition(() => {
             router.refresh(); 
@@ -132,6 +185,9 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
       setIsGenerating(false);
     }
   };
+  
+  const displayedGuideContent = selectedLanguage !== 'en' && translatedGuideMarkdown ? translatedGuideMarkdown : generatedGuide;
+  const guideCardTitle = `Your AI-Generated Development Guide ${selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}`;
 
   return (
     <>
@@ -267,7 +323,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
               )}
           />
           <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <Button type="submit" disabled={isSaving || isGenerating} size="lg">
+            <Button type="submit" disabled={isSaving || isGenerating || isTranslatingGuide} size="lg">
                 {isSaving ? (
                 <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -280,7 +336,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
                 </>
                 )}
             </Button>
-            <Button type="button" onClick={handleGenerateGuide} disabled={isSaving || isGenerating || form.formState.isDirty} size="lg" variant="outline">
+            <Button type="button" onClick={handleGenerateGuide} disabled={isSaving || isGenerating || isTranslatingGuide || form.formState.isDirty} size="lg" variant="outline">
               {isGenerating ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -301,13 +357,15 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
       </Form>
 
       <div id="ai-guide-section">
-        {(isGenerating || generatedGuide) && <Separator className="my-12" />}
+        {(isGenerating || generatedGuide || isTranslatingGuide) && <Separator className="my-12" />}
 
-        {isGenerating && (
+        {(isGenerating || isTranslatingGuide) && !generatedGuide && ( // Show main loader if generating or translating and no guide yet
           <div className="space-y-4">
               <div className="flex items-center space-x-2">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  <p className="text-lg text-muted-foreground">AI is crafting your development guide, please wait...</p>
+                  <p className="text-lg text-muted-foreground">
+                    {isGenerating ? "AI is crafting your development guide, please wait..." : "Translating guide, please wait..."}
+                  </p>
               </div>
               <Card className="animate-pulse">
                   <CardHeader><div className="h-6 bg-muted rounded w-1/2"></div></CardHeader>
@@ -322,15 +380,21 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
           </div>
         )}
 
-        {!isGenerating && generatedGuide && (
+        {displayedGuideContent && !isGenerating && ( // Only display if not actively generating new content
           <Card className="mt-8 border-primary/70 shadow-lg">
             <CardHeader>
               <CardTitle className="font-headline text-2xl flex items-center text-primary">
-                <Wand2 className="mr-3 h-7 w-7" /> Your AI-Generated Development Guide
+                <Wand2 className="mr-3 h-7 w-7" /> {guideCardTitle}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <MarkdownDisplay content={generatedGuide} />
+              {isTranslatingGuide && ( // Show specific translating loader for guide content area
+                <div className="flex items-center space-x-2 my-4">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  <p className="text-md text-muted-foreground">Translating guide content...</p>
+                </div>
+              )}
+              {!isTranslatingGuide && <MarkdownDisplay content={displayedGuideContent} />}
               <p className="text-xs text-muted-foreground mt-4">
                 This guide is AI-generated. Always review and adapt it to your specific needs and context.
               </p>
@@ -341,3 +405,5 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
     </>
   );
 }
+
+    

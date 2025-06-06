@@ -20,6 +20,26 @@
         "Develop an API for e-commerce sites to integrate personalized outfit recommendations directly into product pages."
       ],
       "createdAt": "2025-06-06T22:03:48.179Z"
+    },
+    {
+      "id": "17492533868034m0u4s7",
+      "originalIdea": "generate a sermon about john 3:16",
+      "refinedIdea": "Develop a sermon series, 'John 3:16 Deconstructed,' that explores the historical context, theological implications, and practical applications of this pivotal verse for contemporary Christian living.",
+      "marketPotentialScore": 65,
+      "swotSnippet": "Opportunity: Leverage digital platforms to reach a wider audience and foster interactive discussions on the sermon's themes.",
+      "competitorTeaser": "The sermon preparation market is saturated with commentaries and outlines, but innovative approaches to engaging modern audiences are needed.",
+      "associatedConcepts": [
+        "Theology",
+        "Religious Education",
+        "Christian Ministry",
+        "Biblical Studies",
+        "Online Church Services"
+      ],
+      "potentialPivots": [
+        "Create a video series explaining John 3:16 in layman's terms, targeting new believers.",
+        "Develop a small group study guide centered around the implications of John 3:16 on daily living."
+      ],
+      "createdAt": "2025-06-06T23:43:06.803Z"
     }
   ],
   "buildProjects": [
