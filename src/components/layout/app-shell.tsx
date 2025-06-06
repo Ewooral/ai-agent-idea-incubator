@@ -13,12 +13,14 @@ import {
   SidebarMenuButton,
   SidebarInset,
   SidebarTrigger,
+  SidebarFooter, // Import SidebarFooter
 } from "@/components/ui/sidebar";
 import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer } from "lucide-react";
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { LanguageSelector } from '@/components/language-selector'; // Import LanguageSelector
 
 const navItems = [
   { href: "/", label: "Generate Idea", icon: Lightbulb, tooltip: "Generate New Ideas" },
@@ -42,13 +44,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Link href="/" className="hidden group-data-[state=collapsed]:block" onClick={() => isMobileMenuOpen && setIsMobileMenuOpen(false)}>
               <Feather className="text-primary" size={28}/>
           </Link>
-          {/* SidebarTrigger is for desktop collapsing, managed by Sidebar component itself */}
-          {/* For mobile, we use SheetTrigger outside this component or hide desktop one */}
         </div>
       </SidebarHeader>
       <ScrollArea className="flex-grow">
-        <SidebarContent className="p-2">
-          <SidebarMenu>
+        <SidebarContent className="p-2 flex flex-col h-full"> {/* Modified for flex layout */}
+          <SidebarMenu className="flex-grow"> {/* Allow menu to take available space */}
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href} className="p-0">
                 <Link href={item.href} passHref legacyBehavior>
@@ -67,8 +67,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
+          {/* LanguageSelector is now outside SidebarMenu, directly in SidebarContent or Footer */}
         </SidebarContent>
       </ScrollArea>
+      <SidebarFooter className="p-2 border-t"> {/* Use SidebarFooter */}
+        <LanguageSelector />
+      </SidebarFooter>
     </>
   );
 
@@ -78,7 +82,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <Sidebar
         variant="sidebar"
         collapsible="icon"
-        className="hidden lg:flex flex-col !bg-card shadow-sm" // Use !bg-card for specific bg
+        className="hidden lg:flex flex-col !bg-card shadow-sm" 
       >
         {sidebarNavigation}
       </Sidebar>
@@ -93,22 +97,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Button>
           </SheetTrigger>
           <Link href="/">
-             <FeatherLogo size={24} showText={false} /> {/* Mobile logo - icon only */}
+             <FeatherLogo size={24} showText={false} /> 
           </Link>
-          <div className="w-8"></div>{/* Spacer for balance */}
-          <SheetContent side="left" className="p-0 w-72 !bg-card">
+          <div className="w-8"></div>
+          <SheetContent side="left" className="p-0 w-72 !bg-card flex flex-col"> {/* Ensure flex-col for SheetContent too */}
             {sidebarNavigation}
           </SheetContent>
         </Sheet>
       </div>
       
-      {/* "Developed by" tag - Moved outside SidebarInset for fixed positioning relative to viewport */}
       <div className="fixed top-3 right-4 z-50 px-3 py-1.5 rounded-md shadow-lg bg-card text-accent-foreground text-xs font-medium">
         Developed by bfam, Inc.
       </div>
 
-      <SidebarInset className="flex-1 overflow-y-auto"> 
-        <main className="p-4 pt-20 lg:pt-6 md:p-6 lg:p-8 max-w-full mx-auto"> {/* Adjusted padding for mobile header and potential fixed tag */}
+      <SidebarInset className="flex-1 overflow-y-auto relative"> 
+        <main className="p-4 pt-20 lg:pt-6 md:p-6 lg:p-8 max-w-full mx-auto">
           {children}
         </main>
       </SidebarInset>

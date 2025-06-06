@@ -5,6 +5,7 @@
 import type { RefineIdeaInput, RefineIdeaOutput } from '@/ai/flows/refine-idea-with-ai';
 import { refineIdea } from '@/ai/flows/refine-idea-with-ai';
 import { saveValidatedIdeaAction } from '@/app/actions/ideaActions';
+import { translateTextAction } from '@/app/actions/translationActions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckCircle, Loader2, BarChart3, Tag, Lightbulb, TrendingUp, ShieldCheck, Target, Search, Zap, Save } from 'lucide-react';
 import Image from 'next/image';
@@ -21,6 +22,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { useLanguage, supportedLanguages } from '@/contexts/language-context';
 
 const validationSchema = z.object({
   idea: z.string().min(10, { message: "Please provide a detailed idea (min 10 characters)." }),
@@ -36,6 +38,9 @@ export default function ValidationPage(): ReactNode {
   const [validationResult, setValidationResult] = useState<RefineIdeaOutput | null>(null);
   const { toast } = useToast();
   const searchParams = useSearchParams();
+  const { selectedLanguage, getLanguageName } = useLanguage();
+  const [translatedRefinedIdea, setTranslatedRefinedIdea] = useState<string | null>(null);
+  const [isTranslating, setIsTranslating] = useState<boolean>(false);
 
   const form = useForm<ValidationFormValues>({
     resolver: zodResolver(validationSchema),
@@ -53,10 +58,53 @@ export default function ValidationPage(): ReactNode {
     }
   }, [searchParams, form]);
 
+  useEffect(() => {
+    if (selectedLanguage === 'en' || !validationResult?.refinedIdea) {
+      setTranslatedRefinedIdea(null); // Clear translation if English or no idea
+      return;
+    }
+
+    const translate = async () => {
+      setIsTranslating(true);
+      try {
+        const languageName = getLanguageName(selectedLanguage);
+        if (!languageName) {
+          throw new Error("Invalid language selected for translation.");
+        }
+        const translationInput = {
+          textToTranslate: validationResult.refinedIdea,
+          targetLanguage: languageName, // Pass full language name
+        };
+        const result = await translateTextAction(translationInput);
+        if (result.success && result.translatedText) {
+          setTranslatedRefinedIdea(result.translatedText);
+          toast({
+            title: `Idea translated to ${languageName}!`,
+          });
+        } else {
+          throw new Error(result.message || "Translation failed.");
+        }
+      } catch (error: any) {
+        console.error("Translation error:", error);
+        setTranslatedRefinedIdea(null); // Clear on error
+        toast({
+          title: "Translation Error",
+          description: error.message || "Could not translate the refined idea.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsTranslating(false);
+      }
+    };
+
+    translate();
+  }, [selectedLanguage, validationResult, getLanguageName, toast]);
+
 
   const onSubmit: SubmitHandler<ValidationFormValues> = async (data) => {
     setIsLoading(true);
     setValidationResult(null);
+    setTranslatedRefinedIdea(null); // Clear previous translation on new validation
     const resultsSection = document.getElementById('validation-results-section');
     if (resultsSection) {
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -97,6 +145,7 @@ export default function ValidationPage(): ReactNode {
     }
     setIsSaving(true);
     try {
+      // Ensure we save the original refined idea, not the translated one
       const result = await saveValidatedIdeaAction(form.getValues('idea'), validationResult);
       if (result.success) {
         toast({
@@ -122,6 +171,8 @@ export default function ValidationPage(): ReactNode {
     }
   };
   
+  const displayedRefinedIdea = selectedLanguage !== 'en' && translatedRefinedIdea ? translatedRefinedIdea : validationResult?.refinedIdea;
+
   return (
     <div className="container mx-auto py-8 px-4">
       <Card className="mb-8 shadow-xl bg-card">
@@ -130,7 +181,7 @@ export default function ValidationPage(): ReactNode {
             <Zap className="mr-3 text-primary" size={32} /> AI Idea Refinement & Validation
           </CardTitle>
           <CardDescription>
-            Submit your business idea to our AI for refinement, associated concepts, potential pivots, and a preview of premium market analysis.
+            Submit your business idea to our AI for refinement, associated concepts, potential pivots, and a preview of premium market analysis. Select a language from the sidebar to translate the refined idea.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -250,7 +301,7 @@ export default function ValidationPage(): ReactNode {
                 <CardTitle className="font-headline text-2xl flex items-center text-primary">
                   <Lightbulb size={28} className="mr-3"/> AI Refinement & Strategic Insights
                 </CardTitle>
-                <CardDescription>Review the AI's analysis of your idea below.</CardDescription>
+                <CardDescription>Review the AI's analysis of your idea below. Use the language selector in the sidebar to translate the refined idea.</CardDescription>
               </div>
               <Button onClick={handleSaveIdea} disabled={isSaving || isLoading} size="lg">
                 {isSaving ? (
@@ -262,8 +313,20 @@ export default function ValidationPage(): ReactNode {
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <h3 className="text-xl font-semibold mb-2 text-foreground flex items-center"><CheckCircle size={22} className="mr-2 text-green-500"/>Refined Idea:</h3>
-                <p className="text-foreground/90 text-base leading-relaxed bg-muted/30 p-4 rounded-md border">{validationResult.refinedIdea}</p>
+                <h3 className="text-xl font-semibold mb-2 text-foreground flex items-center">
+                  <CheckCircle size={22} className="mr-2 text-green-500"/>
+                  Refined Idea {selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}:
+                </h3>
+                {isTranslating ? (
+                  <div className="flex items-center space-x-2 bg-muted/30 p-4 rounded-md border">
+                    <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                    <p>Translating...</p>
+                  </div>
+                ) : (
+                  <p className="text-foreground/90 text-base leading-relaxed bg-muted/30 p-4 rounded-md border">
+                    {displayedRefinedIdea || "Enter an idea above to see the refined version here."}
+                  </p>
+                )}
               </div>
               
               {validationResult.associatedConcepts && validationResult.associatedConcepts.length > 0 && (
@@ -372,4 +435,3 @@ export default function ValidationPage(): ReactNode {
     </div>
   );
 }
-
