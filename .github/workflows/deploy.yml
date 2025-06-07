@@ -24,9 +24,10 @@ jobs:
           port: ${{ secrets.VPS_SSH_PORT || 22 }} # Defaults to port 22 if VPS_SSH_PORT secret is not set
           script: |
             # IMPORTANT: Replace '/path/to/your/app' with the absolute path to your application directory on the VPS
+            # This is where your project code and deploy.sh script should be located.
             cd /path/to/your/app 
             
-            # Ensure the deploy script is executable (your script already does this for pm2, but good practice)
+            # Ensure the deploy script is executable
             chmod +x ./deploy.sh
             
             # Execute the deployment script
