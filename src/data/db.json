@@ -40,6 +40,27 @@
         "Develop a small group study guide centered around the implications of John 3:16 on daily living."
       ],
       "createdAt": "2025-06-06T23:43:06.803Z"
+    },
+    {
+      "id": "17492547874935echf84",
+      "originalIdea": "AI-Powered Personalized Football Training Platform: A subscription-based service using AI to analyze player performance data (biometrics, game footage) and create customized training regimes, nutritional plans, and recovery strategies. Caters to amateur and professional players with varying pricing tiers.",
+      "refinedIdea": "AI-Powered Football Performance Platform: Delivers personalized training, nutrition, and recovery plans based on AI analysis of player data, enhancing performance and reducing injury risk for athletes of all levels through a tiered subscription model.",
+      "marketPotentialScore": 78,
+      "swotSnippet": "Strength: Highly personalized training regimes offer a significant competitive advantage over generic training programs, leading to better player outcomes.",
+      "competitorTeaser": "The market presents several established players in sports analytics, but personalized AI-driven training platforms are still emerging, offering differentiation opportunities.",
+      "associatedConcepts": [
+        "Wearable Technology",
+        "Sports Analytics",
+        "Digital Health",
+        "Gamified Training",
+        "Performance Psychology"
+      ],
+      "potentialPivots": [
+        "Focus on specific football positions (e.g., quarterbacks, goalkeepers) for hyper-specialized training.",
+        "Partner with existing football clubs or academies to integrate the platform into their training programs.",
+        "Develop a freemium model with basic analytics and offer premium features like personalized training plans as a paid upgrade."
+      ],
+      "createdAt": "2025-06-07T00:06:27.493Z"
     }
   ],
   "buildProjects": [

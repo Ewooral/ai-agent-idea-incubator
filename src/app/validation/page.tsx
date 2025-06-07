@@ -8,7 +8,6 @@ import { saveValidatedIdeaAction } from '@/app/actions/ideaActions';
 import { translateTextAction } from '@/app/actions/translationActions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckCircle, Loader2, BarChart3, Tag, Lightbulb, TrendingUp, ShieldCheck, Target, Search, Zap, Save } from 'lucide-react';
-import Image from 'next/image';
 import { useState, type ReactNode, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
@@ -22,7 +21,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { useLanguage, supportedLanguages } from '@/contexts/language-context';
+import { useLanguage } from '@/contexts/language-context';
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from '@/components/ui/chart';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+
 
 const validationSchema = z.object({
   idea: z.string().min(10, { message: "Please provide a detailed idea (min 10 characters)." }),
@@ -31,6 +33,37 @@ const validationSchema = z.object({
 });
 
 type ValidationFormValues = z.infer<typeof validationSchema>;
+
+// Placeholder chart data and config
+const illustrativeChartData = [
+  { factor: "Market Size", score: 75, fill: "var(--color-marketSize)" },
+  { factor: "Growth Potential", score: 85, fill: "var(--color-growthPotential)" },
+  { factor: "Competition Level", score: 60, fill: "var(--color-competition)" },
+  { factor: "Innovation Factor", score: 70, fill: "var(--color-innovation)" },
+];
+
+const chartConfig = {
+  score: {
+    label: "Score (0-100)",
+  },
+  marketSize: {
+    label: "Market Size",
+    color: "hsl(var(--chart-1))",
+  },
+  growthPotential: {
+    label: "Growth Potential",
+    color: "hsl(var(--chart-2))",
+  },
+  competition: {
+    label: "Competition Level",
+    color: "hsl(var(--chart-3))",
+  },
+  innovation: {
+    label: "Innovation Factor",
+    color: "hsl(var(--chart-4))",
+  },
+} satisfies ChartConfig;
+
 
 export default function ValidationPage(): ReactNode {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -396,20 +429,38 @@ export default function ValidationPage(): ReactNode {
 
                 <Card className="bg-card/80 backdrop-blur-sm">
                   <CardHeader>
-                    <CardTitle className="text-lg flex items-center"><BarChart3 size={20} className="mr-2 text-primary"/>Market Viability Charts (Preview)</CardTitle>
+                    <CardTitle className="text-lg flex items-center"><BarChart3 size={20} className="mr-2 text-primary"/>Illustrative Market Viability Chart</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden bg-muted/30 border border-dashed">
-                       <Image 
-                        src="https://placehold.co/600x400.png" 
-                        alt="Placeholder chart showing market viability trends" 
-                        layout="fill"
-                        objectFit="contain"
-                        className="opacity-75"
-                        data-ai-hint="market trend chart"
-                       />
+                    <div className="h-80 w-full rounded-lg bg-muted/30 border border-dashed p-4">
+                       <ChartContainer config={chartConfig} className="w-full h-full">
+                        <BarChart accessibilityLayer data={illustrativeChartData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
+                          <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                          <XAxis
+                            dataKey="factor"
+                            tickLine={false}
+                            tickMargin={10}
+                            axisLine={false}
+                            tickFormatter={(value) => value.length > 15 ? `${value.substring(0,15)}...` : value}
+                          />
+                          <YAxis 
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={10}
+                            domain={[0, 100]}
+                          />
+                          <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent hideLabel />}
+                          />
+                          <ChartLegend content={<ChartLegendContent />} />
+                          <Bar dataKey="score" radius={8} />
+                        </BarChart>
+                      </ChartContainer>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">Full premium reports include interactive charts with market trends, TAM/SAM/SOM estimates, and more.</p>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      This is an illustrative chart. A full AI-driven report would dynamically generate charts based on market data related to your idea.
+                    </p>
                   </CardContent>
                 </Card>
             </CardContent>
