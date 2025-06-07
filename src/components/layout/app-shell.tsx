@@ -15,13 +15,14 @@ import {
   SidebarTrigger,
   SidebarFooter, 
 } from "@/components/ui/sidebar";
-import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer, Settings as SettingsIcon } from "lucide-react";
+import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer, Settings as SettingsIcon, HelpCircle } from "lucide-react";
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LanguageSelector } from '@/components/language-selector';
 import { ThemeToggleButton } from '@/components/theme-toggle-button';
+import { HelpGuide } from '@/components/help-guide'; // Import the HelpGuide component
 
 const navItems = [
   { href: "/", label: "Generate Idea", icon: Lightbulb, tooltip: "Generate New Ideas" },
@@ -74,6 +75,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <SidebarFooter className="p-2 border-t flex flex-col gap-2"> 
         <ThemeToggleButton />
         <LanguageSelector />
+        <HelpGuide /> {/* Added HelpGuide component instance here */}
       </SidebarFooter>
     </>
   );
@@ -89,24 +91,29 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </Sidebar>
 
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between p-2 border-b bg-card shadow-sm h-16">
-        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon">
               <Menu className="h-6 w-6" />
               <span className="sr-only">Open menu</span>
             </Button>
           </SheetTrigger>
-          <Link href="/">
-             <FeatherLogo size={24} showText={false} /> 
-          </Link>
-          <div className="w-8"></div> {/* Spacer for balance */}
-          <SheetContent side="left" className="p-0 w-72 !bg-card flex flex-col"> 
+          <SheetContent side="left" className="p-0 w-72 !bg-card flex flex-col">
+            {/* Accessibility: Add SheetHeader and SheetTitle for screen readers */}
             <SheetHeader className="sr-only">
               <SheetTitle>Main Menu</SheetTitle>
             </SheetHeader>
             {sidebarNavigation}
           </SheetContent>
         </Sheet>
+        
+        <Link href="/">
+            <FeatherLogo size={24} showText={false} /> 
+        </Link>
+        
+        {/* Spacer to balance the header. If a help button or other icon is added here, adjust accordingly. */}
+        {/* For now, using a div that matches the width of the SheetTrigger button for balance */}
+        <div className="w-10 h-10"></div> 
       </div>
       
       <div className="fixed top-3 right-4 z-50 px-3 py-1.5 rounded-md shadow-lg bg-card text-card-foreground text-xs font-medium">
@@ -121,3 +128,5 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+
+    
