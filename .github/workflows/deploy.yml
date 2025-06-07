@@ -1,0 +1,35 @@
+
+name: Deploy to Contabo VPS
+
+on:
+  push:
+    branches:
+      - master # Or 'main' if that's your default branch
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # Recommended to have the latest code in the runner environment
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_SSH_PORT || 22 }} # Defaults to port 22 if VPS_SSH_PORT secret is not set
+          script: |
+            # IMPORTANT: Replace '/path/to/your/app' with the absolute path to your application directory on the VPS
+            cd /path/to/your/app 
+            
+            # Ensure the deploy script is executable (your script already does this for pm2, but good practice)
+            chmod +x ./deploy.sh
+            
+            # Execute the deployment script
+            echo "🚀 Executing deploy.sh on VPS..."
+            ./deploy.sh
+            echo "✅ Deployment script finished."
