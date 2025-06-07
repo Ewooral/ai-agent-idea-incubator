@@ -19,7 +19,25 @@
         "Partner with clothing rental services to offer 'try before you buy' options based on AI styling.",
         "Develop an API for e-commerce sites to integrate personalized outfit recommendations directly into product pages."
       ],
-      "createdAt": "2025-06-06T22:03:48.179Z"
+      "createdAt": "2025-06-06T22:03:48.179Z",
+      "viabilityFactorsChartData": [
+        {
+          "name": "Market Size",
+          "score": 85
+        },
+        {
+          "name": "Competition Level",
+          "score": 60
+        },
+        {
+          "name": "Innovation Factor",
+          "score": 75
+        },
+        {
+          "name": "Scalability",
+          "score": 80
+        }
+      ]
     },
     {
       "id": "17492533868034m0u4s7",
@@ -39,7 +57,25 @@
         "Create a video series explaining John 3:16 in layman's terms, targeting new believers.",
         "Develop a small group study guide centered around the implications of John 3:16 on daily living."
       ],
-      "createdAt": "2025-06-06T23:43:06.803Z"
+      "createdAt": "2025-06-06T23:43:06.803Z",
+      "viabilityFactorsChartData": [
+        {
+          "name": "Audience Reach",
+          "score": 70
+        },
+        {
+          "name": "Engagement Potential",
+          "score": 80
+        },
+        {
+          "name": "Monetization Options",
+          "score": 45
+        },
+        {
+          "name": "Content Uniqueness",
+          "score": 60
+        }
+      ]
     },
     {
       "id": "17492547874935echf84",
@@ -60,24 +96,72 @@
         "Partner with existing football clubs or academies to integrate the platform into their training programs.",
         "Develop a freemium model with basic analytics and offer premium features like personalized training plans as a paid upgrade."
       ],
-      "createdAt": "2025-06-07T00:06:27.493Z"
+      "createdAt": "2025-06-07T00:06:27.493Z",
+      "viabilityFactorsChartData": [
+        {
+          "name": "Market Need",
+          "score": 85
+        },
+        {
+          "name": "Tech Feasibility",
+          "score": 75
+        },
+        {
+          "name": "Competitive Advantage",
+          "score": 70
+        },
+        {
+          "name": "Scalability",
+          "score": 80
+        }
+      ]
     }
   ],
   "buildProjects": [
     {
       "id": "1749249833565dp4ij4d",
       "ideaId": "1749247428179k9bvb3a",
-      "valueProposition": "    Smart Outfit Planning: AI analyzes clothing items to suggest stylish combinations.\n\n    Sustainability: Reduces overconsumption by promoting reuse of existing clothes.\n\n    Personalization: Learns user preferences (e.g., colors, fits, occasions).\n\n    Time-Saving: Eliminates \"what to wear\" stress with instant recommendations.",
-      "customerSegments": "Primary Audience:\n\n    Eco-Conscious Millennials/Gen Z: Users who care about sustainability but struggle with wardrobe efficiency.\n\n    Busy Professionals: Time-strapped individuals who want quick, stylish outfit choices.\n\n    Fashion Newbies: People lacking confidence in styling their own clothes.\n\n    Minimalists: Those aiming to own fewer, more versatile clothing items.\n\nSecondary Audience:\n\n    Online Shoppers: Integrate with e-commerce to suggest sustainable purchases.",
-      "keyActivities": "Critical Actions for Your Business:\n\n    AI Training: Develop algorithms to analyze clothing attributes (color, fabric, season).\n\n    App Development: Build intuitive mobile interfaces (e.g., outfit visualizations, closet scanning).\n\n    Data Collection: Crowdsource user preferences to refine recommendations.\n\n    Partnerships: Collaborate with sustainable brands for affiliate marketing.\n\n    Community Building: Add social features (e.g., outfit sharing, voting).",
-      "revenueStreams": "Monetization Strategies:\n\n    Freemium Model:\n\n        Free: Basic outfit suggestions.\n\n        Premium ($5–10/month): Advanced features (e.g., seasonal trend reports, VIP stylist access).\n\n    Affiliate Marketing: Earn commissions by linking to sustainable brands.\n\n    Sponsored Content: Partner with ethical fashion labels for promoted placements.\n\n    White-Label Solutions: License AI to clothing retailers for their apps.\n\n",
-      "notes": "Unstructured Ideas:\n\n    AR Try-On: Virtual fitting room using phone camerasContext/Requests for AI Suggestions:\n\n    Prioritize low-latency AI to avoid lag in outfit generation.\n\n    Need ethical AI guidance to avoid bias (e.g., inclusive sizing/styles).\n\n    Open to pre-trained models for faster development (e.g., Microsoft Fashion GEN or OpenAI’s CLIP for image tagging).\n\n    Consider offline functionality for wardrobe scanning without internet.\n\n(Example Ask: \"Suggest lightweight ML models for mobile devices.\")\n.\n\n    Wardrobe Analytics: Track cost-per-wear to highlight underused items.\n\n    Integration: Sync with smart closets (e.g., IoT hangers).\n\n    Gamification: Reward users for re-wearing clothes (e.g., \"Sustainability Score\").\n\nPotential Challenges:\n\n    Data Privacy: Secure user wardrobe images/preferences.\n\n    Bias in AI: Ensure inclusive recommendations (body types, cultures).",
+      "valueProposition": "Smart Outfit Planning: AI analyzes clothing items to suggest stylish combinations.\n\nSustainability: Reduces overconsumption by promoting reuse of existing clothes.\n\nPersonalization: Learns user preferences (e.g., colors, fits, occasions).\n\nTime-Saving: Eliminates \"what to wear\" stress with instant recommendations.",
+      "customerSegments": "Primary Audience:\n\nEco-Conscious Millennials/Gen Z: Users who care about sustainability but struggle with wardrobe efficiency.\n\nBusy Professionals: Time-strapped individuals who want quick, stylish outfit choices.\n\nFashion Newbies: People lacking confidence in styling their own clothes.\n\nMinimalists: Those aiming to own fewer, more versatile clothing items.\n\nSecondary Audience:\n\nOnline Shoppers: Integrate with e-commerce to suggest sustainable purchases.",
+      "keyActivities": "Critical Actions for Your Business:\n\nAI Training: Develop algorithms to analyze clothing attributes (color, fabric, season).\n\nApp Development: Build intuitive mobile interfaces (e.g., outfit visualizations, closet scanning).\n\nData Collection: Crowdsource user preferences to refine recommendations.\n\nPartnerships: Collaborate with sustainable brands for affiliate marketing.\n\nCommunity Building: Add social features (e.g., outfit sharing, voting).",
+      "revenueStreams": "Monetization Strategies:\n\nFreemium Model:\n\nFree: Basic outfit suggestions.\n\nPremium ($5–10/month): Advanced features (e.g., seasonal trend reports, VIP stylist access).\n\nAffiliate Marketing: Earn commissions by linking to sustainable brands.\n\nSponsored Content: Partner with ethical fashion labels for promoted placements.\n\nWhite-Label Solutions: License AI to clothing retailers for their apps.",
+      "notes": "Unstructured Ideas:\n\nAR Try-On: Virtual fitting room using phone camerasContext/Requests for AI Suggestions:\n\nPrioritize low-latency AI to avoid lag in outfit generation.\n\nNeed ethical AI guidance to avoid bias (e.g., inclusive sizing/styles).\n\nOpen to pre-trained models for faster development (e.g., Microsoft Fashion GEN or OpenAI’s CLIP for image tagging).\n\nConsider offline functionality for wardrobe scanning without internet.\n\n(Example Ask: \"Suggest lightweight ML models for mobile devices.\")\n.\n\nWardrobe Analytics: Track cost-per-wear to highlight underused items.\n\nIntegration: Sync with smart closets (e.g., IoT hangers).\n\nGamification: Reward users for re-wearing clothes (e.g., \"Sustainability Score\").\n\nPotential Challenges:\n\nData Privacy: Secure user wardrobe images/preferences.\n\nBias in AI: Ensure inclusive recommendations (body types, cultures).",
       "createdAt": "2025-06-06T22:43:53.565Z",
-      "updatedAt": "2025-06-06T23:04:00.240Z",
-      "targetPlatform": "    Mobile App (iOS/Android)                ",
-      "coreFeaturesMVP": "Must-have features for the first version:\n\n    Wardrobe Scanner\n\n        Upload photos or scan clothes via phone camera.\n\n        AI tags attributes (color, pattern, season, category).\n\n    Outfit Generator\n\n        Algorithm suggests combinations based on weather, occasion, and user preferences.\n\n    User Profile & Preferences\n\n        Style quiz (e.g., \"Do you prefer casual or formal?\") to personalize suggestions.\n\n    Basic Sustainability Metrics\n\n        Tracks \"cost per wear\" or \"closet utilization rate\" to encourage reuse.\n\n    Save/Rate Outfits\n\n        Users can favorite outfits or mark \"worn\" to improve AI recommendations.\n\n(Exclude advanced features like AR try-on or social sharing for MVP.)",
-      "techStackSuggestion": "Suggested Technologies:\n\n    Frontend: React Native (iOS/Android) or Flutter.\n\n    Backend: Node.js + Express (lightweight) or Firebase (for faster MVP).\n\n    AI/ML:\n\n        Computer Vision: TensorFlow.js (mobile-friendly) or PyTorch (for server-side processing).\n\n        Recommendations: Python-based scikit-learn or pre-trained models (e.g., Google’s Vision API for item tagging).\n\n    Database: Firebase Realtime DB (simple) or PostgreSQL (scalable).\n\n    Cloud: AWS S3 (image storage), Lambda (serverless AI processing).",
+      "updatedAt": "2025-06-07T09:56:10.573Z",
+      "targetPlatform": "Mobile App (iOS/Android)",
+      "coreFeaturesMVP": "Must-have features for the first version:\n\nWardrobe Scanner\n\nUpload photos or scan clothes via phone camera.\n\nAI tags attributes (color, pattern, season, category).\n\nOutfit Generator\n\nAlgorithm suggests combinations based on weather, occasion, and user preferences.\n\nUser Profile & Preferences\n\nStyle quiz (e.g., \"Do you prefer casual or formal?\") to personalize suggestions.\n\nBasic Sustainability Metrics\n\nTracks \"cost per wear\" or \"closet utilization rate\" to encourage reuse.\n\nSave/Rate Outfits\n\nUsers can favorite outfits or mark \"worn\" to improve AI recommendations.\n\n(Exclude advanced features like AR try-on or social sharing for MVP.)",
+      "techStackSuggestion": "Suggested Technologies:\n\nFrontend: React Native (iOS/Android) or Flutter.\n\nBackend: Node.js + Express (lightweight) or Firebase (for faster MVP).\n\nAI/ML:\n\nComputer Vision: TensorFlow.js (mobile-friendly) or PyTorch (for server-side processing).\n\nRecommendations: Python-based scikit-learn or pre-trained models (e.g., Google’s Vision API for item tagging).\n\nDatabase: Firebase Realtime DB (simple) or PostgreSQL (scalable).\n\nCloud: AWS S3 (image storage), Lambda (serverless AI processing).",
       "generatedGuideMarkdown": "# 1. Introduction\n\nThis guide outlines the development process for an AI-powered personal stylist mobile app designed to analyze users' wardrobes, suggest outfits, and provide personalized style advice, promoting sustainable fashion and efficient wardrobe utilization. The goal is to create a Minimum Viable Product (MVP) to validate the core concept and gather user feedback.\n\n# 2. Minimum Viable Product (MVP) Definition\n\n### Core MVP Features\n\n-   **Wardrobe Scanner:** Users can upload photos or scan clothing items using their phone camera. The AI automatically tags attributes such as color, pattern, season, and category.\n-   **Outfit Generator:** An algorithm suggests outfit combinations based on weather, occasion, and user preferences.\n-   **User Profile & Preferences:** A style quiz gathers information about user preferences (e.g., casual vs. formal) to personalize outfit suggestions.\n-   **Basic Sustainability Metrics:** The app tracks metrics such as \"cost per wear\" or \"closet utilization rate\" to encourage reuse of clothing items.\n-   **Save/Rate Outfits:** Users can favorite suggested outfits or mark outfits as \"worn\" to improve the AI's recommendations over time.\n\n### User Stories\n\n-   As a busy professional, I want to quickly see outfit suggestions based on the weather and my work meetings so I can save time getting ready in the morning.\n-   As an eco-conscious student, I want to know the 'cost per wear' of my clothes so I can focus on wearing the clothes I already own and avoid unnecessary purchases.\n-   As a fashion newbie, I want the app to help me put together stylish outfits using clothes that I already own so that I feel more confident in my personal style.\n\n### Tech Stack Recommendation\n\n-   **Frontend:** React Native (cross-platform, efficient development for both iOS and Android).\n-   **Backend:** Node.js with Express.js (lightweight, scalable, and JavaScript-based for consistent development across frontend and backend).\n-   **Database:** PostgreSQL (Scalable, reliable, and supports complex queries for outfit recommendations. Can easily scale compared to Firebase Realtime Database).\n-   **AI/ML:** TensorFlow.js (for on-device image analysis and attribute tagging, prioritizing speed and offline capabilities where possible) combined with Python/PyTorch (for server-side complex outfit generation and recommendation training).\n-   **Cloud:** AWS S3 (for storing wardrobe images) and AWS Lambda (for serverless AI processing).\n\n# 3. Phase-Based Development Plan\n\n### Phase 1: Project Setup & Foundational Backend\n\n1.  **Version Control:** Set up a Git repository (e.g., on GitHub, GitLab, or Bitbucket) and initialize the project.\n2.  **Project Structure:** Create a well-organized project structure for both frontend and backend components.\n3.  **Backend Setup:** Initialize the Node.js/Express.js backend, install necessary dependencies (e.g., `express`, `cors`, `body-parser`, `pg` for PostgreSQL).\n4.  **Database Schema Design:** Design the PostgreSQL database schema, including tables for users, clothing items, outfit combinations, preferences, and sustainability metrics.\n5.  **API Endpoints (Basic):** Implement basic API endpoints for user authentication (registration, login) and wardrobe management (uploading, tagging).\n6.  **Cloud Storage Setup:** Configure AWS S3 for storing clothing images.\n7.  **CI/CD Pipeline:** Set up a basic Continuous Integration/Continuous Deployment pipeline using services like GitHub Actions or CircleCI for automated testing and deployment.\n\n### Phase 2: Core Feature Implementation (Frontend & Backend)\n\n-   **Wardrobe Scanner:**\n    -   **Frontend:** Implement the image upload/scanning functionality using the device camera or gallery.\n    -   **Backend/AI:** Integrate TensorFlow.js for on-device image analysis. If needed, use AWS Lambda to execute more complex AI models with Python. Develop endpoint to save image location and extracted attributes to the database.\n-   **Outfit Generator:**\n    -   **Backend/AI:** Develop the outfit generation algorithm using Python/scikit-learn or pre-trained models. The algorithm should consider weather, occasion, and user preferences.\n    -   **Backend:** Create an API endpoint to retrieve outfit suggestions based on user ID and parameters.\n-   **User Profile & Preferences:**\n    -   **Frontend:** Design and implement the style quiz to gather user preferences.\n    -   **Backend:** Create API endpoints to store and retrieve user preferences in the database.\n-   **Sustainability Metrics:**\n    -   **Backend:** Implement the logic to calculate \"cost per wear\" and \"closet utilization rate\" based on user data.\n    -   **Frontend:** Display these metrics in the user profile.\n-   **Save/Rate Outfits:**\n    -   **Frontend:** Allow users to save and rate suggested outfits.\n    -   **Backend:** Create API endpoints to store user outfit ratings and favorites in the database.\n\n### Phase 3: UI/UX Design & Frontend Development\n\n1.  **UI Design:** Create wireframes and mockups of the app's user interface, focusing on usability and visual appeal.\n2.  **Component Development:** Develop reusable React Native components for common UI elements (e.g., buttons, input fields, list items).\n3.  **Screen Implementation:** Implement the main screens of the app: wardrobe, outfit suggestions, user profile, and style quiz.\n4.  **Navigation:** Implement navigation between screens using React Navigation or a similar library.\n5.  **State Management:** Integrate a state management library like Redux or Context API to manage application state effectively.\n6.  **API Integration:** Integrate the frontend with the backend API endpoints to fetch data and submit user actions.\n\n### Phase 4: Testing\n\n1.  **Unit Tests:** Write unit tests for individual components and functions in both the frontend and backend.\n2.  **Integration Tests:** Write integration tests to verify the interaction between different modules and components.\n3.  **End-to-End (E2E) Tests:** Use tools like Detox or Jest to write E2E tests that simulate user interactions and verify the overall functionality of the app.\n4.  **User Acceptance Testing (UAT):** Conduct UAT with a group of target users to gather feedback on usability, functionality, and overall satisfaction.\n5.  **AI Model Evaluation:** Implement metrics and processes to regularly evaluate and improve the AI model's performance and fairness. This should include testing for bias in outfit suggestions across various demographics and body types.\n\n### Phase 5: Deployment\n\n1.  **iOS Deployment:**\n    -   Build the React Native app for iOS.\n    -   Create an Apple Developer account.\n    -   Submit the app to the App Store.\n2.  **Android Deployment:**\n    -   Build the React Native app for Android.\n    -   Create a Google Play Developer account.\n    -   Submit the app to the Google Play Store.\n3.  **Backend Deployment:** Deploy the Node.js/Express.js backend to a cloud platform like AWS Elastic Beanstalk, Heroku, or Google App Engine.\n4.  **Database Deployment:** Deploy the PostgreSQL database to a managed database service like AWS RDS or Google Cloud SQL.\n\n# 4. Post-Launch & Iteration\n\n### Initial Marketing & User Acquisition\n\n1.  **Social Media Marketing:** Target eco-conscious millennials/Gen Z and busy professionals through social media campaigns on platforms like Instagram, TikTok, and LinkedIn.\n2.  **Content Marketing:** Create blog posts, articles, and videos on topics related to sustainable fashion, wardrobe efficiency, and personal styling.\n3.  **App Store Optimization (ASO):** Optimize the app's title, description, and keywords to improve its visibility in app store search results.\n\n### Feedback Collection & Iteration\n\n1.  **In-App Feedback:** Implement an in-app feedback mechanism (e.g., a survey or contact form) to allow users to easily provide feedback.\n2.  **User Reviews:** Monitor app store reviews and respond to user comments and suggestions.\n3.  **Analytics:** Track user behavior and engagement using analytics tools like Google Analytics or Mixpanel to identify areas for improvement.\n4.  **A/B Testing:** Conduct A/B tests on different features and UI elements to optimize user experience and conversion rates.\n\n# 5. Estimated Timeline & Resources\n\n-   **Timeline:** The MVP development process is estimated to take 4-8 months for a small, focused team of 2-3 developers (1 frontend, 1 backend/AI, 1 full stack). This timeline can be influenced by factors such as the complexity of the AI model, the level of UI/UX polish, and the team's experience.\n-   **Team Roles:**\n    -   Frontend Developer (React Native)\n    -   Backend Developer (Node.js/Express.js, Python/AI)\n    -   UI/UX Designer (Optional, but highly recommended)\n\n# 6. Potential Challenges & Mitigation\n\n-   **Data Privacy:**\n    -   **Challenge:** Securing user wardrobe images and preferences and complying with data privacy regulations (e.g., GDPR, CCPA).\n    -   **Mitigation:** Implement robust data encryption, anonymization techniques, and obtain explicit user consent for data collection and usage. Clearly outline data usage policies in the app's privacy policy.\n-   **Bias in AI:**\n    -   **Challenge:** Ensuring that the AI model provides inclusive recommendations that are not biased towards specific body types, cultures, or styles.\n    -   **Mitigation:** Train the AI model on a diverse dataset, regularly evaluate the model for bias, and allow users to customize their preferences to mitigate bias.\n-   **AI Model Performance:**\n    -   **Challenge:** Balancing AI model accuracy with the app's performance on mobile devices. Complex models may lead to slower outfit suggestions or increased battery consumption.\n    -   **Mitigation:** Optimize the AI model for mobile devices, use cloud-based AI processing for complex tasks (via AWS Lambda), and allow users to adjust the model's complexity based on their device's capabilities.\n"
+    }
+  ],
+  "forumCategories": [
+    {
+      "id": "cat_001",
+      "title": "General Discussion",
+      "description": "Talk about anything related to innovation and entrepreneurship.",
+      "iconName": "MessageSquare",
+      "createdAt": "2024-05-20T10:00:00.000Z"
+    },
+    {
+      "id": "cat_002",
+      "title": "Idea Feedback",
+      "description": "Share your ideas and get constructive feedback from the community.",
+      "iconName": "Lightbulb",
+      "createdAt": "2024-05-20T10:05:00.000Z"
+    },
+    {
+      "id": "cat_003",
+      "title": "Find Collaborators",
+      "description": "Looking for a co-founder or team members? Post here!",
+      "iconName": "Users2",
+      "createdAt": "2024-05-20T10:10:00.000Z"
+    },
+    {
+      "id": "cat_004",
+      "title": "Showcase & Success Stories",
+      "description": "Share your progress, launches, and success stories.",
+      "iconName": "Rocket",
+      "createdAt": "2024-05-20T10:15:00.000Z"
     }
   ]
 }

@@ -14,6 +14,7 @@ export interface SavedIdea {
   competitorTeaser?: string;
   associatedConcepts?: string[];
   potentialPivots?: string[];
+  viabilityFactorsChartData?: Array<{ name: string; score: number }>;
   createdAt: string; 
 }
 
@@ -33,9 +34,18 @@ export interface BuildProject {
   updatedAt: string; 
 }
 
+export interface ForumCategory {
+  id: string;
+  title: string;
+  description: string;
+  iconName: string; // Name of the lucide-react icon
+  createdAt: string;
+}
+
 interface Database {
   savedIdeas: SavedIdea[];
   buildProjects: BuildProject[];
+  forumCategories: ForumCategory[];
 }
 
 async function readDb(): Promise<Database> {
@@ -48,10 +58,13 @@ async function readDb(): Promise<Database> {
     if (!jsonData.buildProjects) {
       jsonData.buildProjects = [];
     }
+    if (!jsonData.forumCategories) {
+      jsonData.forumCategories = [];
+    }
     return jsonData;
   } catch (error: any) {
     if (error.code === 'ENOENT') {
-      return { savedIdeas: [], buildProjects: [] };
+      return { savedIdeas: [], buildProjects: [], forumCategories: [] };
     }
     console.error('Failed to read database file:', error);
     throw new Error('Could not read database.');
@@ -92,6 +105,7 @@ export async function addSavedIdea(
     competitorTeaser: refinedOutput.competitorTeaser,
     associatedConcepts: refinedOutput.associatedConcepts,
     potentialPivots: refinedOutput.potentialPivots,
+    viabilityFactorsChartData: refinedOutput.viabilityFactorsChartData,
     createdAt: new Date().toISOString(),
   };
   db.savedIdeas.push(newIdea);
@@ -117,15 +131,14 @@ export async function upsertBuildProject(
     db.buildProjects[existingProjectIndex] = {
       ...existingProject,
       ...projectData,
-      id: existingProject.id, // Ensure ID is preserved
-      ideaId: existingProject.ideaId, // Ensure ideaId is preserved
+      id: existingProject.id, 
+      ideaId: existingProject.ideaId, 
       updatedAt: now,
     };
     await writeDb(db);
     return db.buildProjects[existingProjectIndex];
   }
   
-  // Create new project if not found by ideaId or id
   const newProject: BuildProject = {
     id: projectData.id || Date.now().toString() + Math.random().toString(36).substring(2, 9),
     ideaId: projectData.ideaId,
@@ -144,4 +157,24 @@ export async function upsertBuildProject(
   db.buildProjects.push(newProject);
   await writeDb(db);
   return newProject;
+}
+
+// Forum Category Functions
+export async function getForumCategories(): Promise<ForumCategory[]> {
+  const db = await readDb();
+  return db.forumCategories.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+}
+
+export async function addForumCategory(
+  categoryData: Omit<ForumCategory, 'id' | 'createdAt'>
+): Promise<ForumCategory> {
+  const db = await readDb();
+  const newCategory: ForumCategory = {
+    id: `cat_${Date.now().toString()}` + Math.random().toString(36).substring(2, 7),
+    ...categoryData,
+    createdAt: new Date().toISOString(),
+  };
+  db.forumCategories.push(newCategory);
+  await writeDb(db);
+  return newCategory;
 }
