@@ -106,7 +106,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </Sheet>
       </div>
       
-      <div className="fixed top-3 right-4 z-50 px-3 py-1.5 rounded-md shadow-lg bg-card text-accent-foreground text-xs font-medium">
+      <div className="fixed top-3 right-4 z-50 px-3 py-1.5 rounded-md shadow-lg bg-card text-card-foreground text-xs font-medium">
         Developed by bfam, Inc.
       </div>
 
