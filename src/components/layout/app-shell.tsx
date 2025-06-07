@@ -22,7 +22,6 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LanguageSelector } from '@/components/language-selector';
 import { ThemeToggleButton } from '@/components/theme-toggle-button';
-import { HelpGuide } from '@/components/help-guide'; // Import the HelpGuide component
 
 const navItems = [
   { href: "/", label: "Generate Idea", icon: Lightbulb, tooltip: "Generate New Ideas" },
@@ -31,6 +30,7 @@ const navItems = [
   { href: "/build-studio", label: "Build Studio", icon: Hammer, tooltip: "Develop Your Ideas" },
   { href: "/community", label: "Community Forum", icon: Users, tooltip: "Connect with Others" },
   { href: "/settings", label: "Settings", icon: SettingsIcon, tooltip: "Application Settings" },
+  { href: "/help", label: "Help Guide", icon: HelpCircle, tooltip: "Application Help" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -75,7 +75,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <SidebarFooter className="p-2 border-t flex flex-col gap-2"> 
         <ThemeToggleButton />
         <LanguageSelector />
-        <HelpGuide /> {/* Added HelpGuide component instance here */}
       </SidebarFooter>
     </>
   );
@@ -99,7 +98,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-72 !bg-card flex flex-col">
-            {/* Accessibility: Add SheetHeader and SheetTitle for screen readers */}
             <SheetHeader className="sr-only">
               <SheetTitle>Main Menu</SheetTitle>
             </SheetHeader>
@@ -111,8 +109,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <FeatherLogo size={24} showText={false} /> 
         </Link>
         
-        {/* Spacer to balance the header. If a help button or other icon is added here, adjust accordingly. */}
-        {/* For now, using a div that matches the width of the SheetTrigger button for balance */}
         <div className="w-10 h-10"></div> 
       </div>
       
@@ -128,5 +124,3 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
-    
