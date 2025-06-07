@@ -131,10 +131,16 @@ export default function GenerateIdeaPage(): ReactNode {
     setIsLoadingAiIdeas(true);
     setGeneratedIdeas([]);
     setTranslatedGeneratedIdeas(null);
-    const resultsSection = document.getElementById('results-section');
-    if (resultsSection) {
-      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    
+    // Ensure results section exists and scroll to it
+    // The timeout gives the DOM a moment to update if the skeleton is conditionally rendered
+    setTimeout(() => {
+      const resultsSection = document.getElementById('results-section');
+      if (resultsSection) {
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 0);
+
 
     try {
       if (!input.problemArea && !input.keywords) {
@@ -180,7 +186,9 @@ export default function GenerateIdeaPage(): ReactNode {
   };
 
   const handleTopicCardClick = (topic: TopicCardProps) => {
-    form.reset();
+    form.reset(); // Clear form fields
+    form.setValue('problemArea', topic.problemArea || ""); // Update form state to reflect clicked topic
+    form.setValue('keywords', topic.keywords || "");
     const input: GenerateNovelIdeaInput = {
       problemArea: topic.problemArea || undefined,
       keywords: topic.keywords || undefined,
@@ -283,7 +291,7 @@ export default function GenerateIdeaPage(): ReactNode {
               <CardContent className="flex-grow pb-3">
                 <p className="text-sm text-muted-foreground">{topic.description}</p>
               </CardContent>
-               {isLoading && !form.formState.isSubmitting && (form.getValues().keywords === topic.keywords || form.getValues().problemArea === topic.problemArea) ? (
+               {isLoading && (form.getValues().keywords === topic.keywords || form.getValues().problemArea === topic.problemArea) && !form.formState.isSubmitting ? (
                  <CardFooter className="pt-0 pb-4 justify-center">
                     <Button variant="outline" size="sm" disabled className="w-full text-xs">
                       <Loader2 className="mr-2 h-3 w-3 animate-spin" />
@@ -304,18 +312,20 @@ export default function GenerateIdeaPage(): ReactNode {
 
       <div id="results-section">
         {isLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-            {[...Array(3)].map((_, i) => (
-              <Card key={i} className="animate-pulse bg-card">
-                <CardHeader>
-                  <div className="h-6 bg-muted rounded w-3/4"></div>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-4 bg-muted rounded w-full mb-2"></div>
-                  <div className="h-4 bg-muted rounded w-5/6"></div>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="min-h-[70vh] flex flex-col justify-center items-center mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="animate-pulse bg-card">
+                  <CardHeader>
+                    <div className="h-6 bg-muted rounded w-3/4"></div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-4 bg-muted rounded w-full mb-2"></div>
+                    <div className="h-4 bg-muted rounded w-5/6"></div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         )}
 
@@ -345,5 +355,4 @@ export default function GenerateIdeaPage(): ReactNode {
     </div>
   );
 }
-
     

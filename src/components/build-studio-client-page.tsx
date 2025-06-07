@@ -1,3 +1,4 @@
+
 // src/components/build-studio-client-page.tsx
 "use client";
 
@@ -17,8 +18,8 @@ import { Loader2, FileText, Users, Activity, DollarSign, Save, Wand2, AlertTrian
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { MarkdownDisplay } from './markdown-display';
-import { useLanguage } from '@/contexts/language-context'; // Import useLanguage
-import { translateTextAction } from '@/app/actions/translationActions'; // Import translation action
+import { useLanguage } from '@/contexts/language-context'; 
+import { translateTextAction } from '@/app/actions/translationActions'; 
 
 
 interface BuildStudioClientPageProps {
@@ -79,7 +80,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
     }
 
     if (selectedLanguage === 'en') {
-      setTranslatedGuideMarkdown(null); // Clear translation if English
+      setTranslatedGuideMarkdown(null); 
       return;
     }
 
@@ -105,7 +106,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
         }
       } catch (error: any) {
         console.error("Guide translation error:", error);
-        setTranslatedGuideMarkdown(null); // Clear on error
+        setTranslatedGuideMarkdown(null); 
         toast({
           title: "Guide Translation Error",
           description: error.message || "Could not translate the development guide.",
@@ -161,16 +162,22 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
 
     setIsGenerating(true);
     setGeneratedGuide(undefined); 
-    setTranslatedGuideMarkdown(null); // Clear previous translation
-    const guideSection = document.getElementById('ai-guide-section');
-    if (guideSection) {
-        guideSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    setTranslatedGuideMarkdown(null); 
+    
+    // Ensure results section exists and scroll to it
+    // The timeout gives the DOM a moment to update if the skeleton is conditionally rendered
+    setTimeout(() => {
+      const guideSection = document.getElementById('ai-guide-section');
+      if (guideSection) {
+          guideSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 0);
+
 
     try {
       const result = await generateDevelopmentGuideAction(ideaId);
       if (result.success && result.guideMarkdown) {
-        setGeneratedGuide(result.guideMarkdown); // This will trigger the translation useEffect
+        setGeneratedGuide(result.guideMarkdown); 
         toast({ title: "Guide Generated!", description: "AI has crafted your development guide." });
          startTransition(() => {
             router.refresh(); 
@@ -359,9 +366,9 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
       <div id="ai-guide-section">
         {(isGenerating || generatedGuide || isTranslatingGuide) && <Separator className="my-12" />}
 
-        {(isGenerating || isTranslatingGuide) && !generatedGuide && ( // Show main loader if generating or translating and no guide yet
-          <div className="space-y-4">
-              <div className="flex items-center space-x-2">
+        {(isGenerating || isTranslatingGuide) && !generatedGuide && ( 
+          <div className="space-y-4 min-h-[70vh] flex flex-col justify-center">
+              <div className="flex items-center space-x-2 self-center">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
                   <p className="text-lg text-muted-foreground">
                     {isGenerating ? "AI is crafting your development guide, please wait..." : "Translating guide, please wait..."}
@@ -380,7 +387,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
           </div>
         )}
 
-        {displayedGuideContent && !isGenerating && ( // Only display if not actively generating new content
+        {displayedGuideContent && !isGenerating && ( 
           <Card className="mt-8 border-primary/70 shadow-lg">
             <CardHeader>
               <CardTitle className="font-headline text-2xl flex items-center text-primary">
@@ -388,8 +395,8 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {isTranslatingGuide && ( // Show specific translating loader for guide content area
-                <div className="flex items-center space-x-2 my-4">
+              {isTranslatingGuide && ( 
+                <div className="flex items-center space-x-2 my-4 min-h-[50vh] justify-center">
                   <Loader2 className="h-6 w-6 animate-spin text-primary" />
                   <p className="text-md text-muted-foreground">Translating guide content...</p>
                 </div>
@@ -405,5 +412,4 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
     </>
   );
 }
-
     
