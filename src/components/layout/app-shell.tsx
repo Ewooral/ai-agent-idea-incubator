@@ -19,7 +19,7 @@ import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer, 
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LanguageSelector } from '@/components/language-selector';
 import { ThemeToggleButton } from '@/components/theme-toggle-button';
 
@@ -101,6 +101,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </Link>
           <div className="w-8"></div> {/* Spacer for balance */}
           <SheetContent side="left" className="p-0 w-72 !bg-card flex flex-col"> 
+            <SheetHeader className="sr-only">
+              <SheetTitle>Main Menu</SheetTitle>
+            </SheetHeader>
             {sidebarNavigation}
           </SheetContent>
         </Sheet>
