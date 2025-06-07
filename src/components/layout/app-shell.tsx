@@ -13,14 +13,14 @@ import {
   SidebarMenuButton,
   SidebarInset,
   SidebarTrigger,
-  SidebarFooter, // Import SidebarFooter
+  SidebarFooter, 
 } from "@/components/ui/sidebar";
-import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer } from "lucide-react";
+import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer, Settings as SettingsIcon } from "lucide-react"; // Added SettingsIcon
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { LanguageSelector } from '@/components/language-selector'; // Import LanguageSelector
+import { LanguageSelector } from '@/components/language-selector';
 
 const navItems = [
   { href: "/", label: "Generate Idea", icon: Lightbulb, tooltip: "Generate New Ideas" },
@@ -28,6 +28,7 @@ const navItems = [
   { href: "/validation", label: "Idea Validation", icon: CheckCircle, tooltip: "Validate Your Ideas" },
   { href: "/build-studio", label: "Build Studio", icon: Hammer, tooltip: "Develop Your Ideas" },
   { href: "/community", label: "Community Forum", icon: Users, tooltip: "Connect with Others" },
+  { href: "/settings", label: "Settings", icon: SettingsIcon, tooltip: "Application Settings" }, // Added Settings page
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -47,8 +48,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </SidebarHeader>
       <ScrollArea className="flex-grow">
-        <SidebarContent className="p-2 flex flex-col h-full"> {/* Modified for flex layout */}
-          <SidebarMenu className="flex-grow"> {/* Allow menu to take available space */}
+        <SidebarContent className="p-2 flex flex-col h-full"> 
+          <SidebarMenu className="flex-grow"> 
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href} className="p-0">
                 <Link href={item.href} passHref legacyBehavior>
@@ -67,10 +68,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
-          {/* LanguageSelector is now outside SidebarMenu, directly in SidebarContent or Footer */}
         </SidebarContent>
       </ScrollArea>
-      <SidebarFooter className="p-2 border-t"> {/* Use SidebarFooter */}
+      <SidebarFooter className="p-2 border-t"> 
         <LanguageSelector />
       </SidebarFooter>
     </>
@@ -78,7 +78,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Desktop Sidebar */}
       <Sidebar
         variant="sidebar"
         collapsible="icon"
@@ -87,7 +86,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {sidebarNavigation}
       </Sidebar>
 
-      {/* Mobile Header and Sidebar Sheet */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between p-2 border-b bg-card shadow-sm h-16">
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild>
@@ -100,7 +98,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
              <FeatherLogo size={24} showText={false} /> 
           </Link>
           <div className="w-8"></div>
-          <SheetContent side="left" className="p-0 w-72 !bg-card flex flex-col"> {/* Ensure flex-col for SheetContent too */}
+          <SheetContent side="left" className="p-0 w-72 !bg-card flex flex-col"> 
             {sidebarNavigation}
           </SheetContent>
         </Sheet>
