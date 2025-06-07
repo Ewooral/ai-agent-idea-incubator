@@ -1,8 +1,8 @@
 
 // src/app/community/page.tsx
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, MessageSquare, Lightbulb, Users2, Rocket, type Icon as LucideIcon, AlertTriangle, PlusCircle } from "lucide-react";
+import { Users, MessageSquare, Lightbulb, Users2, Rocket, type Icon as LucideIcon, AlertTriangle, PlusCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { getForumCategories, type ForumCategory } from "@/lib/db";
 
@@ -61,26 +61,23 @@ export default async function CommunityPage() {
                 {categories.map((category) => {
                   const IconComponent = getIconComponent(category.iconName);
                   return (
-                    <Card key={category.id} className="hover:shadow-lg transition-shadow bg-card">
+                    <Card key={category.id} className="hover:shadow-lg transition-shadow bg-card flex flex-col">
                       <CardHeader>
                         <CardTitle className="flex items-center text-xl">
                           <IconComponent className="mr-3 text-accent" size={24} />
                           {category.title}
                         </CardTitle>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="flex-grow">
                         <p className="text-sm text-muted-foreground mb-3">{category.description}</p>
-                        {/* Placeholder for post count and last activity - to be implemented later */}
-                        {/* <div className="text-xs text-muted-foreground flex justify-between">
-                          <span>0 posts</span>
-                          <span>No activity yet</span>
-                        </div> */}
                       </CardContent>
-                      <CardContent className="pt-2 pb-4">
-                        <Button variant="outline" className="w-full" disabled>
-                          View Category (Coming Soon)
+                      <CardFooter className="pt-2 pb-4">
+                        <Button asChild variant="outline" className="w-full">
+                          <Link href={`/community/${category.id}`}>
+                            View Category <ArrowRight className="ml-2 h-4 w-4" />
+                          </Link>
                         </Button>
-                      </CardContent>
+                      </CardFooter>
                     </Card>
                   );
                 })}
@@ -105,7 +102,7 @@ export default async function CommunityPage() {
             <h3 className="text-xl font-semibold mb-2 text-foreground">Building Our Community Features</h3>
             <p className="text-muted-foreground max-w-lg mx-auto mb-6">
               We're actively developing full forum functionality, including user accounts, posts, and real-time interactions.
-              This page currently showcases dynamically managed categories. Stay tuned for more updates!
+              Stay tuned for more updates!
             </p>
             <Button asChild size="lg">
               <Link href="/">

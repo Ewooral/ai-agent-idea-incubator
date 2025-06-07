@@ -162,6 +162,13 @@
       "description": "Share your progress, launches, and success stories.",
       "iconName": "Rocket",
       "createdAt": "2024-05-20T10:15:00.000Z"
+    },
+    {
+      "id": "cat_1749257453578nheir",
+      "title": "Enhanced the CreateProposalModal component",
+      "description": "I have being a teacher for the past 12 years",
+      "iconName": "LightBulb",
+      "createdAt": "2025-06-07T00:50:53.578Z"
     }
   ]
 }

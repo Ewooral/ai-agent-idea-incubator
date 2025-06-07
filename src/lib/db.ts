@@ -165,6 +165,11 @@ export async function getForumCategories(): Promise<ForumCategory[]> {
   return db.forumCategories.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 }
 
+export async function getForumCategoryById(id: string): Promise<ForumCategory | null> {
+  const db = await readDb();
+  return db.forumCategories.find(category => category.id === id) || null;
+}
+
 export async function addForumCategory(
   categoryData: Omit<ForumCategory, 'id' | 'createdAt'>
 ): Promise<ForumCategory> {
