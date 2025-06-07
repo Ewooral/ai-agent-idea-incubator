@@ -15,12 +15,13 @@ import {
   SidebarTrigger,
   SidebarFooter, 
 } from "@/components/ui/sidebar";
-import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer, Settings as SettingsIcon } from "lucide-react"; // Added SettingsIcon
+import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer, Settings as SettingsIcon } from "lucide-react";
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { LanguageSelector } from '@/components/language-selector';
+import { ThemeToggleButton } from '@/components/theme-toggle-button';
 
 const navItems = [
   { href: "/", label: "Generate Idea", icon: Lightbulb, tooltip: "Generate New Ideas" },
@@ -28,7 +29,7 @@ const navItems = [
   { href: "/validation", label: "Idea Validation", icon: CheckCircle, tooltip: "Validate Your Ideas" },
   { href: "/build-studio", label: "Build Studio", icon: Hammer, tooltip: "Develop Your Ideas" },
   { href: "/community", label: "Community Forum", icon: Users, tooltip: "Connect with Others" },
-  { href: "/settings", label: "Settings", icon: SettingsIcon, tooltip: "Application Settings" }, // Added Settings page
+  { href: "/settings", label: "Settings", icon: SettingsIcon, tooltip: "Application Settings" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -70,7 +71,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </SidebarMenu>
         </SidebarContent>
       </ScrollArea>
-      <SidebarFooter className="p-2 border-t"> 
+      <SidebarFooter className="p-2 border-t flex flex-col gap-2"> 
+        <ThemeToggleButton />
         <LanguageSelector />
       </SidebarFooter>
     </>
@@ -97,7 +99,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Link href="/">
              <FeatherLogo size={24} showText={false} /> 
           </Link>
-          <div className="w-8"></div>
+          <div className="w-8"></div> {/* Spacer for balance */}
           <SheetContent side="left" className="p-0 w-72 !bg-card flex flex-col"> 
             {sidebarNavigation}
           </SheetContent>
