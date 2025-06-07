@@ -43,17 +43,17 @@ export default async function BuildStudioIdeaServerPage({ params }: BuildStudioI
 
       <Card className="mb-8 shadow-xl bg-card border-primary/30">
         <CardHeader>
-          <CardTitle className="font-headline text-3xl flex items-center">
+          <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
             <Hammer className="mr-3 text-primary" size={32} /> AI Development Guide for Your Idea
           </CardTitle>
           <CardDescription>Input key details about your project, then let AI generate a step-by-step development guide.</CardDescription>
         </CardHeader>
         <CardContent>
             <div className="p-4 mb-6 bg-muted/50 rounded-lg border border-primary/20">
-                <h3 className="text-lg font-semibold text-primary flex items-center mb-1">
+                <h3 className="text-base sm:text-lg font-semibold text-primary flex items-center mb-1">
                     <Lightbulb className="mr-2 h-5 w-5" /> Original Refined Idea:
                 </h3>
-                <p className="text-foreground/90">{savedIdea.refinedIdea}</p>
+                <p className="text-foreground/90 text-sm sm:text-base">{savedIdea.refinedIdea}</p>
             </div>
             <BuildStudioClientPage 
               ideaId={ideaId} 

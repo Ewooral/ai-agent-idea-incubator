@@ -164,8 +164,6 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
     setGeneratedGuide(undefined); 
     setTranslatedGuideMarkdown(null); 
     
-    // Ensure results section exists and scroll to it
-    // The timeout gives the DOM a moment to update if the skeleton is conditionally rendered
     setTimeout(() => {
       const guideSection = document.getElementById('ai-guide-section');
       if (guideSection) {
@@ -218,7 +216,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
               name="valueProposition"
               render={({ field }) => (
               <FormItem>
-                  <FormLabel className="text-lg flex items-center"><FileText className="mr-2 h-5 w-5 text-accent" />Value Proposition *</FormLabel>
+                  <FormLabel className="text-base sm:text-lg flex items-center"><FileText className="mr-2 h-5 w-5 text-accent" />Value Proposition *</FormLabel>
                   <FormControl>
                   <Textarea placeholder="What unique value do you offer? Why should customers choose you?" {...field} rows={3} />
                   </FormControl>
@@ -232,7 +230,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
               name="customerSegments"
               render={({ field }) => (
               <FormItem>
-                  <FormLabel className="text-lg flex items-center"><Users className="mr-2 h-5 w-5 text-accent" />Customer Segments *</FormLabel>
+                  <FormLabel className="text-base sm:text-lg flex items-center"><Users className="mr-2 h-5 w-5 text-accent" />Customer Segments *</FormLabel>
                   <FormControl>
                   <Textarea placeholder="Who are your target customers? Describe their key characteristics." {...field} rows={3}/>
                   </FormControl>
@@ -246,7 +244,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
               name="keyActivities"
               render={({ field }) => (
               <FormItem>
-                  <FormLabel className="text-lg flex items-center"><Activity className="mr-2 h-5 w-5 text-accent" />Key Activities *</FormLabel>
+                  <FormLabel className="text-base sm:text-lg flex items-center"><Activity className="mr-2 h-5 w-5 text-accent" />Key Activities *</FormLabel>
                   <FormControl>
                   <Textarea placeholder="What critical activities must your business perform to deliver its value proposition?" {...field} rows={3}/>
                   </FormControl>
@@ -260,7 +258,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
               name="revenueStreams"
               render={({ field }) => (
               <FormItem>
-                  <FormLabel className="text-lg flex items-center"><DollarSign className="mr-2 h-5 w-5 text-accent" />Revenue Streams *</FormLabel>
+                  <FormLabel className="text-base sm:text-lg flex items-center"><DollarSign className="mr-2 h-5 w-5 text-accent" />Revenue Streams *</FormLabel>
                   <FormControl>
                   <Textarea placeholder="How will your business generate revenue? (e.g., sales, subscriptions, ads)" {...field} rows={3}/>
                   </FormControl>
@@ -271,14 +269,14 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
           />
           
           <Separator />
-          <h3 className="text-xl font-semibold text-foreground pt-4">Details for AI Guide Generation</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-foreground pt-4">Details for AI Guide Generation</h3>
           
           <FormField
               control={form.control}
               name="targetPlatform"
               render={({ field }) => (
               <FormItem>
-                  <FormLabel className="text-lg">Target Platform *</FormLabel>
+                  <FormLabel className="text-base sm:text-lg">Target Platform *</FormLabel>
                   <FormControl>
                   <Input placeholder="e.g., Web Application, iOS Mobile App, Cross-platform Mobile App" {...field} />
                   </FormControl>
@@ -292,7 +290,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
               name="coreFeaturesMVP"
               render={({ field }) => (
               <FormItem>
-                  <FormLabel className="text-lg">Core MVP Features *</FormLabel>
+                  <FormLabel className="text-base sm:text-lg">Core MVP Features *</FormLabel>
                   <FormControl>
                   <Textarea placeholder="List 3-5 essential features for your Minimum Viable Product. Be concise but clear. e.g., User registration & login, Ability to create posts, Real-time chat functionality" {...field} rows={4}/>
                   </FormControl>
@@ -306,7 +304,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
               name="techStackSuggestion"
               render={({ field }) => (
               <FormItem>
-                  <FormLabel className="text-lg">Tech Stack Preference (Optional)</FormLabel>
+                  <FormLabel className="text-base sm:text-lg">Tech Stack Preference (Optional)</FormLabel>
                   <FormControl>
                   <Textarea placeholder="e.g., React Native for mobile, Python/Django backend, Firebase for BaaS. If unsure, leave blank and AI will suggest." {...field} rows={3}/>
                   </FormControl>
@@ -320,7 +318,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
               name="notes"
               render={({ field }) => (
               <FormItem>
-                  <FormLabel className="text-lg">Additional Notes for AI (Optional)</FormLabel>
+                  <FormLabel className="text-base sm:text-lg">Additional Notes for AI (Optional)</FormLabel>
                   <FormControl>
                   <Textarea placeholder="Any other specific context, constraints, or preferences for the AI to consider when generating the guide." {...field} rows={4}/>
                   </FormControl>
@@ -330,7 +328,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
               )}
           />
           <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <Button type="submit" disabled={isSaving || isGenerating || isTranslatingGuide} size="lg">
+            <Button type="submit" disabled={isSaving || isGenerating || isTranslatingGuide} size="lg" className="w-full sm:w-auto">
                 {isSaving ? (
                 <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -343,7 +341,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
                 </>
                 )}
             </Button>
-            <Button type="button" onClick={handleGenerateGuide} disabled={isSaving || isGenerating || isTranslatingGuide || form.formState.isDirty} size="lg" variant="outline">
+            <Button type="button" onClick={handleGenerateGuide} disabled={isSaving || isGenerating || isTranslatingGuide || form.formState.isDirty} size="lg" variant="outline" className="w-full sm:w-auto">
               {isGenerating ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -390,7 +388,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
         {displayedGuideContent && !isGenerating && ( 
           <Card className="mt-8 border-primary/70 shadow-lg">
             <CardHeader>
-              <CardTitle className="font-headline text-2xl flex items-center text-primary">
+              <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-primary">
                 <Wand2 className="mr-3 h-7 w-7" /> {guideCardTitle}
               </CardTitle>
             </CardHeader>
@@ -412,4 +410,3 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
     </>
   );
 }
-    

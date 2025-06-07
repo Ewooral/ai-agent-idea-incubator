@@ -37,9 +37,9 @@ export default async function CommunityPage() {
   return (
     <div className="container mx-auto py-8 px-4">
       <Card className="shadow-xl bg-card">
-        <CardHeader className="flex flex-row justify-between items-start">
+        <CardHeader className="flex flex-col sm:flex-row justify-between items-start gap-4">
             <div>
-                <CardTitle className="font-headline text-3xl flex items-center">
+                <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
                     <Users className="mr-3 text-primary" size={32} /> Idea Exchange Community
                 </CardTitle>
                 <CardDescription>
@@ -47,7 +47,7 @@ export default async function CommunityPage() {
                     (Full forum functionality is being built incrementally!)
                 </CardDescription>
             </div>
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" className="w-full sm:w-auto">
                 <Link href="/admin/community/categories">
                     <PlusCircle className="mr-2 h-4 w-4" /> Add Category (Admin)
                 </Link>
@@ -55,7 +55,7 @@ export default async function CommunityPage() {
         </CardHeader>
         <CardContent className="space-y-8">
           <div>
-            <h2 className="font-headline text-2xl mb-6">Discussion Categories</h2>
+            <h2 className="font-headline text-xl sm:text-2xl mb-6">Discussion Categories</h2>
             {categories.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {categories.map((category) => {
@@ -63,13 +63,13 @@ export default async function CommunityPage() {
                   return (
                     <Card key={category.id} className="hover:shadow-lg transition-shadow bg-card flex flex-col">
                       <CardHeader>
-                        <CardTitle className="flex items-center text-xl">
+                        <CardTitle className="flex items-center text-lg sm:text-xl">
                           <IconComponent className="mr-3 text-accent" size={24} />
                           {category.title}
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="flex-grow">
-                        <p className="text-sm text-muted-foreground mb-3">{category.description}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground mb-3">{category.description}</p>
                       </CardContent>
                       <CardFooter className="pt-2 pb-4">
                         <Button asChild variant="outline" className="w-full">
@@ -85,11 +85,11 @@ export default async function CommunityPage() {
             ) : (
                 <div className="text-center py-10 border rounded-lg bg-muted/20">
                     <Users size={48} className="mx-auto mb-4 text-primary/50" />
-                    <h3 className="text-xl font-semibold mb-2 text-foreground">No Categories Yet</h3>
-                    <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                    <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">No Categories Yet</h3>
+                    <p className="text-muted-foreground max-w-md mx-auto mb-6 text-sm sm:text-base">
                         It looks like there are no forum categories. An administrator can add some.
                     </p>
-                     <Button asChild>
+                     <Button asChild className="w-full sm:w-auto">
                         <Link href="/admin/community/categories">
                             <PlusCircle className="mr-2 h-5 w-5" /> Add First Category (Admin)
                         </Link>
@@ -99,12 +99,12 @@ export default async function CommunityPage() {
           </div>
           
           <div className="text-center py-10 border-t mt-10">
-            <h3 className="text-xl font-semibold mb-2 text-foreground">Building Our Community Features</h3>
-            <p className="text-muted-foreground max-w-lg mx-auto mb-6">
+            <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">Building Our Community Features</h3>
+            <p className="text-muted-foreground max-w-lg mx-auto mb-6 text-sm sm:text-base">
               We're actively developing full forum functionality, including user accounts, posts, and real-time interactions.
               Stay tuned for more updates!
             </p>
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="w-full sm:w-auto">
               <Link href="/">
                 <Lightbulb className="mr-2 h-5 w-5" /> Back to Idea Generation
               </Link>

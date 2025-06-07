@@ -55,7 +55,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
       <Card className="shadow-xl bg-card">
         <CardHeader>
-          <CardTitle className="font-headline text-3xl flex items-center">
+          <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
             <IconComponent className="mr-3 text-primary" size={32} />
             {category.title}
           </CardTitle>
@@ -63,15 +63,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex justify-end">
-            <Button disabled>
+            <Button disabled className="w-full sm:w-auto">
               <PlusCircle className="mr-2 h-5 w-5" /> Create New Thread (Coming Soon)
             </Button>
           </div>
           
           <div className="text-center py-12 border rounded-lg bg-muted/20">
             <MessageSquare size={48} className="mx-auto mb-4 text-primary/50" />
-            <h3 className="text-xl font-semibold mb-2 text-foreground">No Threads Yet</h3>
-            <p className="text-muted-foreground max-w-md mx-auto">
+            <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">No Threads Yet</h3>
+            <p className="text-muted-foreground max-w-md mx-auto text-sm sm:text-base">
               No discussions have started in this category. Be the first to post a new thread!
             </p>
           </div>

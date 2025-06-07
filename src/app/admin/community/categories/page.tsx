@@ -77,7 +77,7 @@ export default function AddCommunityCategoryPage() {
         </Button>
       <Card className="max-w-2xl mx-auto shadow-xl">
         <CardHeader>
-          <CardTitle className="font-headline text-2xl flex items-center">
+          <CardTitle className="font-headline text-xl sm:text-2xl flex items-center">
             <PlusCircle className="mr-2 text-primary" /> Add New Forum Category
           </CardTitle>
           <CardDescription>

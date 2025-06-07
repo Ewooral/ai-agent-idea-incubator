@@ -106,7 +106,6 @@ export default function GenerateIdeaPage(): ReactNode {
           if (result.success && result.translatedText) {
             return result.translatedText;
           }
-          // Fallback to original idea if translation failed for this specific idea
           toast({ title: `Translation Warning`, description: `Could not translate one of the ideas to ${languageName}. Showing original.`, variant: "default" });
           return generatedIdeas[index];
         });
@@ -116,7 +115,7 @@ export default function GenerateIdeaPage(): ReactNode {
 
       } catch (error: any) {
         console.error("Error translating ideas array:", error);
-        setTranslatedGeneratedIdeas(null); // Fallback to original ideas on general error
+        setTranslatedGeneratedIdeas(null); 
         toast({ title: "Translation Error", description: `Could not translate ideas. ${error.message}`, variant: "destructive" });
       } finally {
         setIsTranslatingIdeas(false);
@@ -132,8 +131,6 @@ export default function GenerateIdeaPage(): ReactNode {
     setGeneratedIdeas([]);
     setTranslatedGeneratedIdeas(null);
     
-    // Ensure results section exists and scroll to it
-    // The timeout gives the DOM a moment to update if the skeleton is conditionally rendered
     setTimeout(() => {
       const resultsSection = document.getElementById('results-section');
       if (resultsSection) {
@@ -153,7 +150,7 @@ export default function GenerateIdeaPage(): ReactNode {
         return;
       }
       const result = await generateNovelIdea(input);
-      setGeneratedIdeas(result.novelIdeas); // This will trigger the translation useEffect
+      setGeneratedIdeas(result.novelIdeas); 
       if (result.novelIdeas.length === 0) {
         toast({
           title: "No Ideas Generated",
@@ -186,8 +183,8 @@ export default function GenerateIdeaPage(): ReactNode {
   };
 
   const handleTopicCardClick = (topic: TopicCardProps) => {
-    form.reset(); // Clear form fields
-    form.setValue('problemArea', topic.problemArea || ""); // Update form state to reflect clicked topic
+    form.reset(); 
+    form.setValue('problemArea', topic.problemArea || ""); 
     form.setValue('keywords', topic.keywords || "");
     const input: GenerateNovelIdeaInput = {
       problemArea: topic.problemArea || undefined,
@@ -203,7 +200,7 @@ export default function GenerateIdeaPage(): ReactNode {
     <div className="container mx-auto py-8 px-4">
       <Card className="mb-8 shadow-xl bg-card">
         <CardHeader>
-          <CardTitle className="font-headline text-3xl flex items-center">
+          <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
             <Sparkles className="mr-2 text-primary" />
             Spark Your Next Big Idea
           </CardTitle>
@@ -271,8 +268,8 @@ export default function GenerateIdeaPage(): ReactNode {
       </Card>
 
       <div className="mb-12">
-        <h2 className="font-headline text-2xl mb-2 text-center">Or, Explore Ideas by Topic</h2>
-        <p className="text-muted-foreground text-center mb-6">Click a card to generate ideas for a specific theme.</p>
+        <h2 className="font-headline text-xl sm:text-2xl mb-2 text-center">Or, Explore Ideas by Topic</h2>
+        <p className="text-muted-foreground text-center mb-6 text-sm sm:text-base">Click a card to generate ideas for a specific theme.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {topicCardsData.map((topic) => (
             <Card
@@ -289,7 +286,7 @@ export default function GenerateIdeaPage(): ReactNode {
                 <CardTitle className="font-headline text-lg">{topic.title}</CardTitle>
               </CardHeader>
               <CardContent className="flex-grow pb-3">
-                <p className="text-sm text-muted-foreground">{topic.description}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">{topic.description}</p>
               </CardContent>
                {isLoading && (form.getValues().keywords === topic.keywords || form.getValues().problemArea === topic.problemArea) && !form.formState.isSubmitting ? (
                  <CardFooter className="pt-0 pb-4 justify-center">
@@ -331,15 +328,15 @@ export default function GenerateIdeaPage(): ReactNode {
 
         {!isLoading && ideasToDisplay.length > 0 && (
           <div>
-            <h2 className="font-headline text-2xl mb-6 mt-8">
+            <h2 className="font-headline text-xl sm:text-2xl mb-6 mt-8">
               Generated Ideas {selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {ideasToDisplay.map((displayIdea, index) => (
                  <IdeaDisplayCard
                     key={index}
-                    idea={displayIdea} // The idea to display (could be translated)
-                    originalIdeaForQuery={generatedIdeas[index]} // Always the original English idea for the link
+                    idea={displayIdea} 
+                    originalIdeaForQuery={generatedIdeas[index]} 
                   />
               ))}
             </div>
@@ -348,11 +345,10 @@ export default function GenerateIdeaPage(): ReactNode {
          {!isLoading && ideasToDisplay.length === 0 && (!form.formState.isSubmitted && !topicCardsData.some(topic => form.getValues().keywords === topic.keywords || form.getValues().problemArea === topic.problemArea)) && (
           <div className="text-center py-10 text-muted-foreground min-h-[200px] flex flex-col justify-center items-center">
               <Lightbulb size={48} className="mx-auto mb-4 text-primary/70" />
-              <p>Enter a problem or keywords above, or select a topic to start generating ideas.</p>
+              <p className="text-sm sm:text-base">Enter a problem or keywords above, or select a topic to start generating ideas.</p>
           </div>
         )}
       </div>
     </div>
   );
 }
-    

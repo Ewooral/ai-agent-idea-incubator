@@ -116,8 +116,6 @@ export default function ValidationPage(): ReactNode {
     setValidationResult(null);
     setTranslatedRefinedIdea(null); 
     
-    // Ensure results section exists and scroll to it
-    // The timeout gives the DOM a moment to update if the skeleton is conditionally rendered
     setTimeout(() => {
       const resultsSection = document.getElementById('validation-results-section');
       if (resultsSection) {
@@ -161,7 +159,6 @@ export default function ValidationPage(): ReactNode {
     }
     setIsSaving(true);
     try {
-      // Ensure we save the original refined idea, not the translated one
       const result = await saveValidatedIdeaAction(form.getValues('idea'), validationResult);
       if (result.success) {
         toast({
@@ -200,7 +197,7 @@ export default function ValidationPage(): ReactNode {
     <div className="container mx-auto py-8 px-4">
       <Card className="mb-8 shadow-xl bg-card">
         <CardHeader>
-          <CardTitle className="font-headline text-3xl flex items-center">
+          <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
             <Zap className="mr-3 text-primary" size={32} /> AI Idea Refinement & Validation
           </CardTitle>
           <CardDescription>
@@ -221,7 +218,6 @@ export default function ValidationPage(): ReactNode {
                         placeholder="Describe your business idea in detail... What problem does it solve? Who is it for?"
                         {...field}
                         rows={5}
-                        className="text-base"
                       />
                     </FormControl>
                     <FormDescription>
@@ -319,14 +315,14 @@ export default function ValidationPage(): ReactNode {
         {!isLoading && validationResult && (
           <>
           <Card className="mt-8 shadow-xl bg-card border-primary/50">
-            <CardHeader className="flex flex-row justify-between items-start">
+            <CardHeader className="flex flex-col sm:flex-row justify-between items-start gap-4">
               <div>
-                <CardTitle className="font-headline text-2xl flex items-center text-primary">
+                <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-primary">
                   <Lightbulb size={28} className="mr-3"/> AI Refinement & Strategic Insights
                 </CardTitle>
                 <CardDescription>Review the AI's analysis of your idea below. Use the language selector in the sidebar to translate the refined idea.</CardDescription>
               </div>
-              <Button onClick={handleSaveIdea} disabled={isSaving || isLoading} size="lg">
+              <Button onClick={handleSaveIdea} disabled={isSaving || isLoading} size="lg" className="w-full sm:w-auto">
                 {isSaving ? (
                   <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Saving...</>
                 ) : (
@@ -336,7 +332,7 @@ export default function ValidationPage(): ReactNode {
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <h3 className="text-xl font-semibold mb-2 text-foreground flex items-center">
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground flex items-center">
                   <CheckCircle size={22} className="mr-2 text-green-500"/>
                   Refined Idea {selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}:
                 </h3>
@@ -354,10 +350,10 @@ export default function ValidationPage(): ReactNode {
               
               {validationResult.associatedConcepts && validationResult.associatedConcepts.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-2 text-foreground flex items-center"><Tag size={20} className="mr-2 text-accent"/>Associated Concepts:</h3>
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground flex items-center"><Tag size={20} className="mr-2 text-accent"/>Associated Concepts:</h3>
                   <div className="flex flex-wrap gap-2">
                     {validationResult.associatedConcepts.map((concept, index) => (
-                      <Badge key={index} variant="secondary" className="text-sm px-3 py-1">{concept}</Badge>
+                      <Badge key={index} variant="secondary" className="text-xs sm:text-sm px-2 sm:px-3 py-1">{concept}</Badge>
                     ))}
                   </div>
                 </div>
@@ -365,10 +361,10 @@ export default function ValidationPage(): ReactNode {
 
               {validationResult.potentialPivots && validationResult.potentialPivots.length > 0 && (
                  <div>
-                  <h3 className="text-lg font-semibold mb-2 text-foreground flex items-center"><TrendingUp size={20} className="mr-2 text-accent"/>Potential Pivots:</h3>
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground flex items-center"><TrendingUp size={20} className="mr-2 text-accent"/>Potential Pivots:</h3>
                    <div className="flex flex-wrap gap-2">
                     {validationResult.potentialPivots.map((pivot, index) => (
-                      <Badge key={index} variant="outline" className="text-sm px-3 py-1 bg-accent/10 border-accent text-accent-foreground hover:bg-accent/20">{pivot}</Badge>
+                      <Badge key={index} variant="outline" className="text-xs sm:text-sm px-2 sm:px-3 py-1 bg-accent/10 border-accent text-accent-foreground hover:bg-accent/20">{pivot}</Badge>
                     ))}
                   </div>
                 </div>
@@ -378,7 +374,7 @@ export default function ValidationPage(): ReactNode {
 
           <Card className="mt-8 shadow-xl bg-gradient-to-br from-primary/10 via-card to-accent/10 border-accent/50">
             <CardHeader>
-                <CardTitle className="font-headline text-2xl flex items-center text-primary">
+                <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-primary">
                     <ShieldCheck size={28} className="mr-3" /> AI-Generated Analysis
                 </CardTitle>
                 <CardDescription>AI-driven market insights and strategic advantages for your idea.</CardDescription>
@@ -387,19 +383,19 @@ export default function ValidationPage(): ReactNode {
                 <div className="grid md:grid-cols-2 gap-6">
                     <Card className="bg-card/80 backdrop-blur-sm">
                         <CardHeader>
-                            <CardTitle className="text-lg flex items-center"><Target size={20} className="mr-2 text-primary"/>Overall Market Potential Score</CardTitle>
+                            <CardTitle className="text-base sm:text-lg flex items-center"><Target size={20} className="mr-2 text-primary"/>Overall Market Potential Score</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="flex items-center space-x-3 mb-2">
-                                <Progress value={validationResult.marketPotentialScore} className="w-full h-4" />
-                                <span className="font-bold text-2xl text-primary">{validationResult.marketPotentialScore}%</span>
+                                <Progress value={validationResult.marketPotentialScore} className="w-full h-3 sm:h-4" />
+                                <span className="font-bold text-xl sm:text-2xl text-primary">{validationResult.marketPotentialScore}%</span>
                             </div>
                             <p className="text-xs text-muted-foreground">AI-estimated overall potential based on current inputs.</p>
                         </CardContent>
                     </Card>
                      <Card className="bg-card/80 backdrop-blur-sm">
                         <CardHeader>
-                            <CardTitle className="text-lg flex items-center"><Zap size={20} className="mr-2 text-primary"/>Key SWOT Snippet</CardTitle>
+                            <CardTitle className="text-base sm:text-lg flex items-center"><Zap size={20} className="mr-2 text-primary"/>Key SWOT Snippet</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <p className="text-foreground/90 text-sm p-3 bg-muted/50 rounded-md border border-dashed">{validationResult.swotSnippet}</p>
@@ -409,7 +405,7 @@ export default function ValidationPage(): ReactNode {
                 </div>
                  <Card className="bg-card/80 backdrop-blur-sm">
                     <CardHeader>
-                        <CardTitle className="text-lg flex items-center"><Search size={20} className="mr-2 text-primary"/>Competitor Landscape Teaser</CardTitle>
+                        <CardTitle className="text-base sm:text-lg flex items-center"><Search size={20} className="mr-2 text-primary"/>Competitor Landscape Teaser</CardTitle>
                     </CardHeader>
                     <CardContent>
                          <p className="text-foreground/90 text-sm p-3 bg-muted/50 rounded-md border border-dashed">{validationResult.competitorTeaser}</p>
@@ -420,32 +416,38 @@ export default function ValidationPage(): ReactNode {
                 {validationResult.viabilityFactorsChartData && validationResult.viabilityFactorsChartData.length > 0 ? (
                   <Card className="bg-card/80 backdrop-blur-sm">
                     <CardHeader>
-                      <CardTitle className="text-lg flex items-center"><BarChart3 size={20} className="mr-2 text-primary"/>AI-Generated Market Viability Factors</CardTitle>
+                      <CardTitle className="text-base sm:text-lg flex items-center"><BarChart3 size={20} className="mr-2 text-primary"/>AI-Generated Market Viability Factors</CardTitle>
                     </CardHeader>
                     <CardContent className="text-center">
-                      <div className="h-80 w-full rounded-lg bg-muted/30 border border-dashed p-4">
+                      <div className="h-64 sm:h-80 w-full rounded-lg bg-muted/30 border border-dashed p-4">
                         <ChartContainer config={dynamicChartConfig} className="w-full h-full">
-                          <BarChart accessibilityLayer data={validationResult.viabilityFactorsChartData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
+                          <BarChart accessibilityLayer data={validationResult.viabilityFactorsChartData} margin={{ top: 5, right: 5, left: -25, bottom: 20 }}>
                             <CartesianGrid vertical={false} strokeDasharray="3 3" />
                             <XAxis
                               dataKey="name"
                               tickLine={false}
                               tickMargin={10}
                               axisLine={false}
-                              tickFormatter={(value) => value.length > 15 ? `${value.substring(0,15)}...` : value}
+                              angle={-30}
+                              textAnchor="end"
+                              height={50}
+                              interval={0}
+                              tickFormatter={(value) => value.length > 12 ? `${value.substring(0,10)}...` : value}
+                              className="text-xs"
                             />
                             <YAxis 
                               tickLine={false}
                               axisLine={false}
                               tickMargin={10}
                               domain={[0, 100]}
+                              className="text-xs"
                             />
                             <ChartTooltip
                               cursor={false}
                               content={<ChartTooltipContent />}
                             />
-                            <ChartLegend content={<ChartLegendContent />} />
-                            <Bar dataKey="score" fill="var(--color-score)" radius={8} />
+                            <ChartLegend content={<ChartLegendContent wrapperStyle={{ fontSize: '0.75rem' }} />} />
+                            <Bar dataKey="score" fill="var(--color-score)" radius={window.innerWidth < 640 ? 4 : 8} />
                           </BarChart>
                         </ChartContainer>
                       </div>
@@ -457,7 +459,7 @@ export default function ValidationPage(): ReactNode {
                 ) : (
                   <Card className="bg-card/80 backdrop-blur-sm">
                     <CardHeader>
-                      <CardTitle className="text-lg flex items-center"><BarChart3 size={20} className="mr-2 text-primary"/>Market Viability Factors</CardTitle>
+                      <CardTitle className="text-base sm:text-lg flex items-center"><BarChart3 size={20} className="mr-2 text-primary"/>Market Viability Factors</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-muted-foreground">Detailed chart data for viability factors was not generated for this idea. Try refining your input.</p>
@@ -476,12 +478,11 @@ export default function ValidationPage(): ReactNode {
          {!isLoading && !validationResult && (
           <div className="text-center py-16 text-muted-foreground min-h-[70vh] flex flex-col justify-center items-center bg-card shadow-md rounded-lg mt-8">
               <Zap size={48} className="mx-auto mb-4 text-primary/50" />
-              <p className="text-lg">Enter your idea above and let our AI provide valuable insights.</p>
-              <p className="text-sm">The validation results and AI-driven analysis will appear here.</p>
+              <p className="text-base sm:text-lg">Enter your idea above and let our AI provide valuable insights.</p>
+              <p className="text-xs sm:text-sm">The validation results and AI-driven analysis will appear here.</p>
           </div>
         )}
       </div>
     </div>
   );
 }
-

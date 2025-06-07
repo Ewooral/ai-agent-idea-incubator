@@ -37,10 +37,8 @@ export default function SettingsPage() {
           title: "Data Cleared",
           description: result.message,
         });
-        // Optionally, refresh the current page or redirect
-        // router.refresh(); // This might be sufficient if local state doesn't hold cleared data
-         startTransition(() => {
-          router.push('/'); // Redirect to home page after clearing to reflect empty state
+        startTransition(() => {
+          router.push('/'); 
         });
       } else {
         toast({
@@ -64,7 +62,7 @@ export default function SettingsPage() {
     <div className="container mx-auto py-8 px-4">
       <Card className="shadow-xl bg-card">
         <CardHeader>
-          <CardTitle className="font-headline text-3xl flex items-center">
+          <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
             <Settings className="mr-3 text-primary" size={32} /> Application Settings
           </CardTitle>
           <CardDescription>
@@ -74,7 +72,7 @@ export default function SettingsPage() {
         <CardContent className="space-y-8">
           <Card className="border-destructive/50 bg-destructive/5">
             <CardHeader>
-              <CardTitle className="text-xl flex items-center text-destructive">
+              <CardTitle className="text-lg sm:text-xl flex items-center text-destructive">
                 <AlertTriangle className="mr-2" /> Danger Zone
               </CardTitle>
             </CardHeader>
@@ -87,7 +85,7 @@ export default function SettingsPage() {
               </p>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="destructive" disabled={isClearing || isPending}>
+                  <Button variant="destructive" disabled={isClearing || isPending} className="w-full sm:w-auto">
                     {isClearing || isPending ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
@@ -128,7 +126,7 @@ export default function SettingsPage() {
           </Card>
 
           <div>
-            <h3 className="text-xl font-semibold mb-2 text-foreground">Data Storage Information</h3>
+            <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">Data Storage Information</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               This application currently stores data in a local JSON file (`src/data/db.json`). 
               While suitable for prototyping, personal use, and demonstration purposes, for production environments 
@@ -147,13 +145,9 @@ export default function SettingsPage() {
   );
 }
 
-// Helper for AlertDialogAction styling, normally this comes from button.tsx but variant="destructive" might not be available directly
-// For safety, let's define it explicitly if needed, though ShadCN usually handles this.
-// This is generally not needed if buttonVariants is correctly exported and used.
 const buttonVariants = ({ variant }: { variant?: string }) => {
   if (variant === "destructive") {
     return "bg-destructive text-destructive-foreground hover:bg-destructive/90";
   }
   return "";
 };
-
