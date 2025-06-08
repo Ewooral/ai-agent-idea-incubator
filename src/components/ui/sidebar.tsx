@@ -11,7 +11,12 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent } from "@/components/ui/sheet"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader, // Added import
+  SheetTitle,  // Added import
+} from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Tooltip,
@@ -182,7 +187,7 @@ const Sidebar = React.forwardRef<
       return (
         <div
           className={cn(
-            "flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground", 
+            "flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground",
             className
           )}
           ref={ref}
@@ -198,7 +203,7 @@ const Sidebar = React.forwardRef<
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
           <SheetContent
             data-sidebar="sidebar"
-            data-mobile="true" // Add this attribute to target mobile sheet styles
+            data-mobile="true"
             className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
             style={
               {
@@ -207,6 +212,9 @@ const Sidebar = React.forwardRef<
             }
             side={side}
           >
+            <SheetHeader className="sr-only">
+              <SheetTitle>Main navigation</SheetTitle>
+            </SheetHeader>
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
         </Sheet>
@@ -216,7 +224,7 @@ const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        className="group peer hidden md:block text-sidebar-foreground"
+        className="group peer hidden text-sidebar-foreground md:block"
         data-state={state}
         data-collapsible={state === "collapsed" ? collapsible : ""}
         data-variant={variant}
@@ -225,8 +233,7 @@ const Sidebar = React.forwardRef<
         {/* This is what handles the sidebar gap on desktop */}
         <div
           className={cn(
-            "duration-200 relative w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
-            "h-full", // Reverted: Occupy full height of its parent
+            "duration-200 relative h-[calc(100svh_-_4rem)] w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
             "group-data-[collapsible=offcanvas]:w-0",
             "group-data-[side=right]:rotate-180",
             variant === "floating" || variant === "inset"
@@ -237,7 +244,7 @@ const Sidebar = React.forwardRef<
         <div
           className={cn(
             "duration-200 fixed z-10 hidden w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
-            "top-0 bottom-0 h-full", // Reverted: Occupy full viewport height
+            "bottom-0 top-16 h-[calc(100svh_-_4rem)]",
             side === "left"
               ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
               : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -325,7 +332,7 @@ const SidebarInset = React.forwardRef<
     <main
       ref={ref}
       className={cn(
-        "relative flex min-h-svh flex-1 flex-col bg-background", // Removed pt-16
+        "relative flex min-h-svh flex-1 flex-col bg-background", 
         "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
         className
       )}
