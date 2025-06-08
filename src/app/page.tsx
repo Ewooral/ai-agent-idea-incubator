@@ -202,7 +202,7 @@ export default function GenerateIdeaPage(): ReactNode {
         <CardHeader>
           <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
             <Sparkles className="mr-2 text-primary" />
-            Spark Your Next Big Idea
+            Spark Your Next Big Idea!
           </CardTitle>
           <CardDescription>
             Unleash the power of AI. Input a problem area or keywords, or select a topic below to discover novel business concepts. Use the language selector in the sidebar to translate generated ideas.
