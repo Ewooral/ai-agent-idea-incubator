@@ -1,7 +1,7 @@
 
 'use server';
 
-import { ideaIncubatorChatbotFlow, type IdeaIncubatorChatbotInput, type IdeaIncubatorChatbotOutput, type ChatMessage } from '@/ai/flows/idea-incubator-chat-flow';
+import { askIdeaIncubatorChatbot, type IdeaIncubatorChatbotInput, type IdeaIncubatorChatbotOutput } from '@/ai/flows/idea-incubator-chat-flow';
 import { helpTopics, type HelpTopic } from '@/data/help-guide-topics';
 import { z } from 'zod';
 
@@ -75,7 +75,7 @@ export async function askChatbotAction(
       appFeatureSummaries: appFeatureSummaries,
     };
 
-    const result: IdeaIncubatorChatbotOutput = await ideaIncubatorChatbotFlow(flowInput);
+    const result: IdeaIncubatorChatbotOutput = await askIdeaIncubatorChatbot(flowInput); // Use the new wrapper function
     return { success: true, aiResponse: result.aiResponse };
   } catch (error: any) {
     console.error('Error during chatbot action:', error);

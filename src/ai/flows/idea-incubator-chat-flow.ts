@@ -3,9 +3,10 @@
 /**
  * @fileOverview A Genkit flow for an AI chatbot to answer questions about the Idea Incubator app.
  *
- * - ideaIncubatorChatbotFlow - The main flow function.
+ * - askIdeaIncubatorChatbot - The main exported async wrapper function for the flow.
  * - IdeaIncubatorChatbotInput - Input type for the flow.
  * - IdeaIncubatorChatbotOutput - Output type for the flow.
+ * - ChatMessage - Type for chat messages within history.
  */
 
 import {ai} from '@/ai/genkit';
@@ -20,17 +21,16 @@ export type ChatMessage = z.infer<typeof ChatMessageSchema>;
 const AppFeatureSummarySchema = z.object({
   title: z.string().describe("The title of the application feature."),
   summary: z.string().describe("A brief summary of what the feature does and how to use it."),
-  // We could add more structured data here if needed, like keywords or related features.
 });
 
-export const IdeaIncubatorChatbotInputSchema = z.object({
+const IdeaIncubatorChatbotInputSchema = z.object({
   userQuery: z.string().describe("The user's current question."),
   chatHistory: z.array(ChatMessageSchema).optional().describe("The history of the conversation so far."),
   appFeatureSummaries: z.array(AppFeatureSummarySchema).describe("Summaries of the Idea Incubator application features to be used as a knowledge base."),
 });
 export type IdeaIncubatorChatbotInput = z.infer<typeof IdeaIncubatorChatbotInputSchema>;
 
-export const IdeaIncubatorChatbotOutputSchema = z.object({
+const IdeaIncubatorChatbotOutputSchema = z.object({
   aiResponse: z.string().describe("The AI's response to the user's query."),
 });
 export type IdeaIncubatorChatbotOutput = z.infer<typeof IdeaIncubatorChatbotOutputSchema>;
@@ -70,9 +70,10 @@ Sparky's Response:
 `,
 });
 
-export const ideaIncubatorChatbotFlow = ai.defineFlow(
+// Internal flow definition, not exported directly
+const _ideaIncubatorChatbotFlow = ai.defineFlow(
   {
-    name: 'ideaIncubatorChatbotFlow',
+    name: 'ideaIncubatorChatbotInternalFlow', // Renamed for clarity
     inputSchema: IdeaIncubatorChatbotInputSchema,
     outputSchema: IdeaIncubatorChatbotOutputSchema,
   },
@@ -84,3 +85,8 @@ export const ideaIncubatorChatbotFlow = ai.defineFlow(
     return output;
   }
 );
+
+// Exported async wrapper function
+export async function askIdeaIncubatorChatbot(input: IdeaIncubatorChatbotInput): Promise<IdeaIncubatorChatbotOutput> {
+  return _ideaIncubatorChatbotFlow(input);
+}
