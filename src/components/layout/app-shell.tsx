@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { FeatherLogo } from "@/components/icons/feather-logo";
 import {
   Sidebar, // Used for desktop sidebar
-  SidebarHeader,
+  SidebarHeader as UISidebarHeader, // Renamed to avoid conflict with SheetHeader
   SidebarContent,
   SidebarMenu,
   SidebarMenuItem,
@@ -18,6 +18,8 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SheetHeader, // Added for mobile sheet title
+  SheetTitle,   // Added for mobile sheet title
 } from "@/components/ui/sheet"; // For explicit mobile sheet
 import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer, Settings as SettingsIcon, HelpCircle, LogIn, UserPlus, X } from "lucide-react";
 import React from "react";
@@ -138,15 +140,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const mobileSheetContent = (
     <>
-      <SidebarHeader className="p-4 border-b flex items-center justify-between">
-        <Link href="/" onClick={() => setIsMobileSheetOpen(false)}>
-          <FeatherLogo size={28} />
-        </Link>
-        <Button variant="ghost" size="icon" onClick={() => setIsMobileSheetOpen(false)}>
-          <X className="h-5 w-5" />
-          <span className="sr-only">Close menu</span>
-        </Button>
-      </SidebarHeader>
+      <SheetHeader className="p-4 border-b">
+        <SheetTitle>
+          <Link href="/" onClick={() => setIsMobileSheetOpen(false)} className="flex items-center">
+            <FeatherLogo size={28} />
+          </Link>
+        </SheetTitle>
+      </SheetHeader>
       <ScrollArea className="flex-grow">
         <SidebarContent className="p-2 flex flex-col h-full">
           <SidebarMenu className="flex-grow">
@@ -163,14 +163,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   
   const desktopSidebarContent = (
      <>
-      <SidebarHeader className="p-4 border-b">
+      <UISidebarHeader className="p-4 border-b"> {/* Changed to UISidebarHeader */}
         <Link href="/" className="block group-data-[state=expanded]:hidden group-data-[mobile=true]:block">
             <FeatherLogo size={28} />
         </Link>
         <Link href="/" className="hidden group-data-[state=collapsed]:block group-data-[mobile=true]:hidden">
             <Feather className="text-primary" size={28}/>
         </Link>
-      </SidebarHeader>
+      </UISidebarHeader>
       <ScrollArea className="flex-grow">
         <SidebarContent className="p-2 flex flex-col h-full">
           <SidebarMenu className="flex-grow">
@@ -218,3 +218,4 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+
