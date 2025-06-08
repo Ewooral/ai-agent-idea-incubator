@@ -25,7 +25,7 @@ jobs:
           script: |
             # IMPORTANT: Replace '/path/to/your/app' with the absolute path to your application directory on the VPS
             # This is where your project code and deploy.sh script should be located.
-            cd /path/to/your/app 
+            cd /root/ai-agent-idea-incubator
             
             # Ensure the deploy script is executable
             chmod +x ./deploy.sh

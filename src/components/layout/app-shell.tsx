@@ -41,7 +41,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <>
      <SidebarHeader className="p-4 border-b">
         <div className="flex items-center justify-between">
-          <Link href="/" className="block group-data-[state=collapsed]:hidden" onClick={() => isMobileMenuOpen && setIsMobileMenuOpen(false)}>
+          <Link href="/" className="block group-data-[state=expanded]:hidden" onClick={() => isMobileMenuOpen && setIsMobileMenuOpen(false)}>
               <FeatherLogo size={28} />
           </Link>
           <Link href="/" className="hidden group-data-[state=collapsed]:block" onClick={() => isMobileMenuOpen && setIsMobileMenuOpen(false)}>
@@ -117,9 +117,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </div>
 
       <SidebarInset className="flex-1 overflow-y-auto relative"> 
-        <main className="p-4 pt-20 lg:pt-6 md:p-6 lg:p-8 max-w-full mx-auto">
+        <div className="p-4 pt-20 lg:pt-6 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
           {children}
-        </main>
+        </div>
       </SidebarInset>
     </div>
   );
