@@ -12,7 +12,8 @@ export const BuildProjectDataSchema = z.object({
   targetPlatform: z.string().max(200, "Too long").optional(),
   coreFeaturesMVP: z.string().max(2000, "Too long").optional(),
   techStackSuggestion: z.string().max(1000, "Too long").optional(),
-  // generatedGuideMarkdown is not part of form submission, it's an output
+  generatedGuideMarkdown: z.string().optional(), // Added to schema for completeness if form ever needs to pass it
+  generatedBusinessProposalMarkdown: z.string().optional(), // Added to schema for completeness
 });
 
 export type BuildProjectFormValues = z.infer<typeof BuildProjectDataSchema>;

@@ -30,6 +30,7 @@ export interface BuildProject {
   coreFeaturesMVP?: string;
   techStackSuggestion?: string;
   generatedGuideMarkdown?: string; 
+  generatedBusinessProposalMarkdown?: string; // Added new field
   createdAt: string; 
   updatedAt: string; 
 }
@@ -130,7 +131,7 @@ export async function upsertBuildProject(
     const existingProject = db.buildProjects[existingProjectIndex];
     db.buildProjects[existingProjectIndex] = {
       ...existingProject,
-      ...projectData,
+      ...projectData, // This will overwrite existing fields with new data, including the new proposal field
       id: existingProject.id, 
       ideaId: existingProject.ideaId, 
       updatedAt: now,
@@ -151,6 +152,7 @@ export async function upsertBuildProject(
     coreFeaturesMVP: projectData.coreFeaturesMVP,
     techStackSuggestion: projectData.techStackSuggestion,
     generatedGuideMarkdown: projectData.generatedGuideMarkdown,
+    generatedBusinessProposalMarkdown: projectData.generatedBusinessProposalMarkdown, // Initialize new field
     createdAt: now,
     updatedAt: now,
   };
