@@ -219,7 +219,7 @@ export default function GenerateIdeaPage(): ReactNode {
                     <FormLabel>Problem Area (Optional)</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="e.g.,Proving C.Ronaldo is better than Messi,  Reducing food waste in urban areas, improving remote team collaboration, proving"
+                        placeholder="e.g. Proving C.Ronaldo is better than Messi,  Reducing food waste in urban areas, improving remote team collaboration, proving"
                         {...field}
                         rows={3}
                         disabled={isLoading}
@@ -240,7 +240,7 @@ export default function GenerateIdeaPage(): ReactNode {
                     <FormLabel>Keywords/Topics (Optional)</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g.,CR7, Messi, Sustainable energy, AI in education, personalized healthcare"
+                        placeholder="e.g. CR7, Messi, Sustainable energy, AI in education, personalized healthcare"
                         {...field}
                         disabled={isLoading}
                       />
