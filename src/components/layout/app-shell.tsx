@@ -49,12 +49,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
-  const renderNavItems = (items: typeof mainNavItems, forDesktopSidebar: boolean = false) => {
+  const renderNavItems = (items: typeof mainNavItems | typeof allAuthNavItems | typeof allUtilityNavItems, forDesktopSidebar: boolean = false) => {
     let itemsToRender = items;
     if (forDesktopSidebar) {
-      if (items === allAuthNavItems) { // Assuming allAuthNavItems is passed for auth section
-        itemsToRender = []; // Login/Register moved to top header for desktop
-      } else if (items === allUtilityNavItems) { // Assuming allUtilityNavItems is passed for utility section
+      if (items === allAuthNavItems) { 
+        itemsToRender = []; 
+      } else if (items === allUtilityNavItems) { 
         itemsToRender = items.filter(item => item.href !== "/settings");
       }
     }
@@ -79,9 +79,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   };
 
 
-  // This definition is for the mobile sheet, so it includes all items.
   const sidebarNavigationForMobileSheet = (
     <>
+     <UISheetHeader className="sr-only">
+      <UISheetTitle>Main Menu</UISheetTitle>
+    </UISheetHeader>
      <SidebarHeader className="p-4 border-b">
         <div className="flex items-center justify-between">
           <Link href="/" className="block group-data-[state=expanded]:hidden" onClick={() => isMobileMenuOpen && setIsMobileMenuOpen(false)}>
@@ -123,9 +125,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="p-0 w-72 !bg-card flex flex-col">
-                <UISheetHeader className="sr-only">
-                  <UISheetTitle>Main Menu</UISheetTitle>
-                </UISheetHeader>
                 {sidebarNavigationForMobileSheet}
               </SheetContent>
             </Sheet>
@@ -177,8 +176,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <SidebarContent className="p-2 flex flex-col h-full">
               <SidebarMenu className="flex-grow">
                 {renderNavItems(mainNavItems, true)}
-                {/* Auth items are removed for desktop sidebar, handled in top header */}
-                {renderNavItems(desktopUtilityNavItems, true)} {/* Render only Help for desktop */}
+                {renderNavItems(desktopUtilityNavItems, true)} 
               </SidebarMenu>
             </SidebarContent>
           </ScrollArea>
@@ -189,7 +187,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </Sidebar>
 
         <SidebarInset className="flex-1 overflow-y-auto relative">
-           <div className="p-4 pt-6 md:p-6 lg:p-8 max-w-7xl mx-auto w-full"> {/* Adjusted pt-6 as SidebarInset already starts below header due to parent's pt-16 */}
+           <div className="px-4 pt-6 md:pt-6 lg:pt-8 w-full max-w-7xl mx-auto">
               {children}
           </div>
         </SidebarInset>
@@ -197,3 +195,4 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+
