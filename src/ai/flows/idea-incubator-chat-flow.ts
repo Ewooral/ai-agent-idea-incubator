@@ -38,6 +38,8 @@ export type IdeaIncubatorChatbotOutput = z.infer<typeof IdeaIncubatorChatbotOutp
 
 const chatbotPrompt = ai.definePrompt({
   name: 'ideaIncubatorChatbotPrompt',
+  // The input schema for the prompt itself doesn't need to change,
+  // as we will pass an augmented object to its invocation.
   input: {schema: IdeaIncubatorChatbotInputSchema},
   output: {schema: IdeaIncubatorChatbotOutputSchema},
   prompt: `You are "Sparky", a friendly, respectful, and helpful AI assistant for the "Idea Incubator" web application.
@@ -58,8 +60,8 @@ Here is a summary of the Idea Incubator application features. Use this as your k
 Chat History (if any):
 {{#if chatHistory}}
   {{#each chatHistory}}
-    {{#if (eq this.role "user")}}User: {{this.parts.0.text}}{{/if}}
-    {{#if (eq this.role "model")}}Sparky: {{this.parts.0.text}}{{/if}}
+    {{#if this.isUser}}User: {{this.parts.0.text}}{{/if}}
+    {{#if this.isModel}}Sparky: {{this.parts.0.text}}{{/if}}
   {{/each}}
 {{/if}}
 
@@ -78,7 +80,19 @@ const _ideaIncubatorChatbotFlow = ai.defineFlow(
     outputSchema: IdeaIncubatorChatbotOutputSchema,
   },
   async (input) => {
-    const {output} = await chatbotPrompt(input);
+    // Augment chatHistory with isUser and isModel flags for Handlebars
+    const augmentedChatHistory = input.chatHistory?.map(msg => ({
+      ...msg,
+      isUser: msg.role === 'user',
+      isModel: msg.role === 'model',
+    }));
+
+    const promptInput = {
+      ...input,
+      chatHistory: augmentedChatHistory,
+    };
+
+    const {output} = await chatbotPrompt(promptInput);
     if (!output || !output.aiResponse) {
         throw new Error("AI failed to generate a response for the chatbot.");
     }

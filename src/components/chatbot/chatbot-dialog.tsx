@@ -195,7 +195,9 @@ export function ChatbotDialog() {
             </Button>
           </form>
         </DialogFooter>
-         <Button 
+         {/* The DialogContent component already includes an X button by default in its top-right.
+             The custom button below was redundant.
+        <Button 
             variant="ghost" 
             size="icon" 
             onClick={() => setIsOpen(false)}
@@ -204,6 +206,7 @@ export function ChatbotDialog() {
           >
           <X size={20}/>
         </Button>
+        */}
       </DialogContent>
     </Dialog>
   );
