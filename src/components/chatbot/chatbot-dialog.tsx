@@ -39,7 +39,7 @@ export function ChatbotDialog() {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isOpen]); // Removed messages.length from dependency to avoid re-adding greeting
+  }, [isOpen]);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -107,14 +107,16 @@ export function ChatbotDialog() {
         variant="outline"
         size="icon"
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-2 focus:ring-ring focus:ring-offset-2 z-50"
+        className="fixed bottom-4 right-4 h-14 w-14 sm:bottom-6 sm:right-6 rounded-full shadow-lg bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-2 focus:ring-ring focus:ring-offset-2 z-50"
         aria-label={isOpen ? "Close Chatbot" : "Open Chatbot"}
       >
         {isOpen ? <X size={28} /> : <MessageSquare size={28} />}
       </Button>
 
       {isOpen && (
-        <Card className="fixed bottom-24 right-6 w-full max-w-sm md:max-w-md h-[70vh] max-h-[500px] lg:max-h-[550px] flex flex-col shadow-2xl rounded-xl border bg-card z-40">
+        <Card 
+          className="fixed bottom-20 right-4 w-[90vw] h-[60vh] sm:bottom-24 sm:right-6 sm:w-full sm:max-w-sm md:max-w-md sm:h-[70vh] max-h-[500px] lg:max-h-[550px] flex flex-col shadow-2xl rounded-xl border bg-card z-40"
+        >
           <CardHeader className="flex flex-row items-center justify-between p-3 border-b">
             <div className="flex items-center space-x-2">
               <Bot className="text-primary h-6 w-6" />
