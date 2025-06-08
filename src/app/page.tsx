@@ -197,7 +197,7 @@ export default function GenerateIdeaPage(): ReactNode {
   const isLoading = isGeneratingAiIdeas || isTranslatingIdeas;
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="mx-auto flex flex-col justify-center items-center max-w-7xl py-8 px-4">
       <Card className="mb-8 shadow-xl bg-card">
         <CardHeader>
           <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
