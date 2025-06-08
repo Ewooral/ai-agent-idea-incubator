@@ -36,7 +36,7 @@ export function ChatbotDialog() {
   const initialGreeting: Message = {
     id: 'greeting-0',
     role: 'ai',
-    content: "Hello! I'm Sparky, your Idea Incubator assistant. How can I help you today?",
+    content: "Hello! I'm Elia, your Idea Incubator assistant. How can I help you today?",
   };
 
   useEffect(() => {
@@ -126,7 +126,7 @@ export function ChatbotDialog() {
             <Bot className="mr-2 text-primary" /> Idea Incubator Assistant
           </DialogTitle>
           <DialogDescription className="text-xs">
-            Ask Sparky anything about using the app.
+            Ask Elia anything about using the app.
           </DialogDescription>
         </DialogHeader>
         
@@ -172,7 +172,7 @@ export function ChatbotDialog() {
                   </div>
                 <div className="bg-muted text-muted-foreground rounded-lg px-3 py-2 text-sm shadow flex items-center rounded-bl-none border">
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Sparky is thinking...
+                  Elia is thinking...
                 </div>
               </div>
             )}
@@ -195,18 +195,6 @@ export function ChatbotDialog() {
             </Button>
           </form>
         </DialogFooter>
-         {/* The DialogContent component already includes an X button by default in its top-right.
-             The custom button below was redundant.
-        <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => setIsOpen(false)}
-            className="absolute top-3 right-3 text-muted-foreground hover:bg-accent"
-            aria-label="Close chat"
-          >
-          <X size={20}/>
-        </Button>
-        */}
       </DialogContent>
     </Dialog>
   );
