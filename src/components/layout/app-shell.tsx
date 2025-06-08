@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader as UISheetHeader, SheetTitle as UISheetTitle, SheetTrigger } from "@/components/ui/sheet"; 
 import { LanguageSelector } from '@/components/language-selector';
 import { ThemeToggleButton } from '@/components/theme-toggle-button';
+import { ChatbotDialog } from '@/components/chatbot/chatbot-dialog'; // Added Chatbot
 
 const mainNavItems = [
   { href: "/", label: "Generate Idea", icon: Lightbulb, tooltip: "Generate New Ideas" },
@@ -112,10 +113,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div>
-      {/* New Top Header */}
       <header className="fixed top-0 left-0 right-0 z-30 h-16 bg-card border-b shadow-sm">
         <div className="container mx-auto px-4 h-full flex items-center justify-between max-w-7xl">
-          {/* Left Side: Mobile Menu Trigger + Logo */}
           <div className="flex items-center">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -133,7 +132,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
 
-          {/* Right Side: Desktop Nav Links */}
           <nav className="hidden lg:flex items-center space-x-1">
             <Button variant="ghost" asChild>
               <Link href="/login">Login</Link>
@@ -151,17 +149,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       
-      {/* <div className="fixed top-3 right-4 z-50 px-3 py-1.5 rounded-md shadow-lg bg-card text-card-foreground text-xs font-medium">
-        Developed by bfam, Inc.
-      </div> */}
-
-      <div className="flex min-h-screen bg-background pt-16"> {/* pt-16 for fixed header */}
+      <div className="flex min-h-screen bg-background pt-16">
         <Sidebar
           variant="sidebar"
           collapsible="icon"
           className="hidden lg:flex flex-col !bg-card shadow-sm"
         >
-          {/* Desktop Sidebar specific content */}
           <SidebarHeader className="p-4 border-b">
             <div className="flex items-center justify-between">
               <Link href="/" className="block group-data-[state=expanded]:hidden">
@@ -192,7 +185,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </SidebarInset>
       </div>
+      <ChatbotDialog /> {/* Added Chatbot Dialog globally */}
     </div>
   );
 }
-
