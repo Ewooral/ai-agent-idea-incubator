@@ -226,7 +226,7 @@ export default function GenerateIdeaPage(): ReactNode {
                       />
                     </FormControl>
                     <FormDescription>
-                      Describe a challenge or domain you&apos;re interested in.
+                      Kindly Describe a challenge or domain you&apos;re interested in.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
