@@ -5,22 +5,28 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FeatherLogo } from "@/components/icons/feather-logo";
 import {
-  Sidebar,
-  SidebarHeader, 
+  Sidebar, // Used for desktop sidebar
+  SidebarHeader,
   SidebarContent,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarInset,
   SidebarFooter,
-  SidebarTrigger, // Import SidebarTrigger
 } from "@/components/ui/sidebar";
-import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer, Settings as SettingsIcon, HelpCircle, LogIn, UserPlus } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet"; // For explicit mobile sheet
+import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer, Settings as SettingsIcon, HelpCircle, LogIn, UserPlus, X } from "lucide-react";
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LanguageSelector } from '@/components/language-selector';
 import { ThemeToggleButton } from '@/components/theme-toggle-button';
 import { ChatbotDialog } from '@/components/chatbot/chatbot-dialog';
+import { Button } from "@/components/ui/button";
+import { useSidebar as useSidebarContextHook } from "@/components/ui/sidebar"; // renamed to avoid conflict
 
 const mainNavItems = [
   { href: "/", label: "Generate Idea", icon: Lightbulb, tooltip: "Generate New Ideas" },
@@ -40,11 +46,45 @@ const utilityNavItems = [
   { href: "/help", label: "Help Guide", icon: HelpCircle, tooltip: "Application Help" },
 ];
 
+// For desktop sidebar
+const desktopSidebarNavItems = [
+  ...mainNavItems,
+  utilityNavItems.find(item => item.href === "/help")!, // Only Help
+];
+
+// For mobile sheet
+const mobileSheetNavItems = [
+  ...mainNavItems,
+  ...authNavItems,
+  ...utilityNavItems,
+];
+
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [isMobileSheetOpen, setIsMobileSheetOpen] = React.useState(false);
+  const { isMobile } = useSidebarContextHook(); // from ui/sidebar for its internal logic
 
-  const renderNavItems = (items: typeof mainNavItems) => {
+  const renderNavItemsForSheet = (items: typeof mobileSheetNavItems) => {
+    return items.map((item) => (
+      <SidebarMenuItem key={item.href} className="p-0">
+        <Link href={item.href} passHref legacyBehavior>
+          <SidebarMenuButton
+            isActive={pathname === item.href}
+            className="w-full justify-start text-sm"
+            variant="ghost"
+            size="default"
+            onClick={() => setIsMobileSheetOpen(false)} // Close sheet on click
+          >
+            <item.icon size={20} />
+            <span>{item.label}</span>
+          </SidebarMenuButton>
+        </Link>
+      </SidebarMenuItem>
+    ));
+  };
+  
+  const renderNavItemsForDesktopSidebar = (items: typeof desktopSidebarNavItems) => {
     return items.map((item) => (
       <SidebarMenuItem key={item.href} className="p-0">
         <Link href={item.href} passHref legacyBehavior>
@@ -63,31 +103,78 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     ));
   };
 
-  // Content for the sidebar (used by both desktop Sidebar and mobile Sheet via Sidebar component's internal logic)
-  const sidebarFullContent = (
-    <>
-      <SidebarHeader className="p-4 border-b">
-        <div className="flex items-center justify-between">
-          {/* For expanded desktop sidebar and mobile menu header */}
-          <Link href="/" className="block group-data-[state=expanded]:hidden group-data-[mobile=true]:block">
-              <FeatherLogo size={28} />
+
+  const TopHeader = () => (
+    <header className="fixed top-0 left-0 right-0 h-16 bg-card border-b shadow-sm z-30">
+      <div className="container mx-auto px-4 h-full flex items-center justify-between max-w-7xl">
+        <div className="flex items-center gap-4">
+          <SheetTrigger asChild className="lg:hidden">
+            <Button variant="ghost" size="icon" onClick={() => setIsMobileSheetOpen(true)}>
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </SheetTrigger>
+          <Link href="/" className="flex items-center">
+            <FeatherLogo size={28} />
           </Link>
-           {/* For collapsed desktop sidebar */}
-          <Link href="/" className="hidden group-data-[state=collapsed]:block group-data-[mobile=true]:hidden">
-              <Feather className="text-primary" size={28}/>
-          </Link>
-          {/* Mobile menu trigger - shown by Sidebar component on mobile */}
-           <div className="lg:hidden group-data-[mobile=true]:block"> {/* This trigger is part of ui/sidebar for mobile */}
-             {/* The Sidebar component itself handles its open/close trigger on mobile via its props/context */}
-           </div>
         </div>
+        <nav className="hidden lg:flex items-center gap-1">
+          {authNavItems.map(item => (
+            <Button key={item.href} variant="ghost" asChild size="sm">
+              <Link href={item.href}>
+                <item.icon className="mr-1.5 h-4 w-4" /> {item.label}
+              </Link>
+            </Button>
+          ))}
+          <Button variant="ghost" size="icon" asChild>
+            <Link href="/settings" aria-label="Settings">
+              <SettingsIcon className="h-5 w-5" />
+            </Link>
+          </Button>
+        </nav>
+      </div>
+    </header>
+  );
+
+  const mobileSheetContent = (
+    <>
+      <SidebarHeader className="p-4 border-b flex items-center justify-between">
+        <Link href="/" onClick={() => setIsMobileSheetOpen(false)}>
+          <FeatherLogo size={28} />
+        </Link>
+        <Button variant="ghost" size="icon" onClick={() => setIsMobileSheetOpen(false)}>
+          <X className="h-5 w-5" />
+          <span className="sr-only">Close menu</span>
+        </Button>
       </SidebarHeader>
       <ScrollArea className="flex-grow">
         <SidebarContent className="p-2 flex flex-col h-full">
           <SidebarMenu className="flex-grow">
-            {renderNavItems(mainNavItems)}
-            {renderNavItems(authNavItems)} 
-            {renderNavItems(utilityNavItems)} 
+            {renderNavItemsForSheet(mobileSheetNavItems)}
+          </SidebarMenu>
+        </SidebarContent>
+      </ScrollArea>
+      <SidebarFooter className="p-2 border-t flex flex-col gap-2">
+        <ThemeToggleButton />
+        <LanguageSelector />
+      </SidebarFooter>
+    </>
+  );
+  
+  const desktopSidebarContent = (
+     <>
+      <SidebarHeader className="p-4 border-b">
+        <Link href="/" className="block group-data-[state=expanded]:hidden group-data-[mobile=true]:block">
+            <FeatherLogo size={28} />
+        </Link>
+        <Link href="/" className="hidden group-data-[state=collapsed]:block group-data-[mobile=true]:hidden">
+            <Feather className="text-primary" size={28}/>
+        </Link>
+      </SidebarHeader>
+      <ScrollArea className="flex-grow">
+        <SidebarContent className="p-2 flex flex-col h-full">
+          <SidebarMenu className="flex-grow">
+            {renderNavItemsForDesktopSidebar(desktopSidebarNavItems)}
           </SidebarMenu>
         </SidebarContent>
       </ScrollArea>
@@ -101,29 +188,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div>
-      <div className="flex min-h-screen bg-background">
-        <Sidebar
-          variant="sidebar" // Default variant
-          collapsible="icon" // Default collapsible behavior
-          className="hidden lg:flex flex-col !bg-card shadow-sm"
+      <Sheet open={isMobileSheetOpen} onOpenChange={setIsMobileSheetOpen}>
+        <TopHeader /> {/* Contains SheetTrigger for mobile */}
+        <SheetContent 
+            side="left" 
+            className="p-0 w-[var(--sidebar-width-mobile)] flex flex-col !bg-card lg:hidden" // Ensures it's hidden on lg+
+            style={{ "--sidebar-width-mobile": "18rem" } as React.CSSProperties}
         >
-          {sidebarFullContent}
+            {mobileSheetContent}
+        </SheetContent>
+      </Sheet>
+
+      <div className="flex min-h-screen pt-16 bg-background"> {/* pt-16 for the fixed header */}
+        <Sidebar
+          variant="sidebar"
+          collapsible="icon"
+          className="hidden lg:flex flex-col !bg-card shadow-sm" // Only visible on lg+
+        >
+          {desktopSidebarContent}
         </Sidebar>
 
         <SidebarInset className="flex-1 overflow-y-auto relative">
-          {/* Mobile Top Bar */}
-          <div className="lg:hidden sticky top-0 z-20 h-16 bg-card border-b shadow-sm flex items-center px-4 justify-between">
-            <SidebarTrigger> {/* This uses the SidebarTrigger from ui/sidebar to control the mobile sheet */}
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Open menu</span>
-            </SidebarTrigger>
-            <Link href="/">
-              <FeatherLogo size={28} />
-            </Link>
-            <div className="w-6"></div> {/* Spacer for balance */}
-          </div>
-          
-           <div className="px-4 pt-6 md:px-6 lg:px-8 pb-6 w-full max-w-7xl mx-auto">
+           <div className="px-4 pt-6 md:pt-6 lg:pt-8 pb-6 w-full max-w-7xl mx-auto">
               {children}
           </div>
         </SidebarInset>
