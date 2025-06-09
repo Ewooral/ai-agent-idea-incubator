@@ -2,7 +2,7 @@
 // src/app/page.tsx (Generate Idea Page)
 "use client";
 
-import type { GenerateNovelIdeaInput } from '@/ai/flows/generate-novel-idea';
+import type { GenerateNovelIdeaInput, GenerateNovelIdeaOutput } from '@/ai/flows/generate-novel-idea';
 import { generateNovelIdea } from '@/ai/flows/generate-novel-idea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -51,6 +51,12 @@ interface TopicCardProps {
   description: string;
 }
 
+// Type for the items in generatedIdeas and ideasToDisplay
+interface DisplayableIdea {
+  idea: string;
+  noveltyScore: number;
+}
+
 const topicCardsData: TopicCardProps[] = [
   { title: "Health & Wellness", Icon: HeartPulse, keywords: "mental health, physical fitness, well-being, preventative care, mindfulness apps, personalized nutrition", problemArea: "improving daily well-being and access to healthcare", description: "Innovate for healthier lifestyles." },
   { title: "Sustainable Living", Icon: Leaf, keywords: "eco-friendly products, renewable energy solutions, waste reduction tech, conservation efforts, circular economy", problemArea: "creating a more environmentally conscious future", description: "Ideas for a greener planet." },
@@ -70,8 +76,8 @@ const topicCardsData: TopicCardProps[] = [
 
 export default function GenerateIdeaPage(): ReactNode {
   const [isGeneratingAiIdeas, setIsLoadingAiIdeas] = useState<boolean>(false);
-  const [generatedIdeas, setGeneratedIdeas] = useState<string[]>([]); // Stores original English ideas
-  const [translatedGeneratedIdeas, setTranslatedGeneratedIdeas] = useState<string[] | null>(null);
+  const [generatedIdeas, setGeneratedIdeas] = useState<DisplayableIdea[]>([]); // Stores original English ideas with scores
+  const [translatedGeneratedIdeas, setTranslatedGeneratedIdeas] = useState<DisplayableIdea[] | null>(null);
   const [isTranslatingIdeas, setIsTranslatingIdeas] = useState<boolean>(false);
   const { toast } = useToast();
   const { selectedLanguage, getLanguageName } = useLanguage();
@@ -97,20 +103,21 @@ export default function GenerateIdeaPage(): ReactNode {
         const languageName = getLanguageName(selectedLanguage);
         if (!languageName) throw new Error("Invalid language selected");
 
-        const translationPromises = generatedIdeas.map(idea =>
-          translateTextAction({ textToTranslate: idea, targetLanguage: languageName })
+        const translationPromises = generatedIdeas.map(item =>
+          translateTextAction({ textToTranslate: item.idea, targetLanguage: languageName })
         );
         const results = await Promise.all(translationPromises);
 
-        const successfullyTranslatedIdeas = results.map((result, index) => {
+        const successfullyTranslatedItems = results.map((result, index) => {
+          const originalItem = generatedIdeas[index];
           if (result.success && result.translatedText) {
-            return result.translatedText;
+            return { idea: result.translatedText, noveltyScore: originalItem.noveltyScore };
           }
           toast({ title: `Translation Warning`, description: `Could not translate one of the ideas to ${languageName}. Showing original.`, variant: "default" });
-          return generatedIdeas[index];
+          return { idea: originalItem.idea, noveltyScore: originalItem.noveltyScore }; // Keep original idea if translation fails
         });
 
-        setTranslatedGeneratedIdeas(successfullyTranslatedIdeas);
+        setTranslatedGeneratedIdeas(successfullyTranslatedItems);
         toast({ title: `Ideas Translated!`, description: `Ideas translated to ${languageName}.` });
 
       } catch (error: any) {
@@ -149,7 +156,8 @@ export default function GenerateIdeaPage(): ReactNode {
         setIsLoadingAiIdeas(false);
         return;
       }
-      const result = await generateNovelIdea(input);
+      const result: GenerateNovelIdeaOutput = await generateNovelIdea(input);
+      // The result.novelIdeas is already Array<{ idea: string; noveltyScore: number; }>
       setGeneratedIdeas(result.novelIdeas); 
       if (result.novelIdeas.length === 0) {
         toast({
@@ -193,7 +201,7 @@ export default function GenerateIdeaPage(): ReactNode {
     processIdeaGeneration(input);
   };
   
-  const ideasToDisplay = selectedLanguage !== 'en' && translatedGeneratedIdeas ? translatedGeneratedIdeas : generatedIdeas;
+  const ideasToDisplay: DisplayableIdea[] = selectedLanguage !== 'en' && translatedGeneratedIdeas ? translatedGeneratedIdeas : generatedIdeas;
   const isLoading = isGeneratingAiIdeas || isTranslatingIdeas;
 
   return (
@@ -332,11 +340,12 @@ export default function GenerateIdeaPage(): ReactNode {
               Generated Ideas {selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {ideasToDisplay.map((displayIdea, index) => (
+              {ideasToDisplay.map((item, index) => ( // item is now { idea: string, noveltyScore: number }
                  <IdeaDisplayCard
                     key={index}
-                    idea={displayIdea} 
-                    originalIdeaForQuery={generatedIdeas[index]} 
+                    idea={item.idea} // Pass the idea string
+                    noveltyScore={item.noveltyScore} // Pass the novelty score
+                    originalIdeaForQuery={generatedIdeas[index]?.idea} // Pass the original English idea string for the query
                   />
               ))}
             </div>

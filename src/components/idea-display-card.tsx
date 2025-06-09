@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Lightbulb, Hammer, CheckCircle } from "lucide-react";
+import { Lightbulb, Hammer, CheckCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import type { SavedIdea } from "@/lib/db";
@@ -9,16 +9,17 @@ interface IdeaDisplayCardProps {
   savedIdea?: SavedIdea;
   idea?: string; // For display (could be original or translated)
   originalIdeaForQuery?: string; // Always the original English idea for query params
+  noveltyScore?: number; // For newly generated ideas
+  // conceptualImageUrl?: string; // Already part of SavedIdea, so not needed as separate prop if savedIdea is passed
 }
 
-export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery }: IdeaDisplayCardProps) {
+export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery, noveltyScore }: IdeaDisplayCardProps) {
   if (!savedIdea && !idea) {
     return null;
   }
 
   if (savedIdea) {
     // Render for a SavedIdea object (typically on Dashboard or similar pages)
-    // For saved ideas, originalIdeaForQuery is derived from savedIdea.originalIdea for the re-validate link
     const linkToValidationQuery = { idea: savedIdea.originalIdea };
     return (
       <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 bg-card flex flex-col">
@@ -29,7 +30,25 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery }: IdeaD
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-grow">
+          {savedIdea.conceptualImageUrl && (
+            <div className="mb-4 overflow-hidden rounded-md border shadow-sm">
+              <img 
+                src={savedIdea.conceptualImageUrl} 
+                alt="Conceptual image for the idea" 
+                className="w-full h-40 object-cover" 
+                data-ai-hint="business concept"
+              />
+            </div>
+          )}
           <p className="text-sm text-foreground/90 leading-relaxed">{savedIdea.refinedIdea}</p>
+          {savedIdea.marketPotentialScore !== undefined && (
+             <div className="mt-3 flex items-center">
+                <Sparkles className="mr-1.5 h-4 w-4 text-primary" />
+                <p className="text-xs text-muted-foreground">
+                Market Potential: <span className="font-semibold text-foreground">{savedIdea.marketPotentialScore}</span>/100
+                </p>
+            </div>
+          )}
         </CardContent>
         <CardFooter className="pt-2 pb-4 flex flex-col sm:flex-row gap-2">
           <Button variant="outline" size="sm" className="w-full" asChild>
@@ -49,7 +68,6 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery }: IdeaD
 
   if (idea) {
     // Render for a raw idea string (typically on the Generate Idea page)
-    // The link to validation should use originalIdeaForQuery if provided, otherwise fallback to 'idea'
     const linkToValidationQuery = { idea: originalIdeaForQuery || idea };
     return (
       <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 bg-card flex flex-col">
@@ -61,6 +79,14 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery }: IdeaD
         </CardHeader>
         <CardContent className="flex-grow">
           <p className="text-sm text-foreground/90 leading-relaxed">{idea}</p>
+          {noveltyScore !== undefined && (
+            <div className="mt-3 flex items-center">
+                <Sparkles className="mr-1.5 h-4 w-4 text-yellow-500" />
+                <p className="text-xs text-muted-foreground">
+                Novelty Score: <span className="font-semibold text-foreground">{noveltyScore}</span>/10
+                </p>
+            </div>
+          )}
         </CardContent>
         <CardFooter className="pt-2 pb-4">
           <Button variant="default" size="sm" className="w-full" asChild>
@@ -75,5 +101,3 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery }: IdeaD
 
   return null;
 }
-
-    
