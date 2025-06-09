@@ -1,4 +1,3 @@
-
 import fs from 'fs/promises';
 import path from 'path';
 import type { RefineIdeaOutput } from '@/ai/flows/refine-idea-with-ai';
@@ -8,19 +7,20 @@ const DB_PATH = path.join(process.cwd(), 'src', 'data', 'db.json');
 export interface SavedIdea {
   id: string;
   originalIdea: string;
-  refinedIdea: string; 
+  refinedIdea: string;
   marketPotentialScore?: number;
   swotSnippet?: string;
   competitorTeaser?: string;
   associatedConcepts?: string[];
   potentialPivots?: string[];
   viabilityFactorsChartData?: Array<{ name: string; score: number }>;
-  createdAt: string; 
+  conceptualImageUrl?: string; // New: For AI-generated conceptual image
+  createdAt: string;
 }
 
 export interface BuildProject {
   id: string;
-  ideaId: string; 
+  ideaId: string;
   valueProposition: string;
   customerSegments: string;
   keyActivities: string;
@@ -29,10 +29,11 @@ export interface BuildProject {
   targetPlatform?: string;
   coreFeaturesMVP?: string;
   techStackSuggestion?: string;
-  generatedGuideMarkdown?: string; 
-  generatedBusinessProposalMarkdown?: string; // Added new field
-  createdAt: string; 
-  updatedAt: string; 
+  generatedGuideMarkdown?: string;
+  generatedBusinessProposalMarkdown?: string;
+  generatedPitchDeckOutlineMarkdown?: string; // New: For AI-generated pitch deck outline
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ForumCategory {
@@ -94,7 +95,7 @@ export async function getSavedIdeaById(id: string): Promise<SavedIdea | null> {
 
 export async function addSavedIdea(
   originalIdea: string,
-  refinedOutput: RefineIdeaOutput
+  refinedOutput: RefineIdeaOutput // This already includes conceptualImageUrl from the flow
 ): Promise<SavedIdea> {
   const db = await readDb();
   const newIdea: SavedIdea = {
@@ -107,6 +108,7 @@ export async function addSavedIdea(
     associatedConcepts: refinedOutput.associatedConcepts,
     potentialPivots: refinedOutput.potentialPivots,
     viabilityFactorsChartData: refinedOutput.viabilityFactorsChartData,
+    conceptualImageUrl: refinedOutput.conceptualImageUrl, // Store the image URL
     createdAt: new Date().toISOString(),
   };
   db.savedIdeas.push(newIdea);
@@ -124,22 +126,22 @@ export async function upsertBuildProject(
 ): Promise<BuildProject> {
   const db = await readDb();
   const now = new Date().toISOString();
-  
+
   const existingProjectIndex = db.buildProjects.findIndex(p => p.ideaId === projectData.ideaId || (projectData.id && p.id === projectData.id));
 
   if (existingProjectIndex > -1) {
     const existingProject = db.buildProjects[existingProjectIndex];
     db.buildProjects[existingProjectIndex] = {
       ...existingProject,
-      ...projectData, // This will overwrite existing fields with new data, including the new proposal field
-      id: existingProject.id, 
-      ideaId: existingProject.ideaId, 
+      ...projectData,
+      id: existingProject.id,
+      ideaId: existingProject.ideaId,
       updatedAt: now,
     };
     await writeDb(db);
     return db.buildProjects[existingProjectIndex];
   }
-  
+
   const newProject: BuildProject = {
     id: projectData.id || Date.now().toString() + Math.random().toString(36).substring(2, 9),
     ideaId: projectData.ideaId,
@@ -152,7 +154,8 @@ export async function upsertBuildProject(
     coreFeaturesMVP: projectData.coreFeaturesMVP,
     techStackSuggestion: projectData.techStackSuggestion,
     generatedGuideMarkdown: projectData.generatedGuideMarkdown,
-    generatedBusinessProposalMarkdown: projectData.generatedBusinessProposalMarkdown, // Initialize new field
+    generatedBusinessProposalMarkdown: projectData.generatedBusinessProposalMarkdown,
+    generatedPitchDeckOutlineMarkdown: projectData.generatedPitchDeckOutlineMarkdown, // Initialize new field
     createdAt: now,
     updatedAt: now,
   };
