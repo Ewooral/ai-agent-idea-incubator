@@ -130,4 +130,7 @@ const refineIdeaFlow = ai.defineFlow(
             name: factor.name || "Unnamed Factor",
             score: Math.max(0, Math.min(100, Number(factor.score) || 0)),
         })),
-        conceptual
+        conceptualImageUrl: conceptualImageUrl,
+    };
+  }
+);
