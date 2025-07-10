@@ -1,4 +1,3 @@
-
 // src/app/validation/page.tsx
 "use client";
 
@@ -7,8 +6,8 @@ import { refineIdea } from '@/ai/flows/refine-idea-with-ai';
 import { saveValidatedIdeaAction } from '@/app/actions/ideaActions';
 import { translateTextAction } from '@/app/actions/translationActions';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CheckCircle, Loader2, BarChart3, Tag, Lightbulb, TrendingUp, ShieldCheck, Target, Search, Zap, Save } from 'lucide-react';
-import { useState, type ReactNode, useEffect, useMemo } from 'react';
+import { CheckCircle, Loader2, BarChart3, Tag, Lightbulb, TrendingUp, ShieldCheck, Target, Search, Zap, Save, Image as ImageIcon, Upload, BrainCircuit, X } from 'lucide-react';
+import { useState, type ReactNode, useEffect, useMemo, useCallback } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 import { useSearchParams } from 'next/navigation';
@@ -24,6 +23,7 @@ import { Progress } from '@/components/ui/progress';
 import { useLanguage } from '@/contexts/language-context';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import type { AnalyzeImageOutput } from '@/ai/flows/analyze-image-for-insights';
 
 
 const validationSchema = z.object({
@@ -40,6 +40,172 @@ const chartConfigBase = {
     color: "hsl(var(--chart-1))", 
   },
 } satisfies ChartConfig;
+
+// Image Analysis Component
+function ImageAnalysisSection() {
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imageDataUri, setImageDataUri] = useState<string | null>(null);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [analysisResult, setAnalysisResult] = useState<AnalyzeImageOutput | null>(null);
+    const [analysisError, setAnalysisError] = useState<string | null>(null);
+    const { toast } = useToast();
+
+    const handleFileChange = (file: File) => {
+        if (file) {
+            if (file.size > 4 * 1024 * 1024) { // 4MB limit
+                toast({ title: "Image too large", description: "Please upload an image smaller than 4MB.", variant: "destructive" });
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const dataUri = e.target?.result as string;
+                setImagePreview(dataUri);
+                setImageDataUri(dataUri);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    
+    const onDragOver = (e: React.DragEvent<HTMLDivElement>) => e.preventDefault();
+    const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files?.[0];
+        if (file) handleFileChange(file);
+    };
+
+    const handleAnalyzeClick = async () => {
+        if (!imageDataUri) {
+            toast({ title: "No image selected", description: "Please upload an image to analyze.", variant: "destructive" });
+            return;
+        }
+        setIsAnalyzing(true);
+        setAnalysisResult(null);
+        setAnalysisError(null);
+
+        try {
+            const response = await fetch('/api/image-analysis', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ photoDataUri: imageDataUri }),
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.details || 'Failed to analyze image.');
+            }
+            setAnalysisResult(result);
+            toast({ title: "Analysis Complete!", description: "AI has provided insights on the image." });
+        } catch (error: any) {
+            setAnalysisError(error.message);
+            toast({ title: "Analysis Error", description: error.message, variant: "destructive" });
+        } finally {
+            setIsAnalyzing(false);
+        }
+    };
+    
+    const clearImage = () => {
+        setImagePreview(null);
+        setImageDataUri(null);
+        setAnalysisResult(null);
+        setAnalysisError(null);
+    };
+
+    return (
+        <Card className="mt-8 shadow-xl bg-card border-secondary/50">
+            <CardHeader>
+                <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-secondary-foreground">
+                    <ImageIcon size={28} className="mr-3 text-primary"/> Visual Competitive Analysis (SaaS Feature)
+                </CardTitle>
+                <CardDescription>Upload a competitor's screenshot or product image to get AI-powered UI/UX and branding insights.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    <div>
+                        <FormLabel>Upload Image</FormLabel>
+                        {!imagePreview ? (
+                            <div 
+                                onDragOver={onDragOver}
+                                onDrop={onDrop}
+                                className="mt-2 flex justify-center items-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                                onClick={() => document.getElementById('image-upload-input')?.click()}
+                            >
+                                <div className="text-center">
+                                    <Upload className="mx-auto h-10 w-10 text-muted-foreground" />
+                                    <p className="mt-2 text-sm text-muted-foreground">
+                                      <span className="font-semibold text-primary">Click to upload</span> or drag and drop
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">PNG, JPG, or WEBP (MAX. 4MB)</p>
+                                </div>
+                                <Input 
+                                    id="image-upload-input" 
+                                    type="file" 
+                                    className="hidden" 
+                                    accept="image/png, image/jpeg, image/webp"
+                                    onChange={(e) => e.target.files && handleFileChange(e.target.files[0])}
+                                />
+                            </div>
+                        ) : (
+                            <div className="mt-2 relative">
+                                <img src={imagePreview} alt="Image preview" className="w-full h-48 object-contain rounded-lg border bg-muted/20" />
+                                <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-7 w-7" onClick={clearImage}>
+                                    <X className="h-4 w-4" />
+                                    <span className="sr-only">Remove image</span>
+                                </Button>
+                            </div>
+                        )}
+                        <div className="mt-4">
+                            <Button onClick={handleAnalyzeClick} disabled={!imagePreview || isAnalyzing} className="w-full">
+                                {isAnalyzing ? <><Loader2 className="mr-2 h-4 w-4 animate-spin"/>Analyzing...</> : <><BrainCircuit className="mr-2 h-4 w-4"/>Analyze Image with AI</>}
+                            </Button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <FormLabel>AI Insights</FormLabel>
+                        <div className="mt-2 min-h-48">
+                            {isAnalyzing && (
+                                <div className="flex flex-col items-center justify-center h-full space-y-2 text-muted-foreground">
+                                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                                    <p>AI is analyzing the image...</p>
+                                </div>
+                            )}
+                            {analysisError && <p className="text-destructive text-sm">{analysisError}</p>}
+                            {analysisResult && !isAnalyzing && (
+                                <div className="space-y-4 text-sm">
+                                    <div>
+                                        <h4 className="font-semibold text-foreground">UI/UX Analysis</h4>
+                                        <p className="text-muted-foreground">{analysisResult.uiUxAnalysis}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-semibold text-foreground">Branding & Marketing</h4>
+                                        <p className="text-muted-foreground">{analysisResult.brandAndMarketingAnalysis}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-semibold text-foreground">Identified Features</h4>
+                                        <ul className="list-disc list-inside text-muted-foreground">
+                                            {analysisResult.featureIdentification.map((f, i) => <li key={i}>{f}</li>)}
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-semibold text-foreground">Potential Improvements</h4>
+                                        <ul className="list-disc list-inside text-muted-foreground">
+                                            {analysisResult.potentialImprovements.map((p, i) => <li key={i}>{p}</li>)}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
+                            {!isAnalyzing && !analysisResult && !analysisError && (
+                                <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
+                                    <BrainCircuit className="h-8 w-8 mb-2" />
+                                    <p className="text-sm">Analysis results will appear here.</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+    );
+}
 
 
 export default function ValidationPage(): ReactNode {
@@ -371,6 +537,8 @@ export default function ValidationPage(): ReactNode {
               )}
             </CardContent>
           </Card>
+          
+          <ImageAnalysisSection />
 
           <Card className="mt-8 shadow-xl bg-gradient-to-br from-primary/10 via-card to-accent/10 border-accent/50">
             <CardHeader>
