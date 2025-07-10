@@ -621,7 +621,7 @@ export default function ValidationPage(): ReactNode {
                       <div className="h-64 sm:h-80 w-full rounded-lg bg-muted/30 border border-dashed p-4">
                         <ChartContainer config={dynamicChartConfig} className="min-h-[200px] w-full">
                             <ResponsiveContainer width="100%" height="100%">
-                              <BarChart accessibilityLayer data={validationResult.viabilityFactorsChartData} margin={{ top: 5, right: 5, left: -25, bottom: 20 }}>
+                              <BarChart accessibilityLayer data={validationResult.viabilityFactorsChartData} margin={{ top: 5, right: 20, left: -20, bottom: 20 }}>
                                 <CartesianGrid vertical={false} strokeDasharray="3 3" />
                                 <XAxis
                                   dataKey="name"
