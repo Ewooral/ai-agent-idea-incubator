@@ -14,7 +14,7 @@ import { useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
@@ -132,7 +132,7 @@ function ImageAnalysisSection() {
             <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     <div>
-                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" htmlFor="image-upload-input">Upload Image</label>
+                        <Label htmlFor="image-upload-input" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Upload Image</Label>
                         {!imagePreview ? (
                             <div 
                                 onDragOver={onDragOver}
@@ -172,7 +172,7 @@ function ImageAnalysisSection() {
                     </div>
 
                     <div>
-                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">AI Insights</label>
+                        <Label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">AI Insights</Label>
                         <div className="mt-2 min-h-48">
                             {isAnalyzing && (
                                 <div className="flex flex-col items-center justify-center h-full space-y-2 text-muted-foreground">
