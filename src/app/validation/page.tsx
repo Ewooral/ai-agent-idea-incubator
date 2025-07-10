@@ -15,7 +15,7 @@ import { useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
@@ -26,7 +26,6 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLe
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import type { AnalyzeImageOutput } from '@/ai/flows/analyze-image-for-insights';
 import { Label } from '@/components/ui/label';
-import { FormLabel } from '@/components/ui/form';
 
 
 const validationSchema = z.object({
@@ -93,13 +92,11 @@ function ImageAnalysisSection() {
             });
 
             if (!response.ok) {
-                // Try to get error details from the JSON response, but handle cases where it's not JSON
                 let errorDetails = 'Failed to analyze image due to a server error.';
                 try {
                     const errorResult = await response.json();
                     errorDetails = errorResult.details || errorResult.error || errorDetails;
                 } catch (jsonError) {
-                    // The error response wasn't JSON. Use the status text.
                     errorDetails = response.statusText;
                 }
                 throw new Error(errorDetails);
@@ -231,6 +228,7 @@ export default function ValidationPage(): ReactNode {
   const { selectedLanguage, getLanguageName } = useLanguage();
   const [translatedRefinedIdea, setTranslatedRefinedIdea] = useState<string | null>(null);
   const [isTranslating, setIsTranslating] = useState<boolean>(false);
+  const [chartRadius, setChartRadius] = useState(8);
 
   const form = useForm<ValidationFormValues>({
     resolver: zodResolver(validationSchema),
@@ -247,6 +245,17 @@ export default function ValidationPage(): ReactNode {
       form.setValue('idea', ideaFromQuery);
     }
   }, [searchParams, form]);
+  
+  useEffect(() => {
+    // This effect runs only on the client after hydration
+    // to prevent server-side rendering errors with `window`.
+    const handleResize = () => {
+      setChartRadius(window.innerWidth < 640 ? 4 : 8);
+    };
+    handleResize(); // Set initial value
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (selectedLanguage === 'en' || !validationResult?.refinedIdea) {
@@ -619,37 +628,35 @@ export default function ValidationPage(): ReactNode {
                     </CardHeader>
                     <CardContent className="text-center">
                       <div className="h-64 sm:h-80 w-full rounded-lg bg-muted/30 border border-dashed p-4">
-                        <ChartContainer config={dynamicChartConfig} className="min-h-[200px] w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                              <BarChart accessibilityLayer data={validationResult.viabilityFactorsChartData} margin={{ top: 5, right: 20, left: -20, bottom: 20 }}>
-                                <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                                <XAxis
-                                  dataKey="name"
-                                  tickLine={false}
-                                  tickMargin={10}
-                                  axisLine={false}
-                                  angle={-30}
-                                  textAnchor="end"
-                                  height={50}
-                                  interval={0}
-                                  tickFormatter={(value) => value.length > 12 ? `${value.substring(0,10)}...` : value}
-                                  className="text-xs"
-                                />
-                                <YAxis 
-                                  tickLine={false}
-                                  axisLine={false}
-                                  tickMargin={10}
-                                  domain={[0, 100]}
-                                  className="text-xs"
-                                />
-                                <ChartTooltip
-                                  cursor={false}
-                                  content={<ChartTooltipContent />}
-                                />
-                                <ChartLegend content={<ChartLegendContent wrapperStyle={{ fontSize: '0.75rem' }} />} />
-                                <Bar dataKey="score" fill="var(--color-score)" radius={window.innerWidth < 640 ? 4 : 8} />
-                              </BarChart>
-                            </ResponsiveContainer>
+                        <ChartContainer config={dynamicChartConfig} className="w-full h-full">
+                          <BarChart accessibilityLayer data={validationResult.viabilityFactorsChartData} margin={{ top: 5, right: 20, left: -20, bottom: 20 }}>
+                            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                            <XAxis
+                              dataKey="name"
+                              tickLine={false}
+                              tickMargin={10}
+                              axisLine={false}
+                              angle={-30}
+                              textAnchor="end"
+                              height={50}
+                              interval={0}
+                              tickFormatter={(value) => value.length > 12 ? `${value.substring(0,10)}...` : value}
+                              className="text-xs"
+                            />
+                            <YAxis 
+                              tickLine={false}
+                              axisLine={false}
+                              tickMargin={10}
+                              domain={[0, 100]}
+                              className="text-xs"
+                            />
+                            <ChartTooltip
+                              cursor={false}
+                              content={<ChartTooltipContent />}
+                            />
+                            <ChartLegend content={<ChartLegendContent wrapperStyle={{ fontSize: '0.75rem' }} />} />
+                            <Bar dataKey="score" fill="var(--color-score)" radius={chartRadius} />
+                          </BarChart>
                         </ChartContainer>
                       </div>
                       <p className="text-xs text-muted-foreground mt-2">
@@ -687,5 +694,3 @@ export default function ValidationPage(): ReactNode {
     </div>
   );
 }
-
-    
