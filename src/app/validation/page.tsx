@@ -24,6 +24,7 @@ import { useLanguage } from '@/contexts/language-context';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import type { AnalyzeImageOutput } from '@/ai/flows/analyze-image-for-insights';
+import { Label } from '@/components/ui/label';
 
 
 const validationSchema = z.object({
@@ -120,7 +121,7 @@ function ImageAnalysisSection() {
             <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     <div>
-                        <FormLabel>Upload Image</FormLabel>
+                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Upload Image</label>
                         {!imagePreview ? (
                             <div 
                                 onDragOver={onDragOver}
@@ -160,7 +161,7 @@ function ImageAnalysisSection() {
                     </div>
 
                     <div>
-                        <FormLabel>AI Insights</FormLabel>
+                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">AI Insights</label>
                         <div className="mt-2 min-h-48">
                             {isAnalyzing && (
                                 <div className="flex flex-col items-center justify-center h-full space-y-2 text-muted-foreground">
