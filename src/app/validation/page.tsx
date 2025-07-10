@@ -14,7 +14,7 @@ import { useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
@@ -22,7 +22,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useLanguage } from '@/contexts/language-context';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from '@/components/ui/chart';
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import type { AnalyzeImageOutput } from '@/ai/flows/analyze-image-for-insights';
 import { Label } from '@/components/ui/label';
 
@@ -89,10 +89,21 @@ function ImageAnalysisSection() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ photoDataUri: imageDataUri }),
             });
-            const result = await response.json();
+
             if (!response.ok) {
-                throw new Error(result.details || 'Failed to analyze image.');
+                // Try to get error details from the JSON response, but handle cases where it's not JSON
+                let errorDetails = 'Failed to analyze image due to a server error.';
+                try {
+                    const errorResult = await response.json();
+                    errorDetails = errorResult.details || errorResult.error || errorDetails;
+                } catch (jsonError) {
+                    // The error response wasn't JSON. Use the status text.
+                    errorDetails = response.statusText;
+                }
+                throw new Error(errorDetails);
             }
+
+            const result = await response.json();
             setAnalysisResult(result);
             toast({ title: "Analysis Complete!", description: "AI has provided insights on the image." });
         } catch (error: any) {
@@ -121,7 +132,7 @@ function ImageAnalysisSection() {
             <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     <div>
-                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Upload Image</label>
+                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" htmlFor="image-upload-input">Upload Image</label>
                         {!imagePreview ? (
                             <div 
                                 onDragOver={onDragOver}
@@ -582,6 +593,23 @@ export default function ValidationPage(): ReactNode {
                     </CardContent>
                 </Card>
 
+                {validationResult.conceptualImageUrl && (
+                  <Card className="bg-card/80 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="text-base sm:text-lg flex items-center"><ImageIcon size={20} className="mr-2 text-primary"/>Conceptual Image</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <img 
+                        src={validationResult.conceptualImageUrl} 
+                        alt="AI-generated conceptual image for the idea" 
+                        className="w-full h-auto max-h-80 object-contain rounded-lg border bg-muted/20 shadow-sm"
+                        data-ai-hint="business concept abstract"
+                      />
+                       <p className="text-xs text-muted-foreground mt-2">An AI-generated visual representation of the refined idea.</p>
+                    </CardContent>
+                  </Card>
+                )}
+
                 {validationResult.viabilityFactorsChartData && validationResult.viabilityFactorsChartData.length > 0 ? (
                   <Card className="bg-card/80 backdrop-blur-sm">
                     <CardHeader>
@@ -589,7 +617,7 @@ export default function ValidationPage(): ReactNode {
                     </CardHeader>
                     <CardContent className="text-center">
                       <div className="h-64 sm:h-80 w-full rounded-lg bg-muted/30 border border-dashed p-4">
-                        <ChartContainer config={dynamicChartConfig} className="w-full h-full">
+                        <ResponsiveContainer width="100%" height="100%">
                           <BarChart accessibilityLayer data={validationResult.viabilityFactorsChartData} margin={{ top: 5, right: 5, left: -25, bottom: 20 }}>
                             <CartesianGrid vertical={false} strokeDasharray="3 3" />
                             <XAxis
@@ -618,7 +646,7 @@ export default function ValidationPage(): ReactNode {
                             <ChartLegend content={<ChartLegendContent wrapperStyle={{ fontSize: '0.75rem' }} />} />
                             <Bar dataKey="score" fill="var(--color-score)" radius={window.innerWidth < 640 ? 4 : 8} />
                           </BarChart>
-                        </ChartContainer>
+                        </ResponsiveContainer>
                       </div>
                       <p className="text-xs text-muted-foreground mt-2">
                         This chart displays AI-estimated scores for key viability factors related to your idea.

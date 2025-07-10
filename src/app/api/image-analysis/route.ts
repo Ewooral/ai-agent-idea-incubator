@@ -15,13 +15,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid input', details: validation.error.flatten() }, { status: 400 });
     }
 
-    const result: AnalyzeImageOutput = await analyzeImageForInsights(validation.data);
-
-    return NextResponse.json(result);
+    // Explicitly try/catch the AI flow call to ensure any error is handled as a JSON response
+    try {
+      const result: AnalyzeImageOutput = await analyzeImageForInsights(validation.data);
+      return NextResponse.json(result);
+    } catch (aiError: any) {
+      console.error('Error during AI flow execution in image-analysis route:', aiError);
+      return NextResponse.json({ error: 'AI analysis failed', details: aiError.message || 'The AI model could not process the request.' }, { status: 500 });
+    }
 
   } catch (error: any) {
     console.error('Error in image analysis route:', error);
     
+    // This catches errors like malformed JSON in the request body
     let errorMessage = 'An unexpected error occurred.';
     if (error instanceof z.ZodError) {
       errorMessage = 'Validation error.';
