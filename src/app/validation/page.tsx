@@ -619,36 +619,38 @@ export default function ValidationPage(): ReactNode {
                     </CardHeader>
                     <CardContent className="text-center">
                       <div className="h-64 sm:h-80 w-full rounded-lg bg-muted/30 border border-dashed p-4">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart accessibilityLayer data={validationResult.viabilityFactorsChartData} margin={{ top: 5, right: 5, left: -25, bottom: 20 }}>
-                            <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                            <XAxis
-                              dataKey="name"
-                              tickLine={false}
-                              tickMargin={10}
-                              axisLine={false}
-                              angle={-30}
-                              textAnchor="end"
-                              height={50}
-                              interval={0}
-                              tickFormatter={(value) => value.length > 12 ? `${value.substring(0,10)}...` : value}
-                              className="text-xs"
-                            />
-                            <YAxis 
-                              tickLine={false}
-                              axisLine={false}
-                              tickMargin={10}
-                              domain={[0, 100]}
-                              className="text-xs"
-                            />
-                            <ChartTooltip
-                              cursor={false}
-                              content={<ChartTooltipContent />}
-                            />
-                            <ChartLegend content={<ChartLegendContent wrapperStyle={{ fontSize: '0.75rem' }} />} />
-                            <Bar dataKey="score" fill="var(--color-score)" radius={window.innerWidth < 640 ? 4 : 8} />
-                          </BarChart>
-                        </ResponsiveContainer>
+                        <ChartContainer config={dynamicChartConfig} className="min-h-[200px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart accessibilityLayer data={validationResult.viabilityFactorsChartData} margin={{ top: 5, right: 5, left: -25, bottom: 20 }}>
+                                <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                                <XAxis
+                                  dataKey="name"
+                                  tickLine={false}
+                                  tickMargin={10}
+                                  axisLine={false}
+                                  angle={-30}
+                                  textAnchor="end"
+                                  height={50}
+                                  interval={0}
+                                  tickFormatter={(value) => value.length > 12 ? `${value.substring(0,10)}...` : value}
+                                  className="text-xs"
+                                />
+                                <YAxis 
+                                  tickLine={false}
+                                  axisLine={false}
+                                  tickMargin={10}
+                                  domain={[0, 100]}
+                                  className="text-xs"
+                                />
+                                <ChartTooltip
+                                  cursor={false}
+                                  content={<ChartTooltipContent />}
+                                />
+                                <ChartLegend content={<ChartLegendContent wrapperStyle={{ fontSize: '0.75rem' }} />} />
+                                <Bar dataKey="score" fill="var(--color-score)" radius={window.innerWidth < 640 ? 4 : 8} />
+                              </BarChart>
+                            </ResponsiveContainer>
+                        </ChartContainer>
                       </div>
                       <p className="text-xs text-muted-foreground mt-2">
                         This chart displays AI-estimated scores for key viability factors related to your idea.
@@ -685,3 +687,5 @@ export default function ValidationPage(): ReactNode {
     </div>
   );
 }
+
+    
