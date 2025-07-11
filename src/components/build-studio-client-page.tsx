@@ -1,4 +1,3 @@
-
 // src/components/build-studio-client-page.tsx
 "use client";
 
@@ -14,7 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDes
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, FileText, Users, Activity, DollarSign, Save, Wand2, AlertTriangle, Briefcase } from 'lucide-react';
+import { Loader2, FileText, Users, Activity, DollarSign, Save, Wand2, AlertTriangle, Briefcase, Printer, FileDown } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
 import { MarkdownDisplay } from './markdown-display';
@@ -240,6 +239,10 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
       setIsGeneratingProposal(false);
     }
   };
+
+  const handlePrint = () => {
+    window.print();
+  };
   
   const displayedGuideContent = selectedLanguage !== 'en' && translatedGuideMarkdown ? translatedGuideMarkdown : generatedGuide;
   const guideCardTitle = `Your AI-Generated Development Guide ${selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}`;
@@ -250,190 +253,192 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
   const isBusy = isSaving || isGeneratingGuide || isTranslatingGuide || isGeneratingProposal || isTranslatingProposal;
 
   return (
-    <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          {form.getValues('id') && (
+    <div className="printable-area">
+      <div className="no-print">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            {form.getValues('id') && (
+              <FormField
+                control={form.control}
+                name="id"
+                render={({ field }) => <Input type="hidden" {...field} />}
+              />
+            )}
             <FormField
               control={form.control}
-              name="id"
+              name="ideaId"
               render={({ field }) => <Input type="hidden" {...field} />}
             />
-          )}
-          <FormField
-            control={form.control}
-            name="ideaId"
-            render={({ field }) => <Input type="hidden" {...field} />}
-          />
 
-          <FormField
-              control={form.control}
-              name="valueProposition"
-              render={({ field }) => (
-              <FormItem>
-                  <FormLabel className="text-base sm:text-lg flex items-center"><FileText className="mr-2 h-5 w-5 text-accent" />Value Proposition *</FormLabel>
-                  <FormControl>
-                  <Textarea placeholder="What unique value do you offer? Why should customers choose you?" {...field} rows={3} />
-                  </FormControl>
-                  <FormDescription>Clearly articulate the core benefit to your users.</FormDescription>
-                  <FormMessage />
-              </FormItem>
-              )}
-          />
-          <FormField
-              control={form.control}
-              name="customerSegments"
-              render={({ field }) => (
-              <FormItem>
-                  <FormLabel className="text-base sm:text-lg flex items-center"><Users className="mr-2 h-5 w-5 text-accent" />Customer Segments *</FormLabel>
-                  <FormControl>
-                  <Textarea placeholder="Who are your target customers? Describe their key characteristics." {...field} rows={3}/>
-                  </FormControl>
-                  <FormDescription>Define your primary audience.</FormDescription>
-                  <FormMessage />
-              </FormItem>
-              )}
-          />
-          <FormField
-              control={form.control}
-              name="keyActivities"
-              render={({ field }) => (
-              <FormItem>
-                  <FormLabel className="text-base sm:text-lg flex items-center"><Activity className="mr-2 h-5 w-5 text-accent" />Key Activities *</FormLabel>
-                  <FormControl>
-                  <Textarea placeholder="What critical activities must your business perform to deliver its value proposition?" {...field} rows={3}/>
-                  </FormControl>
-                  <FormDescription>List the most important actions your company undertakes.</FormDescription>
-                  <FormMessage />
-              </FormItem>
-              )}
-          />
-          <FormField
-              control={form.control}
-              name="revenueStreams"
-              render={({ field }) => (
-              <FormItem>
-                  <FormLabel className="text-base sm:text-lg flex items-center"><DollarSign className="mr-2 h-5 w-5 text-accent" />Revenue Streams *</FormLabel>
-                  <FormControl>
-                  <Textarea placeholder="How will your business generate revenue? (e.g., sales, subscriptions, ads)" {...field} rows={3}/>
-                  </FormControl>
-                  <FormDescription>Describe your monetization strategy.</FormDescription>
-                  <FormMessage />
-              </FormItem>
-              )}
-          />
-          
-          <Separator />
-          <h3 className="text-lg sm:text-xl font-semibold text-foreground pt-4">Details for AI Document Generation</h3>
-          
-          <FormField
-              control={form.control}
-              name="targetPlatform"
-              render={({ field }) => (
-              <FormItem>
-                  <FormLabel className="text-base sm:text-lg">Target Platform (Required for Dev Guide)</FormLabel>
-                  <FormControl>
-                  <Input placeholder="e.g., Web Application, iOS Mobile App, Cross-platform Mobile App" {...field} />
-                  </FormControl>
-                  <FormDescription>What type of application are you planning to build?</FormDescription>
-                  <FormMessage />
-              </FormItem>
-              )}
-          />
-          <FormField
-              control={form.control}
-              name="coreFeaturesMVP"
-              render={({ field }) => (
-              <FormItem>
-                  <FormLabel className="text-base sm:text-lg">Core MVP Features (Required for Dev Guide)</FormLabel>
-                  <FormControl>
-                  <Textarea placeholder="List 3-5 essential features for your Minimum Viable Product. Be concise but clear. e.g., User registration & login, Ability to create posts, Real-time chat functionality" {...field} rows={4}/>
-                  </FormControl>
-                  <FormDescription>What are the absolute must-have features for the first version?</FormDescription>
-                  <FormMessage />
-              </FormItem>
-              )}
-          />
-          <FormField
-              control={form.control}
-              name="techStackSuggestion"
-              render={({ field }) => (
-              <FormItem>
-                  <FormLabel className="text-base sm:text-lg">Tech Stack Preference (Optional for Dev Guide)</FormLabel>
-                  <FormControl>
-                  <Textarea placeholder="e.g., React Native for mobile, Python/Django backend, Firebase for BaaS. If unsure, leave blank and AI will suggest." {...field} rows={3}/>
-                  </FormControl>
-                  <FormDescription>Any preferred technologies? AI can suggest if you're unsure.</FormDescription>
-                  <FormMessage />
-              </FormItem>
-              )}
-          />
-          <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-              <FormItem>
-                  <FormLabel className="text-base sm:text-lg">Additional Notes for AI (Optional for all Docs)</FormLabel>
-                  <FormControl>
-                  <Textarea placeholder="Any other specific context, constraints, or preferences for the AI to consider when generating the guide." {...field} rows={4}/>
-                  </FormControl>
-                  <FormDescription>More details to help the AI tailor the documents.</FormDescription>
-                  <FormMessage />
-              </FormItem>
-              )}
-          />
-          <div className="flex flex-col sm:flex-row gap-4 items-center flex-wrap">
-            <Button type="submit" disabled={isBusy} size="lg" className="w-full sm:w-auto">
-                {isSaving ? (
-                <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Saving Details...
-                </>
-                ) : (
-                <>
-                    <Save className="mr-2 h-5 w-5" />
-                    Save Project Details
-                </>
+            <FormField
+                control={form.control}
+                name="valueProposition"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel className="text-base sm:text-lg flex items-center"><FileText className="mr-2 h-5 w-5 text-accent" />Value Proposition *</FormLabel>
+                    <FormControl>
+                    <Textarea placeholder="What unique value do you offer? Why should customers choose you?" {...field} rows={3} />
+                    </FormControl>
+                    <FormDescription>Clearly articulate the core benefit to your users.</FormDescription>
+                    <FormMessage />
+                </FormItem>
                 )}
-            </Button>
-            <Button type="button" onClick={handleGenerateGuide} disabled={isBusy || form.formState.isDirty} size="lg" variant="outline" className="w-full sm:w-auto">
-              {isGeneratingGuide ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Generating Guide...
-                </>
-              ) : (
-                <>
-                  <Wand2 className="mr-2 h-5 w-5" />
-                  Generate Development Guide
-                </>
+            />
+            <FormField
+                control={form.control}
+                name="customerSegments"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel className="text-base sm:text-lg flex items-center"><Users className="mr-2 h-5 w-5 text-accent" />Customer Segments *</FormLabel>
+                    <FormControl>
+                    <Textarea placeholder="Who are your target customers? Describe their key characteristics." {...field} rows={3}/>
+                    </FormControl>
+                    <FormDescription>Define your primary audience.</FormDescription>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            <FormField
+                control={form.control}
+                name="keyActivities"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel className="text-base sm:text-lg flex items-center"><Activity className="mr-2 h-5 w-5 text-accent" />Key Activities *</FormLabel>
+                    <FormControl>
+                    <Textarea placeholder="What critical activities must your business perform to deliver its value proposition?" {...field} rows={3}/>
+                    </FormControl>
+                    <FormDescription>List the most important actions your company undertakes.</FormDescription>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            <FormField
+                control={form.control}
+                name="revenueStreams"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel className="text-base sm:text-lg flex items-center"><DollarSign className="mr-2 h-5 w-5 text-accent" />Revenue Streams *</FormLabel>
+                    <FormControl>
+                    <Textarea placeholder="How will your business generate revenue? (e.g., sales, subscriptions, ads)" {...field} rows={3}/>
+                    </FormControl>
+                    <FormDescription>Describe your monetization strategy.</FormDescription>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            
+            <Separator />
+            <h3 className="text-lg sm:text-xl font-semibold text-foreground pt-4">Details for AI Document Generation</h3>
+            
+            <FormField
+                control={form.control}
+                name="targetPlatform"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel className="text-base sm:text-lg">Target Platform (Required for Dev Guide)</FormLabel>
+                    <FormControl>
+                    <Input placeholder="e.g., Web Application, iOS Mobile App, Cross-platform Mobile App" {...field} />
+                    </FormControl>
+                    <FormDescription>What type of application are you planning to build?</FormDescription>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            <FormField
+                control={form.control}
+                name="coreFeaturesMVP"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel className="text-base sm:text-lg">Core MVP Features (Required for Dev Guide)</FormLabel>
+                    <FormControl>
+                    <Textarea placeholder="List 3-5 essential features for your Minimum Viable Product. Be concise but clear. e.g., User registration & login, Ability to create posts, Real-time chat functionality" {...field} rows={4}/>
+                    </FormControl>
+                    <FormDescription>What are the absolute must-have features for the first version?</FormDescription>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            <FormField
+                control={form.control}
+                name="techStackSuggestion"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel className="text-base sm:text-lg">Tech Stack Preference (Optional for Dev Guide)</FormLabel>
+                    <FormControl>
+                    <Textarea placeholder="e.g., React Native for mobile, Python/Django backend, Firebase for BaaS. If unsure, leave blank and AI will suggest." {...field} rows={3}/>
+                    </FormControl>
+                    <FormDescription>Any preferred technologies? AI can suggest if you're unsure.</FormDescription>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            <FormField
+                control={form.control}
+                name="notes"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel className="text-base sm:text-lg">Additional Notes for AI (Optional for all Docs)</FormLabel>
+                    <FormControl>
+                    <Textarea placeholder="Any other specific context, constraints, or preferences for the AI to consider when generating the guide." {...field} rows={4}/>
+                    </FormControl>
+                    <FormDescription>More details to help the AI tailor the documents.</FormDescription>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            <div className="flex flex-col sm:flex-row gap-4 items-center flex-wrap">
+              <Button type="submit" disabled={isBusy} size="lg" className="w-full sm:w-auto">
+                  {isSaving ? (
+                  <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Saving Details...
+                  </>
+                  ) : (
+                  <>
+                      <Save className="mr-2 h-5 w-5" />
+                      Save Project Details
+                  </>
+                  )}
+              </Button>
+              <Button type="button" onClick={handleGenerateGuide} disabled={isBusy || form.formState.isDirty} size="lg" variant="outline" className="w-full sm:w-auto">
+                {isGeneratingGuide ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Generating Guide...
+                  </>
+                ) : (
+                  <>
+                    <Wand2 className="mr-2 h-5 w-5" />
+                    Generate Development Guide
+                  </>
+                )}
+              </Button>
+              <Button type="button" onClick={handleGenerateProposal} disabled={isBusy || form.formState.isDirty} size="lg" variant="outline" className="w-full sm:w-auto">
+                {isGeneratingProposal ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Generating Proposal...
+                  </>
+                ) : (
+                  <>
+                    <Briefcase className="mr-2 h-5 w-5" />
+                    Generate Business Proposal
+                  </>
+                )}
+              </Button>
+            </div>
+            {form.formState.isDirty && (
+                  <p className="text-sm text-yellow-600 flex items-center"><AlertTriangle className="mr-2 h-4 w-4" />You have unsaved changes. Please save before generating documents.</p>
               )}
-            </Button>
-            <Button type="button" onClick={handleGenerateProposal} disabled={isBusy || form.formState.isDirty} size="lg" variant="outline" className="w-full sm:w-auto">
-              {isGeneratingProposal ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Generating Proposal...
-                </>
-              ) : (
-                <>
-                  <Briefcase className="mr-2 h-5 w-5" />
-                  Generate Business Proposal
-                </>
-              )}
-            </Button>
-          </div>
-           {form.formState.isDirty && (
-                <p className="text-sm text-yellow-600 flex items-center"><AlertTriangle className="mr-2 h-4 w-4" />You have unsaved changes. Please save before generating documents.</p>
-            )}
-        </form>
-      </Form>
+          </form>
+        </Form>
+      </div>
 
-      <div id="ai-guide-section">
-        {(isGeneratingGuide || generatedGuide || isTranslatingGuide) && <Separator className="my-12" />}
+      <div id="ai-guide-section" className="print-only">
+        {(isGeneratingGuide || generatedGuide || isTranslatingGuide) && <Separator className="my-12 no-print" />}
 
         {(isGeneratingGuide || isTranslatingGuide) && !generatedGuide && ( 
-          <div className="space-y-4 min-h-[70vh] flex flex-col justify-center">
+          <div className="space-y-4 min-h-[70vh] flex flex-col justify-center no-print">
               <div className="flex items-center space-x-2 self-center">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
                   <p className="text-lg text-muted-foreground">
@@ -451,16 +456,26 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
         )}
 
         {displayedGuideContent && !isGeneratingGuide && ( 
-          <Card className="mt-8 border-primary/70 shadow-lg bg-card">
-            <CardHeader>
-              <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-primary">
-                <Wand2 className="mr-3 h-7 w-7" /> {guideCardTitle}
-              </CardTitle>
-              <CardDescription>AI-generated step-by-step guide to build your project. Review and adapt as needed.</CardDescription>
+          <Card className="mt-8 border-primary/70 shadow-lg bg-card print:shadow-none print:border-none">
+            <CardHeader className="flex flex-col sm:flex-row justify-between items-start gap-4">
+              <div>
+                <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-primary">
+                  <Wand2 className="mr-3 h-7 w-7" /> {guideCardTitle}
+                </CardTitle>
+                <CardDescription className="no-print">AI-generated step-by-step guide to build your project. Review and adapt as needed.</CardDescription>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto no-print">
+                  <Button variant="outline" onClick={handlePrint} className="w-full">
+                      <FileDown className="mr-2 h-4 w-4" /> Export as PDF
+                  </Button>
+                  <Button variant="outline" onClick={handlePrint} className="w-full">
+                      <Printer className="mr-2 h-4 w-4" /> Print Guide
+                  </Button>
+              </div>
             </CardHeader>
             <CardContent>
               {isTranslatingGuide && ( 
-                <div className="flex items-center space-x-2 my-4 min-h-[30vh] justify-center">
+                <div className="flex items-center space-x-2 my-4 min-h-[30vh] justify-center no-print">
                   <Loader2 className="h-6 w-6 animate-spin text-primary" />
                   <p className="text-md text-muted-foreground">Translating guide...</p>
                 </div>
@@ -471,7 +486,7 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
         )}
       </div>
 
-      <div id="ai-proposal-section">
+      <div id="ai-proposal-section" className="no-print">
         {(isGeneratingProposal || generatedProposal || isTranslatingProposal) && <Separator className="my-12" />}
 
         {(isGeneratingProposal || isTranslatingProposal) && !generatedProposal && ( 
@@ -512,6 +527,6 @@ export function BuildStudioClientPage({ ideaId, initialSavedIdea, initialBuildPr
           </Card>
         )}
       </div>
-    </>
+    </div>
   );
 }
