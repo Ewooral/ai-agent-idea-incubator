@@ -32,5 +32,5 @@ pm2 save
 
 # ✅ Done
 echo ""
-echo "✅ Deployment complete! Your app should now be live at https://ewooral.com"
+echo "✅ Deployment complete! Your app should now be live at https://ewooral.com"! 
 echo "📈 Managed by PM2 under process name: $APP_NAME"
