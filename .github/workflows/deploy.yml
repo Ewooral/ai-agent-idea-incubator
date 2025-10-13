@@ -1,4 +1,3 @@
-
 name: Deploy to Contabo VPS
 
 on:
@@ -13,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # Recommended to have the latest code in the runner environment
+        uses: actions/checkout@v4
 
       - name: Deploy to server
         uses: appleboy/ssh-action@master
@@ -21,16 +20,44 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_SSH_PORT || 22 }} # Defaults to port 22 if VPS_SSH_PORT secret is not set
+          port: ${{ secrets.VPS_SSH_PORT || 22 }}
           script: |
-            # IMPORTANT: Replace '/path/to/your/app' with the absolute path to your application directory on the VPS
-            # This is where your project code and deploy.sh script should be located.
+            # Navigate to the correct directory
             cd /root/ai-agent-idea-incubator
+
+            # --- Clean up and pull latest code ---
+            echo "--- Clean up and pull latest code ---"
+            # Ensure the local repository is clean and matches the remote
+            git fetch origin
+            git reset --hard origin/master
+            # Clean up any untracked files and directories
+            git clean -fd
+
+            # --- Install dependencies and build ---
+            echo "--- Installing dependencies and building ---"
+            # Load Node.js environment via NVM
+            export NVM_DIR="$HOME/.nvm"
+            source "$NVM_DIR/nvm.sh"
+            nvm use --lts
             
-            # Ensure the deploy script is executable
-            chmod +x ./deploy.sh
+            # Remove old build directories for a fresh start
+            rm -rf .next
+            rm -rf node_modules
             
-            # Execute the deployment script
-            echo "🚀 Executing deploy.sh on VPS..."
-            ./deploy.sh
-            echo "✅ Deployment script finished."
+            pnpm install
+            pnpm build
+
+            # --- Start/reload application with PM2 ---
+            echo "--- Starting/reloading application with PM2 ---"
+            APP_NAME="idea-incubator"
+            # Check if the app is already running and reload it, otherwise start it
+            if pm2 describe "$APP_NAME" > /dev/null; then
+              pm2 reload "$APP_NAME"
+            else
+              # Use the 'start' command from package.json
+              pm2 start "pnpm" --name "$APP_NAME" -- start
+            fi
+            
+            pm2 save
+            
+            echo "✅ Deployment complete!"
