@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
+  SidebarInset,
 } from "@/components/ui/sidebar";
 import {
   Sheet,
@@ -29,7 +30,6 @@ import { ChatbotDialog } from '@/components/chatbot/chatbot-dialog';
 import { Button } from "@/components/ui/button";
 import { useSidebar as useSidebarContextHook } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/auth-context";
-import { SidebarInset } from "../ui/sidebar";
 
 
 const mainNavItems = [
@@ -252,8 +252,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {desktopSidebarContent}
         </Sidebar>
 
-        <SidebarInset className="flex-1 overflow-y-auto relative flex justify-center">
-           <div className="px-4 pt-6 md:pt-6 lg:pt-8 pb-6 w-full max-w-7xl">
+        <SidebarInset className="flex-1 overflow-y-auto relative">
+           <div className="px-4 pt-6 md:pt-6 lg:pt-8 pb-6 w-full max-w-7xl mx-auto">
               {children}
           </div>
         </SidebarInset>
