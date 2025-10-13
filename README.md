@@ -14,15 +14,13 @@ This led to the creation of the Idea Incubator. The vision was to build a platfo
 
 The application is designed around a clear, three-stage workflow that mirrors the early stages of a research project.
 
-1.  **Novel Idea Generation**: The user starts by either entering a general problem area (like "making model reasoning more transparent") or a few keywords (like "mechanistic interpretability, sparse autoencoders"). The application’s AI then generates a set of novel research questions, each with a "novelty score" to indicate how original the concept is. The user can also explore predefined topics that are highly relevant to AI safety, such as Scalable Oversight, LLM Deception, and AI Control, which are directly inspired by the research priorities of organizations like LASR Labs.
+1.  **Novel Idea Generation**: The user starts by either entering a general problem area (like "making model reasoning more transparent") or a few keywords (like "mechanistic interpretability, sparse autoencoders"). The application’s AI then generates a set of novel research questions, each with a "novelty score" to indicate how original the concept is. The user can also explore predefined topics that are highly relevant to AI safety.
 
 2.  **AI-Powered Refinement and Analysis**: Once a promising question is selected, the user takes it to the analysis stage. Here, the AI refines the initial question into a more specific and testable hypothesis. It provides a deeper analysis, including suggesting potential experiments or pivots, identifying associated technical concepts, and offering a brief teaser on related work in the field. It also generates a "Potential Impact Score" and a chart of viability factors to help the researcher weigh the feasibility and importance of the proposed work.
 
 3.  **Development and Planning**: After an idea has been validated, the user can take it to the Build Studio. In this final stage, the user provides more detail on their project, and the AI generates a comprehensive, step-by-step development guide or experiment plan. This document serves as a detailed first draft, covering project setup, key development phases, and potential challenges, giving the researcher a solid foundation for their work.
 
-## Relevance to LASR Labs and My Contribution
-
-This project is deeply aligned with the mission of LASR Labs because it is a direct attempt to build a tool that facilitates the kind of work they champion: action-relevant, technical AI safety research.
+## My Contribution
 
 My contribution to this project was that of the architect and director. I defined the project's vision, from the initial concept of an "idea incubator" to the specific pivot towards serving the AI safety research community. I designed the application's features and the user workflow, ensuring that each stage provided tangible value to a researcher. I then partnered with an advanced AI development assistant, guiding it with high-level directives, iterative feedback, and precise instructions to build and refine the full-stack application. My role was to ensure that all the components, from the frontend interface to the backend AI flows, came together to create a cohesive and impactful tool.
 
