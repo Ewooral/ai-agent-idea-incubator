@@ -1,6 +1,7 @@
 // src/app/api/image-analysis/route.ts
 import { NextResponse, type NextRequest } from 'next/server';
-import { analyzeImageForInsights, AnalyzeImageInputSchema, type AnalyzeImageOutput } from '@/ai/flows/analyze-image-for-insights';
+import { analyzeImageForInsights } from '@/ai/flows/analyze-image-for-insights';
+import { AnalyzeImageInputSchema, type AnalyzeImageOutput } from '@/app/schemas/image-analysis.schemas';
 import { z } from 'zod';
 
 // This API route is better suited for handling file uploads (in this case, data URIs from the client)
