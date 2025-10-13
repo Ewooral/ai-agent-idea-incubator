@@ -1,6 +1,6 @@
 
 // src/data/help-guide-topics.ts
-import { Lightbulb, CheckCircle, LayoutDashboard, Hammer, Users, Settings, Palette, Globe, HelpCircle, Info, type Icon as LucideIcon } from 'lucide-react';
+import { Lightbulb, CheckCircle, LayoutDashboard, Hammer, Users, Settings, Palette, Globe, HelpCircle, Info, TestTube, type Icon as LucideIcon } from 'lucide-react';
 
 export interface HelpTopic {
   id: string;
@@ -15,137 +15,117 @@ export const helpTopics: HelpTopic[] = [
     title: 'App Overview',
     icon: Info,
     content: `
-Welcome to **Idea Incubator**! This application is designed to be your partner in innovation, helping you:
-- **Generate** novel business ideas using AI.
-- **Validate & Refine** these ideas with AI-driven analysis and market insights.
-- **Develop** detailed, step-by-step project plans for your validated ideas.
-- **Connect** with a community (feature in development).
+Welcome to the **AI Safety Research Simulator**! This application is designed to accelerate your AI Safety research workflow, helping you:
+- **Generate** novel research proposals using AI.
+- **Analyze & Refine** these proposals with AI-driven analysis and strategic insights.
+- **Develop** detailed, step-by-step experiment plans for your validated proposals.
+- **Connect** with a community of fellow researchers (feature in development).
 
-Navigate through the app using the sidebar on the left. Each section is tailored to a specific stage of the idea lifecycle.
+Navigate through the app using the sidebar on the left. Each section is tailored to a specific stage of the research lifecycle.
     `,
   },
   {
-    id: 'generate-idea',
-    title: 'Generating New Ideas',
+    id: 'generate-proposal',
+    title: 'Generating Research Proposals',
     icon: Lightbulb,
     content: `
-The **Generate Idea** page is where your journey begins. Access it from the sidebar via the Lightbulb icon.
+The **Generate Proposal** page is your starting point for exploring new research directions.
 
-![Generate Idea Page Preview](https://placehold.co/600x300.png?text=Generate+Idea+Page)
-<p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Generate Idea Page Interface</p>
+![Generate Proposal Page Preview](https://placehold.co/600x300.png?text=Generate+Proposal+Page)
+<p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Generate Proposal Page Interface</p>
 
 **How to Use:**
 1.  **Custom Input (Form)**:
-    *   **Problem Area (Optional)**: Describe a challenge or domain you're interested in (e.g., "reducing urban food waste").
-    *   **Keywords/Topics (Optional)**: Provide high-level topics to guide the AI (e.g., "sustainable energy, AI in education").
-    *   Click the "Generate With My Input" button.
-    *   *Tip: Providing at least one field helps the AI generate more relevant ideas.*
+    *   **Problem Area (Optional)**: Describe a challenge in AI Safety (e.g., "how to verify honesty in LLMs").
+    *   **Keywords/Topics (Optional)**: Provide high-level topics to guide the AI (e.g., "deceptive alignment, interpretability").
+    *   Click "Generate With My Input".
 2.  **Explore by Topic Cards**:
-    *   Below the form, you'll find topic cards (e.g., "Health & Wellness", "Sustainable Living").
-    *   Clicking a card automatically populates the problem area and keywords and generates ideas for that theme.
+    *   Below the form are cards for core AI Safety topics (e.g., "Scalable Oversight", "Interpretability").
+    *   Clicking a card auto-fills the form and generates relevant research questions.
 3.  **Viewing Results**:
-    *   Generated ideas appear as cards at the bottom of the page.
-    *   The page will automatically scroll down to show you the loading skeletons and then the results.
-4.  **Translation**:
-    *   If you select a different language (using the Globe icon in the sidebar), the generated ideas will be translated.
-5.  **Next Step**:
-    *   On each idea card, click "Validate & Refine" to take the idea to the next stage.
+    *   Generated research questions appear as cards at the bottom of the page.
+    *   Each card includes a "Novelty Score" to gauge its originality.
+4.  **Next Step**:
+    *   On each proposal card, click "Analyze & Refine" to move to the next stage.
 
-**Key Takeaway**: Experiment with different inputs and topics to discover unique business concepts.
+**Key Takeaway**: Use this page to brainstorm novel, concrete research questions that can be developed into full projects.
     `,
   },
   {
-    id: 'validate-idea',
-    title: 'Validating & Refining Ideas',
+    id: 'analyze-proposal',
+    title: 'Analyzing & Refining Proposals',
     icon: CheckCircle,
     content: `
-The **Idea Validation** page (Zap icon in the sidebar) helps you dive deeper into a specific idea using AI.
+The **Analyze Proposal** page (CheckCircle icon) helps you flesh out a research question into a testable hypothesis.
 
-![Idea Validation Page Preview](https://placehold.co/600x350.png?text=Idea+Validation+Page)
-<p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Idea Validation Page Interface</p>
+![Analyze Proposal Page Preview](https://placehold.co/600x350.png?text=Analyze+Proposal+Page)
+<p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Analyze Proposal Page Interface</p>
 
 **How to Use:**
-1.  **Input Your Idea**:
-    *   If you clicked "Validate & Refine" from the Generate Idea page, the idea will be pre-filled.
-    *   Otherwise, type or paste your idea into the "Your Core Idea" text area.
-    *   **Market Context (Optional)**: Add any known market data or trends.
+1.  **Input Your Proposal**:
+    *   A research question from the previous page will be pre-filled.
+    *   You can also enter your own question directly.
+    *   **Context / Related Work (Optional)**: Add any known papers or context.
     *   **Focus Keywords (Optional)**: Add keywords to guide the AI's refinement.
 2.  **AI Analysis**:
-    *   Click "Validate & Refine with AI". The page will scroll to the results section.
+    *   Click "Analyze & Refine with AI".
 3.  **Review AI Output**:
-    *   **Refined Idea**: A more polished version of your concept. This can be translated using the language selector.
-    *   **Associated Concepts**: Related industries or ideas.
-    *   **Potential Pivots**: Alternative directions for your idea.
+    *   **Refined Hypothesis**: A more polished and specific version of your idea.
+    *   **Potential Experiments / Pivots**: Alternative research directions.
     *   **AI-Generated Analysis**:
-        *   **Overall Market Potential Score**: An AI-estimated score (0-100).
-        *   **Key SWOT Snippet**: A highlight from Strengths, Weaknesses, Opportunities, Threats.
-        *   **Competitor Landscape Teaser**: A brief AI insight.
-        *   **Market Viability Factors Chart**: A bar chart showing AI-estimated scores for factors like "Market Size," "Growth Potential," etc. This chart is dynamically generated by the AI.
-4.  **Save Idea**:
-    *   If you're happy with the refined idea and analysis, click "Save to Dashboard".
+        *   **Potential Impact Score**: An AI-estimated score (0-100) of the idea's potential contribution to reducing AI risk.
+        *   **Related Work Teaser**: A brief summary of similar research.
+        *   **Viability Factors Chart**: A chart showing scores for factors like 'Tractability' and 'Scalability'.
+4.  **Save Proposal**:
+    *   Click "Save to Dashboard" to keep a record of the refined proposal.
 
-**Key Takeaway**: This page uses AI to provide a quick, structured assessment and refinement of your initial concept.
+**Key Takeaway**: This page provides a structured, AI-driven critique to strengthen your initial research idea.
     `,
   },
   {
     id: 'dashboard',
-    title: 'Your Idea Dashboard',
+    title: 'Your Research Dashboard',
     icon: LayoutDashboard,
     content: `
-The **Dashboard** (LayoutDashboard icon in the sidebar) is where all your saved ideas are stored.
+The **Dashboard** (LayoutDashboard icon) is where all your saved research proposals are stored.
 
 ![Dashboard Page Preview](https://placehold.co/600x300.png?text=Dashboard+Page)
 <p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Dashboard Interface</p>
 
 **Features:**
-- **View Saved Ideas**: Each saved idea (after validation) is displayed as a card.
-- **Idea Details**: Shows the AI-refined idea text.
-- **Actions per Idea**:
-    - **Re-Validate Idea**: Takes you back to the Idea Validation page with the original idea pre-filled, allowing you to get fresh AI insights.
-    - **Develop Idea**: Takes you to the Build Studio to start planning the development of this specific idea.
+- **View Saved Proposals**: Each saved proposal is displayed as a card, showing the refined hypothesis.
+- **Actions per Proposal**:
+    - **Re-Analyze**: Takes you back to the Analyze page to get fresh AI insights on the original question.
+    - **Develop Plan**: Takes you to the Experiment Plan page to start designing the research project.
 
-**Key Takeaway**: The Dashboard is your central hub for managing and progressing your validated concepts.
+**Key Takeaway**: The Dashboard is your central hub for managing and advancing your research proposals.
     `,
   },
   {
-    id: 'build-studio',
-    title: 'Build Studio: Development Guides',
+    id: 'experiment-plan',
+    title: 'Experiment Plan',
     icon: Hammer,
     content: `
-The **Build Studio** (Hammer icon in the sidebar) helps you create a detailed, AI-generated development guide for your projects.
+The **Experiment Plan** page (Hammer icon) helps you create a detailed, AI-generated plan for your research project.
 
 **Workflow:**
-1.  **Select an Idea**:
-    *   The main Build Studio page lists your saved ideas. Click "Develop Guide" on an idea to proceed.
-    *   This takes you to a dedicated page for that idea (e.g., \`/build-studio/[ideaId]\`).
-
-    ![Build Studio Idea Selection](https://placehold.co/600x300.png?text=Build+Studio+List)
-    <p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Build Studio Idea List</p>
-
+1.  **Select a Proposal**:
+    *   On the main Experiment Plan page, select one of your saved proposals.
 2.  **Input Project Details**:
-    *   On the idea-specific page, fill in the form:
-        *   **Value Proposition***
-        *   **Customer Segments***
-        *   **Key Activities***
-        *   **Revenue Streams***
-        *   **Target Platform*** (e.g., Web, Mobile)
-        *   **Core MVP Features*** (3-5 essential features)
-        *   Tech Stack Preference (Optional)
-        *   Additional Notes for AI (Optional)
-    *   Fields marked with * are crucial for generating a good guide.
-    *   Click **"Save Project Details"**. *You must save before generating a guide if you make changes.*
+    *   Fill in the form with key details about your proposed experiment: Value Proposition (of the research), Customer Segments (who benefits), Key Activities (research tasks), and Revenue Streams (funding sources).
+    *   Provide details for the AI like Target Platform (e.g., PyTorch, JAX), Core MVP Features (core experimental setup), and any tech preferences.
+    *   Click **"Save Project Details"** before generating a plan.
 
-    ![Build Studio Form Preview](https://placehold.co/600x400.png?text=Build+Studio+Form)
-    <p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Build Studio Input Form</p>
+    ![Experiment Plan Form Preview](https://placehold.co/600x400.png?text=Experiment+Plan+Form)
+    <p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Experiment Plan Input Form</p>
 
 3.  **Generate Development Guide**:
-    *   Once details are saved and all required fields are filled, click **"Generate Development Guide"**.
-    *   The AI will create a comprehensive step-by-step guide in Markdown format.
-    *   The page will scroll down to show the guide. This guide can also be translated using the language selector.
+    *   Click **"Generate Development Guide"**.
+    *   The AI will create a step-by-step guide for conducting the research.
 4.  **Review and Use**:
-    *   The generated guide covers MVP definition, tech stack, development phases, post-launch considerations, and more.
+    *   The guide covers the experimental setup, development phases, data analysis, and potential challenges, serving as a first draft for a full research plan.
 
-**Key Takeaway**: The Build Studio transforms your refined idea into an actionable development plan.
+**Key Takeaway**: This tool transforms your refined hypothesis into an actionable research and development plan.
     `,
   },
   {
@@ -153,24 +133,17 @@ The **Build Studio** (Hammer icon in the sidebar) helps you create a detailed, A
     title: 'Community Forum',
     icon: Users,
     content: `
-The **Community Forum** (Users icon in the sidebar) is envisioned as a place to connect with fellow innovators.
-
-![Community Page Preview](https://placehold.co/600x300.png?text=Community+Page)
-<p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Community Forum Categories</p>
+The **Community Forum** (Users icon) is envisioned as a place to connect with fellow AI Safety researchers.
 
 **Current Features:**
-- **Browse Categories**: View a list of discussion categories (e.g., "General Discussion", "Idea Feedback").
-- **Category Pages**: Click on a category to navigate to its dedicated page.
+- **Browse Categories**: View discussion categories relevant to AI Safety research.
 
 **Future Development (Coming Soon):**
-- User accounts and profiles.
-- Ability to create new threads within categories.
-- Posting replies and engaging in discussions.
-- Real-time interactions.
+- User profiles and accounts.
+- Creating new threads to discuss papers, proposals, and results.
+- Replying to posts and engaging with other researchers.
 
-An administrator can currently add new categories via a dedicated admin page (link available on the community page header during development).
-
-**Key Takeaway**: This section is under active development and will grow into a collaborative space.
+**Key Takeaway**: This section is under active development and will become a hub for collaboration.
     `,
   },
   {
@@ -178,22 +151,15 @@ An administrator can currently add new categories via a dedicated admin page (li
     title: 'Application Settings',
     icon: Settings,
     content: `
-The **Settings** page (Cog icon in the sidebar) allows you to manage application-level configurations.
-
-![Settings Page Preview](https://placehold.co/600x250.png?text=Settings+Page)
-<p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Settings Page Interface</p>
+The **Settings** page (Cog icon) allows you to manage application-level configurations.
 
 **Current Features:**
 - **Clear All Application Data**:
     - Located in the "Danger Zone".
-    - This action **permanently deletes all saved ideas and project development plans** from the application's local JSON database (\`src/data/db.json\`).
-    - A confirmation dialog will appear to prevent accidental deletion.
+    - This action **permanently deletes all saved research proposals and experiment plans** from the application's local JSON database.
     - **Use with extreme caution, as this is irreversible.**
-- **Data Storage Information**:
-    - Provides a note that the app currently uses a local JSON file for data storage.
-    - Recommends considering a dedicated database solution for production or larger datasets.
 
-**Key Takeaway**: The Settings page is for administrative tasks. Be careful with data clearing operations.
+**Key Takeaway**: The Settings page is for administrative tasks.
     `,
   },
   {
@@ -203,21 +169,12 @@ The **Settings** page (Cog icon in the sidebar) allows you to manage application
     content: `
 You can customize your viewing experience using the controls in the sidebar footer.
 
-![Sidebar Footer Preview](https://placehold.co/300x150.png?text=Sidebar+Controls)
-<p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Sidebar Theme and Language Controls</p>
-
 **Theme Customization (Sun/Moon Icon):**
-- Click the Sun/Moon icon to open the theme selection dropdown.
-- **Light**: Sets the application to a light color scheme.
-- **Dark**: Sets the application to a dark color scheme.
-- **System**: Automatically syncs with your operating system's theme preference.
+- Switch between Light, Dark, and System themes.
 
 **Language Selection (Globe Icon):**
-- Click the Globe icon to open the language selection dropdown.
-- Choose from the list of supported languages (e.g., English, Español, Français).
-- **Effect**:
-    - AI-generated content (like refined ideas, generated ideas on the main page, and development guides) will be translated to your selected language.
-    - Static UI text (button labels, titles fixed in the code) is **not** currently translated by this feature.
+- Choose a language from the dropdown.
+- AI-generated content (like refined hypotheses and experiment plans) will be translated to your selected language.
 
 **Key Takeaway**: Personalize the app's appearance and content language to suit your preferences.
     `,
@@ -227,14 +184,12 @@ You can customize your viewing experience using the controls in the sidebar foot
     title: 'Images in this Guide',
     icon: HelpCircle,
     content: `
-Please note that the images used throughout this help guide (like the one below) are **illustrative placeholders**.
+Please note that the images used throughout this help guide are **illustrative placeholders**.
 
 ![Placeholder Example](https://placehold.co/400x200.png?text=Illustrative+Image)
 <p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Example of a placeholder image</p>
 
-They are intended to give you a general idea of what the interface looks like. The actual application UI may have evolved or might appear slightly different on your screen. These placeholders can be replaced with actual screenshots in future updates.
+They are intended to give you a general idea of what the interface looks like. The actual application UI may have evolved or might appear slightly different on your screen.
     `,
   },
 ];
-
-    

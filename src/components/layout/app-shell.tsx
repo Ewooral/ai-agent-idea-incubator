@@ -6,22 +6,37 @@ import { usePathname, useRouter } from "next/navigation";
 import { FeatherLogo } from "@/components/icons/feather-logo";
 import {
   Sidebar,
-  SidebarHeader as UISidebarHeader,
   SidebarContent,
+  SidebarInset,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
-  SidebarInset,
+  SidebarHeader as UISidebarHeader,
 } from "@/components/ui/sidebar";
 import {
   Sheet,
   SheetContent,
-  SheetTrigger,
   SheetHeader,
   SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet";
-import { Feather, Lightbulb, LayoutDashboard, CheckCircle, Users, Menu, Hammer, Settings as SettingsIcon, HelpCircle, LogIn, UserPlus, LogOut, User as UserIcon } from "lucide-react";
+import {
+  Feather,
+  Lightbulb,
+  LayoutDashboard,
+  CheckCircle,
+  Users,
+  Menu,
+  Hammer,
+  Settings as SettingsIcon,
+  HelpCircle,
+  LogIn,
+  UserPlus,
+  LogOut,
+  User as UserIcon,
+  TestTube,
+} from "lucide-react";
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LanguageSelector } from '@/components/language-selector';
@@ -33,11 +48,11 @@ import { useAuth } from "@/contexts/auth-context";
 
 
 const mainNavItems = [
-  { href: "/", label: "Generate Idea", icon: Lightbulb, tooltip: "Generate New Ideas", auth: true },
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, tooltip: "Your Idea Dashboard", auth: false },
-  { href: "/validation", label: "Idea Validation", icon: CheckCircle, tooltip: "Validate Your Ideas", auth: true },
-  { href: "/build-studio", label: "Build Studio", icon: Hammer, tooltip: "Develop Your Ideas", auth: true },
-  { href: "/community", label: "Community Forum", icon: Users, tooltip: "Connect with Others", auth: true },
+  { href: "/", label: "Generate Proposal", icon: Lightbulb, tooltip: "Generate Research Proposals", auth: true },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, tooltip: "Your Proposal Dashboard", auth: false },
+  { href: "/validation", label: "Analyze Proposal", icon: CheckCircle, tooltip: "Analyze a Proposal", auth: true },
+  { href: "/build-studio", label: "Experiment Plan", icon: Hammer, tooltip: "Develop Experiment Plans", auth: true },
+  { href: "/community", label: "Community Forum", icon: Users, tooltip: "Connect with Researchers", auth: true },
 ];
 
 const authNavItems = [
@@ -212,7 +227,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <FeatherLogo size={28} />
         </Link>
         <Link href="/" className="hidden group-data-[state=collapsed]:block group-data-[mobile=true]:hidden">
-            <Feather className="text-primary" size={28}/>
+            <TestTube className="text-primary" size={28}/>
         </Link>
       </UISidebarHeader>
       <ScrollArea className="flex-grow">
@@ -252,13 +267,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {desktopSidebarContent}
         </Sidebar>
 
-        <SidebarInset className="flex-1 overflow-y-auto relative">
-           <div className="flex flex-col min-h-full">
-            <div className="px-4 pt-6 md:pt-6 lg:pt-8 pb-6 w-full max-w-7xl mx-auto">
-                {children}
+        <main className="flex-1 flex flex-col">
+          <div className="flex-1 flex items-start justify-center">
+            <div className="px-4 pt-6 md:pt-6 lg:pt-8 pb-6 w-full max-w-7xl">
+              {children}
             </div>
           </div>
-        </SidebarInset>
+        </main>
       </div>
       <ChatbotDialog />
     </div>

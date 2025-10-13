@@ -11,8 +11,8 @@ import AuthGuard from '@/components/auth-guard';
 
 
 export const metadata: Metadata = {
-  title: 'Idea Incubator',
-  description: 'Generate, refine, and validate novel business ideas.',
+  title: 'AI Safety Research Simulator',
+  description: 'Generate, refine, and simulate AI Safety research proposals.',
 };
 
 export default function RootLayout({

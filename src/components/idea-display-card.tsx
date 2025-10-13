@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Lightbulb, Hammer, CheckCircle, Sparkles } from "lucide-react";
+import { Lightbulb, Hammer, CheckCircle, Sparkles, TestTube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import type { SavedIdea } from "@/lib/db";
@@ -10,7 +10,6 @@ interface IdeaDisplayCardProps {
   idea?: string; // For display (could be original or translated)
   originalIdeaForQuery?: string; // Always the original English idea for query params
   noveltyScore?: number; // For newly generated ideas
-  // conceptualImageUrl?: string; // Already part of SavedIdea, so not needed as separate prop if savedIdea is passed
 }
 
 export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery, noveltyScore }: IdeaDisplayCardProps) {
@@ -26,7 +25,7 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery, novelty
         <CardHeader className="pb-2">
           <CardTitle className="font-headline text-lg flex items-start">
             <Lightbulb className="text-accent mr-2 mt-1 shrink-0" size={20} />
-            <span className="flex-grow">Refined Idea</span>
+            <span className="flex-grow">Refined Hypothesis</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-grow">
@@ -34,9 +33,9 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery, novelty
             <div className="mb-4 overflow-hidden rounded-md border shadow-sm">
               <img 
                 src={savedIdea.conceptualImageUrl} 
-                alt="Conceptual image for the idea" 
+                alt="Conceptual diagram for the research idea" 
                 className="w-full h-40 object-cover" 
-                data-ai-hint="business concept"
+                data-ai-hint="research diagram abstract"
               />
             </div>
           )}
@@ -45,7 +44,7 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery, novelty
              <div className="mt-3 flex items-center">
                 <Sparkles className="mr-1.5 h-4 w-4 text-primary" />
                 <p className="text-xs text-muted-foreground">
-                Market Potential: <span className="font-semibold text-foreground">{savedIdea.marketPotentialScore}</span>/100
+                Potential Impact: <span className="font-semibold text-foreground">{savedIdea.marketPotentialScore}</span>/100
                 </p>
             </div>
           )}
@@ -53,12 +52,12 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery, novelty
         <CardFooter className="pt-2 pb-4 flex flex-col sm:flex-row gap-2">
           <Button variant="outline" size="sm" className="w-full" asChild>
             <Link href={{ pathname: '/validation', query: linkToValidationQuery }}>
-              Re-Validate Idea
+              Re-Analyze
             </Link>
           </Button>
           <Button variant="default" size="sm" className="w-full" asChild>
             <Link href={`/build-studio/${savedIdea.id}`}>
-              <Hammer className="mr-2 h-4 w-4" /> Develop Idea
+              <Hammer className="mr-2 h-4 w-4" /> Develop Plan
             </Link>
           </Button>
         </CardFooter>
@@ -73,8 +72,8 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery, novelty
       <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 bg-card flex flex-col">
         <CardHeader className="pb-2">
           <CardTitle className="font-headline text-lg flex items-start">
-            <Lightbulb className="text-accent mr-2 mt-1 shrink-0" size={20} />
-            <span className="flex-grow">Newly Generated Idea</span>
+            <TestTube className="text-accent mr-2 mt-1 shrink-0" size={20} />
+            <span className="flex-grow">New Research Question</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-grow">
@@ -91,7 +90,7 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery, novelty
         <CardFooter className="pt-2 pb-4">
           <Button variant="default" size="sm" className="w-full" asChild>
             <Link href={{ pathname: '/validation', query: linkToValidationQuery }}>
-              <CheckCircle className="mr-2 h-4 w-4" /> Validate & Refine
+              <CheckCircle className="mr-2 h-4 w-4" /> Analyze & Refine
             </Link>
           </Button>
         </CardFooter>

@@ -1,5 +1,5 @@
 
-// src/app/page.tsx (Generate Idea Page)
+// src/app/page.tsx (Generate Research Proposal Page)
 "use client";
 
 import type { GenerateNovelIdeaInput, GenerateNovelIdeaOutput } from '@/ai/flows/generate-novel-idea';
@@ -8,19 +8,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Loader2,
   Lightbulb,
-  HeartPulse,
-  Leaf,
-  Zap,
-  BookOpenText,
-  Users,
-  Home,
-  ChefHat,
-  Laptop,
-  Landmark,
-  Paintbrush,
   Sparkles,
-  Award,
-  Music
+  TestTubeDiagonal,
+  BrainCircuit,
+  ShieldCheck,
+  Scale,
+  Users,
+  Eye,
+  BotMessageSquare,
+  Network
 } from 'lucide-react';
 import { useState, type ReactNode, type ElementType, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
@@ -37,7 +33,7 @@ import { useLanguage } from '@/contexts/language-context';
 import { translateTextAction } from '@/app/actions/translationActions';
 
 const generateIdeaSchema = z.object({
-  problemArea: z.string().optional().describe("A specific problem you want to solve or explore."),
+  problemArea: z.string().optional().describe("A specific AI Safety problem you want to solve."),
   keywords: z.string().optional().describe("Relevant keywords or topics to focus the idea generation."),
 });
 
@@ -58,19 +54,14 @@ interface DisplayableIdea {
 }
 
 const topicCardsData: TopicCardProps[] = [
-  { title: "Health & Wellness", Icon: HeartPulse, keywords: "mental health, physical fitness, well-being, preventative care, mindfulness apps, personalized nutrition", problemArea: "improving daily well-being and access to healthcare", description: "Innovate for healthier lifestyles." },
-  { title: "Sustainable Living", Icon: Leaf, keywords: "eco-friendly products, renewable energy solutions, waste reduction tech, conservation efforts, circular economy", problemArea: "creating a more environmentally conscious future", description: "Ideas for a greener planet." },
-  { title: "Personal Productivity", Icon: Zap, keywords: "time management tools, focus techniques, efficiency software, goal setting platforms, workflow automation", problemArea: "helping individuals achieve more with less stress", description: "Boost efficiency and focus." },
-  { title: "Education & Learning", Icon: BookOpenText, keywords: "online learning platforms, skill development apps, lifelong learning resources, AI tutors, immersive education", problemArea: "making education more accessible and engaging", description: "Shape the future of learning." },
-  { title: "Community Building", Icon: Users, keywords: "social connection apps, local event platforms, volunteer coordination, neighborhood improvement initiatives, digital communities", problemArea: "fostering stronger communities and connections", description: "Connect and engage people." },
-  { title: "Smart Home Tech", Icon: Home, keywords: "home automation systems, IoT devices, energy-efficient appliances, smart security, connected living", problemArea: "enhancing comfort, security, and efficiency in homes", description: "Revolutionize home living." },
-  { title: "Future of Food", Icon: ChefHat, keywords: "sustainable agriculture, food tech innovations, personalized nutrition plans, alternative protein sources, urban farming", problemArea: "addressing food security and sustainability", description: "Reimagine food production & consumption." },
-  { title: "Remote Work Solutions", Icon: Laptop, keywords: "work-from-home tools, virtual collaboration software, distributed team management, freelance platforms, digital nomad support", problemArea: "optimizing the remote work experience", description: "Empower the modern workforce." },
-  { title: "Personal Finance", Icon: Landmark, keywords: "budgeting apps, investment tools, financial literacy platforms, savings strategies, micro-lending", problemArea: "improving financial well-being and accessibility", description: "Innovate in financial management." },
-  { title: "Creative Hobbies", Icon: Paintbrush, keywords: "DIY project platforms, arts and crafts marketplaces, skill-sharing apps, creative expression tools, hobbyist communities", problemArea: "enabling creative pursuits and skill development", description: "Inspire creativity and new skills." },
-  { title: "Sports & Fan Engagement", Icon: Award, keywords: "sports tech, fan experiences, athlete performance, sports media, esports, fantasy sports, memorabilia, community leagues", problemArea: "enhancing fan interaction and modernizing sports participation", description: "Innovate in the world of sports." },
-  { title: "Music & Audio Innovation", Icon: Music, keywords: "music creation tools, streaming platforms, live event tech, artist discovery, audio production, sound therapy, AI music generation", problemArea: "transforming how music is created, consumed, and experienced", description: "Ideas for the future of sound." },
-  { title: "Faith & Spiritual Connection", Icon: Users, keywords: "faith-based community platforms, digital ministry tools, religious education resources, virtual congregations, charity & outreach tech, spiritual wellness apps, interfaith dialogue", problemArea: "leveraging technology to support spiritual practice and community connection", description: "Tech for faith and community." },
+  { title: "Scalable Oversight", Icon: Eye, keywords: "scalable oversight, weak-to-strong generalization, recursive oversight, debate, amplification", problemArea: "ensuring we can supervise AI systems that are smarter than us", description: "Supervising superintelligence." },
+  { title: "Interpretability", Icon: BrainCircuit, keywords: "mechanistic interpretability, dictionary learning, probing, circuit analysis, representation engineering", problemArea: "understanding the internal workings of black-box neural networks", description: "Reverse-engineering neural networks." },
+  { title: "LLM Deception", Icon: BotMessageSquare, keywords: "deception, sycophancy, sandbagging, instrumental alignment, emergent goals", problemArea: "detecting and preventing deceptive behavior in large language models", description: "Finding the lie in the model." },
+  { title: "Multi-Agent Systems", Icon: Users, keywords: "multi-agent collusion, emergent cooperation, game theory, AI diplomacy, principal-agent problems", problemArea: "managing risks from multiple interacting advanced AIs", description: "Cooperation or collusion?" },
+  { title: "Theory of Alignment", Icon: Scale, keywords: "RLHF, inner vs outer alignment, goal misgeneralization, power-seeking, corrigibility, shard theory", problemArea: "developing a robust theoretical foundation for AI alignment", description: "Formalizing AI safety." },
+  { title: "Capability Evaluations", Icon: TestTubeDiagonal, keywords: "capability evals, dangerous capabilities, situational awareness, red teaming, scaffolding", problemArea: "evaluating and predicting potentially dangerous AI capabilities before they arise", description: "What can this AI *really* do?" },
+  { title: "AI Control", Icon: ShieldCheck, keywords: "AI control, shutdown problem, tripwires, boxing, anomaly detection", problemArea: "maintaining meaningful human control over autonomous AI systems", description: "Keeping humans in the loop." },
+  { title: "Automated Interpretability", Icon: Network, keywords: "automated circuit discovery, sparse autoencoders, mechanistic anomaly detection", problemArea: "scaling up interpretability research using AI itself", description: "Using AI to understand AI." },
 ];
 
 
@@ -118,12 +109,12 @@ export default function GenerateIdeaPage(): ReactNode {
         });
 
         setTranslatedGeneratedIdeas(successfullyTranslatedItems);
-        toast({ title: `Ideas Translated!`, description: `Ideas translated to ${languageName}.` });
+        toast({ title: `Proposals Translated!`, description: `Research questions translated to ${languageName}.` });
 
       } catch (error: any) {
         console.error("Error translating ideas array:", error);
         setTranslatedGeneratedIdeas(null); 
-        toast({ title: "Translation Error", description: `Could not translate ideas. ${error.message}`, variant: "destructive" });
+        toast({ title: "Translation Error", description: `Could not translate proposals. ${error.message}`, variant: "destructive" });
       } finally {
         setIsTranslatingIdeas(false);
       }
@@ -161,20 +152,20 @@ export default function GenerateIdeaPage(): ReactNode {
       setGeneratedIdeas(result.novelIdeas); 
       if (result.novelIdeas.length === 0) {
         toast({
-          title: "No Ideas Generated",
-          description: "The AI couldn't find novel ideas for your input. Try different terms.",
+          title: "No Proposals Generated",
+          description: "The AI couldn't find novel research questions for your input. Try different terms.",
         });
       } else {
          toast({
-          title: "Ideas Generated!",
-          description: `Successfully generated ${result.novelIdeas.length} new ideas.`,
+          title: "Proposals Generated!",
+          description: `Successfully generated ${result.novelIdeas.length} new research questions.`,
         });
       }
     } catch (error) {
       console.error("Error generating ideas:", error);
       toast({
         title: "Error",
-        description: "Failed to generate ideas. Please try again.",
+        description: "Failed to generate research questions. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -210,10 +201,10 @@ export default function GenerateIdeaPage(): ReactNode {
         <CardHeader>
           <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
             <Sparkles className="mr-2 text-primary" />
-            Spark Your Next Big Idea!
+            Generate a Research Proposal
           </CardTitle>
           <CardDescription>
-            Unleash the power of AI. Input a problem area or keywords, or select a topic below to discover novel business concepts. Use the language selector in the sidebar to translate generated ideas.
+            Generate novel AI Safety research questions. Input a problem area or keywords, or select a topic below to discover new research directions aligned with LASR Labs' focus.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -227,14 +218,14 @@ export default function GenerateIdeaPage(): ReactNode {
                     <FormLabel>Problem Area (Optional)</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="e.g. Proving C.Ronaldo is better than Messi,  Reducing food waste in urban areas, improving remote team collaboration, proving"
+                        placeholder="e.g., How to make language model reasoning more transparent and auditable."
                         {...field}
                         rows={3}
                         disabled={isLoading}
                       />
                     </FormControl>
                     <FormDescription>
-                      Kindly Describe a challenge or domain you&apos;re interested in.
+                      Describe a specific AI Safety challenge you're interested in.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -248,7 +239,7 @@ export default function GenerateIdeaPage(): ReactNode {
                     <FormLabel>Keywords/Topics (Optional)</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g. CR7, Messi, Sustainable energy, AI in education, personalized healthcare"
+                        placeholder="e.g., Mechanistic interpretability, scalable oversight, deceptive alignment"
                         {...field}
                         disabled={isLoading}
                       />
@@ -276,8 +267,8 @@ export default function GenerateIdeaPage(): ReactNode {
       </Card>
 
       <div className="mb-12">
-        <h2 className="font-headline text-xl sm:text-2xl mb-2 text-center">Or, Explore Ideas by Topic</h2>
-        <p className="text-muted-foreground text-center mb-6 text-sm sm:text-base">Click a card to generate ideas for a specific theme.</p>
+        <h2 className="font-headline text-xl sm:text-2xl mb-2 text-center">Or, Explore Proposals by Topic</h2>
+        <p className="text-muted-foreground text-center mb-6 text-sm sm:text-base">Click a card to generate research questions for a specific theme.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {topicCardsData.map((topic) => (
             <Card
@@ -306,7 +297,7 @@ export default function GenerateIdeaPage(): ReactNode {
                ) : (
                  <CardFooter className="pt-0 pb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <Button variant="outline" size="sm" className="w-full text-xs" disabled={isLoading}>
-                      Generate Ideas
+                      Generate Proposals
                     </Button>
                  </CardFooter>
                )}
@@ -337,7 +328,7 @@ export default function GenerateIdeaPage(): ReactNode {
         {!isLoading && ideasToDisplay.length > 0 && (
           <div>
             <h2 className="font-headline text-xl sm:text-2xl mb-6 mt-8">
-              Generated Ideas {selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}
+              Generated Research Questions {selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {ideasToDisplay.map((item, index) => ( // item is now { idea: string, noveltyScore: number }
@@ -354,7 +345,7 @@ export default function GenerateIdeaPage(): ReactNode {
          {!isLoading && ideasToDisplay.length === 0 && (!form.formState.isSubmitted && !topicCardsData.some(topic => form.getValues().keywords === topic.keywords || form.getValues().problemArea === topic.problemArea)) && (
           <div className="text-center py-10 text-muted-foreground min-h-[200px] flex flex-col justify-center items-center">
               <Lightbulb size={48} className="mx-auto mb-4 text-primary/70" />
-              <p className="text-sm sm:text-base">Enter a problem or keywords above, or select a topic to start generating ideas.</p>
+              <p className="text-sm sm:text-base">Enter a problem area or keywords, or select a topic to start generating research questions.</p>
           </div>
         )}
       </div>
