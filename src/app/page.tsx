@@ -33,7 +33,7 @@ import { useLanguage } from '@/contexts/language-context';
 import { translateTextAction } from '@/app/actions/translationActions';
 
 const generateIdeaSchema = z.object({
-  problemArea: z.string().optional().describe("A specific AI Safety problem you want to solve."),
+  problemArea: z.string().optional().describe("A specific problem you want to solve."),
   keywords: z.string().optional().describe("Relevant keywords or topics to focus the idea generation."),
 });
 
@@ -109,12 +109,12 @@ export default function GenerateIdeaPage(): ReactNode {
         });
 
         setTranslatedGeneratedIdeas(successfullyTranslatedItems);
-        toast({ title: `Proposals Translated!`, description: `Research questions translated to ${languageName}.` });
+        toast({ title: `Ideas Translated!`, description: `Generated ideas translated to ${languageName}.` });
 
       } catch (error: any) {
         console.error("Error translating ideas array:", error);
         setTranslatedGeneratedIdeas(null); 
-        toast({ title: "Translation Error", description: `Could not translate proposals. ${error.message}`, variant: "destructive" });
+        toast({ title: "Translation Error", description: `Could not translate ideas. ${error.message}`, variant: "destructive" });
       } finally {
         setIsTranslatingIdeas(false);
       }
@@ -152,20 +152,20 @@ export default function GenerateIdeaPage(): ReactNode {
       setGeneratedIdeas(result.novelIdeas); 
       if (result.novelIdeas.length === 0) {
         toast({
-          title: "No Proposals Generated",
-          description: "The AI couldn't find novel research questions for your input. Try different terms.",
+          title: "No Ideas Generated",
+          description: "The AI couldn't find novel ideas for your input. Try different terms.",
         });
       } else {
          toast({
-          title: "Proposals Generated!",
-          description: `Successfully generated ${result.novelIdeas.length} new research questions.`,
+          title: "Ideas Generated!",
+          description: `Successfully generated ${result.novelIdeas.length} new ideas.`,
         });
       }
     } catch (error) {
       console.error("Error generating ideas:", error);
       toast({
         title: "Error",
-        description: "Failed to generate research questions. Please try again.",
+        description: "Failed to generate ideas. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -201,10 +201,10 @@ export default function GenerateIdeaPage(): ReactNode {
         <CardHeader>
           <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
             <Sparkles className="mr-2 text-primary" />
-            Generate a Research Proposal
+            Generate a Novel Idea
           </CardTitle>
           <CardDescription>
-            Generate novel AI Safety research questions. Input a problem area or keywords, or select a topic below to discover new research directions aligned with LASR Labs' focus.
+            Generate novel business ideas or research questions. Input a problem area or keywords, or select a topic below to discover new directions.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -225,7 +225,7 @@ export default function GenerateIdeaPage(): ReactNode {
                       />
                     </FormControl>
                     <FormDescription>
-                      Describe a specific AI Safety challenge you're interested in.
+                      Describe a specific challenge you're interested in, for business or research.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -267,8 +267,8 @@ export default function GenerateIdeaPage(): ReactNode {
       </Card>
 
       <div className="mb-12">
-        <h2 className="font-headline text-xl sm:text-2xl mb-2 text-center">Or, Explore Proposals by Topic</h2>
-        <p className="text-muted-foreground text-center mb-6 text-sm sm:text-base">Click a card to generate research questions for a specific theme.</p>
+        <h2 className="font-headline text-xl sm:text-2xl mb-2 text-center">Or, Explore Ideas by Topic (Great for Researchers)</h2>
+        <p className="text-muted-foreground text-center mb-6 text-sm sm:text-base">Click a card to generate ideas for a specific theme.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {topicCardsData.map((topic) => (
             <Card
@@ -297,7 +297,7 @@ export default function GenerateIdeaPage(): ReactNode {
                ) : (
                  <CardFooter className="pt-0 pb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <Button variant="outline" size="sm" className="w-full text-xs" disabled={isLoading}>
-                      Generate Proposals
+                      Generate Ideas
                     </Button>
                  </CardFooter>
                )}
@@ -328,7 +328,7 @@ export default function GenerateIdeaPage(): ReactNode {
         {!isLoading && ideasToDisplay.length > 0 && (
           <div>
             <h2 className="font-headline text-xl sm:text-2xl mb-6 mt-8">
-              Generated Research Questions {selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}
+              Generated Ideas {selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {ideasToDisplay.map((item, index) => ( // item is now { idea: string, noveltyScore: number }
@@ -345,7 +345,7 @@ export default function GenerateIdeaPage(): ReactNode {
          {!isLoading && ideasToDisplay.length === 0 && (!form.formState.isSubmitted && !topicCardsData.some(topic => form.getValues().keywords === topic.keywords || form.getValues().problemArea === topic.problemArea)) && (
           <div className="text-center py-10 text-muted-foreground min-h-[200px] flex flex-col justify-center items-center">
               <Lightbulb size={48} className="mx-auto mb-4 text-primary/70" />
-              <p className="text-sm sm:text-base">Enter a problem area or keywords, or select a topic to start generating research questions.</p>
+              <p className="text-sm sm:text-base">Enter a problem area or keywords, or select a topic to start generating ideas.</p>
           </div>
         )}
       </div>

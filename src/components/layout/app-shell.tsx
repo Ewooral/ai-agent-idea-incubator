@@ -48,11 +48,11 @@ import { useAuth } from "@/contexts/auth-context";
 
 
 const mainNavItems = [
-  { href: "/", label: "Generate Proposal", icon: Lightbulb, tooltip: "Generate Research Proposals", auth: true },
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, tooltip: "Your Proposal Dashboard", auth: false },
-  { href: "/validation", label: "Analyze Proposal", icon: CheckCircle, tooltip: "Analyze a Proposal", auth: true },
-  { href: "/build-studio", label: "Experiment Plan", icon: Hammer, tooltip: "Develop Experiment Plans", auth: true },
-  { href: "/community", label: "Community Forum", icon: Users, tooltip: "Connect with Researchers", auth: true },
+  { href: "/", label: "Generate Idea", icon: Lightbulb, tooltip: "Generate Novel Ideas", auth: true },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, tooltip: "Your Idea Dashboard", auth: false },
+  { href: "/validation", label: "Analyze Idea", icon: CheckCircle, tooltip: "Analyze an Idea", auth: true },
+  { href: "/build-studio", label: "Build Studio", icon: Hammer, tooltip: "Develop Your Idea", auth: true },
+  { href: "/community", label: "Community", icon: Users, tooltip: "Connect with Others", auth: true },
 ];
 
 const authNavItems = [

@@ -40,7 +40,7 @@ export default async function CommunityPage() {
         <CardHeader className="flex flex-col sm:flex-row justify-between items-start gap-4">
             <div>
                 <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
-                    <Users className="mr-3 text-primary" size={32} /> Idea Exchange Community
+                    <Users className="mr-3 text-primary" size={32} /> Community
                 </CardTitle>
                 <CardDescription>
                     Connect with fellow innovators, share ideas, provide feedback, and collaborate.

@@ -25,7 +25,7 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery, novelty
         <CardHeader className="pb-2">
           <CardTitle className="font-headline text-lg flex items-start">
             <Lightbulb className="text-accent mr-2 mt-1 shrink-0" size={20} />
-            <span className="flex-grow">Refined Hypothesis</span>
+            <span className="flex-grow">Refined Idea</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-grow">
@@ -33,9 +33,9 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery, novelty
             <div className="mb-4 overflow-hidden rounded-md border shadow-sm">
               <img 
                 src={savedIdea.conceptualImageUrl} 
-                alt="Conceptual diagram for the research idea" 
+                alt="Conceptual diagram for the idea" 
                 className="w-full h-40 object-cover" 
-                data-ai-hint="research diagram abstract"
+                data-ai-hint="diagram abstract concept"
               />
             </div>
           )}
@@ -73,7 +73,7 @@ export function IdeaDisplayCard({ savedIdea, idea, originalIdeaForQuery, novelty
         <CardHeader className="pb-2">
           <CardTitle className="font-headline text-lg flex items-start">
             <TestTube className="text-accent mr-2 mt-1 shrink-0" size={20} />
-            <span className="flex-grow">New Research Question</span>
+            <span className="flex-grow">New Idea/Concept</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-grow">

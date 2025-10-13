@@ -14,7 +14,7 @@ export default async function BuildStudioLandingPage() {
       <Card className="shadow-xl bg-card">
         <CardHeader>
           <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
-            <Hammer className="mr-3 text-primary" size={32} /> Idea Development Guides
+            <Hammer className="mr-3 text-primary" size={32} /> Build Studio
           </CardTitle>
           <CardDescription>
             Select one of your saved ideas to begin planning its development and generate an AI-powered step-by-step guide.

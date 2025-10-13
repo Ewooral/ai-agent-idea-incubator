@@ -16,21 +16,21 @@ export default async function DashboardPage() {
             <LayoutDashboard className="mr-3 text-primary" size={32} /> My Idea Dashboard
           </CardTitle>
           <CardDescription>
-            Track, manage, and develop your saved business ideas.
+            Track, manage, and develop your saved ideas and research proposals.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="p-6 mb-8 bg-gradient-to-r from-primary/10 via-accent/5 to-secondary/10 rounded-lg border border-primary/20 shadow-inner">
             <div className="flex items-center mb-3">
               <Sparkles className="text-primary mr-3 h-8 w-8" />
-              <h2 className="text-xl sm:text-2xl font-headline text-primary">Welcome to Idea Incubator!</h2>
+              <h2 className="text-xl sm:text-2xl font-headline text-primary">Welcome to the Idea Incubator!</h2>
             </div>
             <p className="text-sm sm:text-base text-foreground/90 leading-relaxed">
-              Your space to spark, refine, and develop groundbreaking business ideas with the power of AI. 
+              Your space to spark, refine, and develop groundbreaking ideas with the power of AI. 
               Here on your dashboard, you can see all the brilliant concepts you've saved after AI validation.
             </p>
             <p className="text-sm sm:text-base text-foreground/90 leading-relaxed mt-2">
-              Ready to take the next step? Choose an idea below to re-validate it with fresh insights or head to the Build Studio to generate a detailed development guide. Let's innovate together!
+              Ready to take the next step? Choose an idea below to re-validate it with fresh insights or head to the Build Studio to generate a detailed development guide or experiment plan. Let's innovate together!
             </p>
           </div>
 
@@ -53,7 +53,7 @@ export default async function DashboardPage() {
               <h3 className="text-xl font-semibold mb-2 text-foreground">No Ideas Saved Yet</h3>
               <p className="text-muted-foreground max-w-md mx-auto text-sm sm:text-base">
                 Start by generating some novel ideas on the "Generate Idea" page. 
-                Then, use the "Idea Validation" page to refine and save your concepts.
+                Then, use the "Analyze Idea" page to refine and save your concepts.
                 They will appear here once saved.
               </p>
             </div>

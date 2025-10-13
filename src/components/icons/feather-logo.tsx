@@ -8,6 +8,6 @@ interface FeatherLogoProps extends LucideProps {
 export const FeatherLogo = ({ showText = true, ...props }: FeatherLogoProps) => (
   <div className="flex items-center gap-2">
     <Feather className="text-primary" {...props} />
-    {showText && <span className="font-headline text-lg font-semibold text-foreground">AI Safety Research Sim</span>}
+    {showText && <span className="font-headline text-lg font-semibold text-foreground">Idea Incubator</span>}
   </div>
 );

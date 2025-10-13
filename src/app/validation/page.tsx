@@ -29,7 +29,7 @@ import { Label } from '@/components/ui/label';
 
 
 const validationSchema = z.object({
-  idea: z.string().min(10, { message: "Please provide a detailed research question (min 10 characters)." }),
+  idea: z.string().min(10, { message: "Please provide a detailed idea or research question (min 10 characters)." }),
   marketData: z.string().optional().describe("Any relevant context, related work, or constraints."),
   focusKeywords: z.string().optional().describe("Specific keywords to guide the AI's focus."),
 });
@@ -43,7 +43,6 @@ const chartConfigBase = {
   },
 } satisfies ChartConfig;
 
-// This component is now less relevant for the research context, but kept as a feature.
 function ImageAnalysisSection() {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [imageDataUri, setImageDataUri] = useState<string | null>(null);
@@ -126,7 +125,7 @@ function ImageAnalysisSection() {
                 <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-secondary-foreground">
                     <ImageIcon size={28} className="mr-3 text-primary"/> Visual Analysis
                 </CardTitle>
-                <CardDescription>Upload a diagram, chart, or screenshot from a research paper for AI-powered analysis.</CardDescription>
+                <CardDescription>Upload a diagram, chart, or screenshot for AI-powered analysis.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
@@ -322,14 +321,14 @@ export default function ValidationPage(): ReactNode {
       const result = await refineIdea(input);
       setValidationResult(result);
       toast({
-        title: "Proposal Refined & Analyzed!",
-        description: "AI has provided strategic insights for your research question.",
+        title: "Idea Refined & Analyzed!",
+        description: "AI has provided strategic insights for your idea.",
       });
     } catch (error) {
       console.error("Error validating idea:", error);
       toast({
         title: "Error",
-        description: "Failed to analyze research question. Please try again.",
+        description: "Failed to analyze idea. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -341,7 +340,7 @@ export default function ValidationPage(): ReactNode {
     if (!validationResult || !form.getValues('idea')) {
       toast({
         title: "Cannot Save",
-        description: "No proposal or analysis result to save.",
+        description: "No idea or analysis result to save.",
         variant: "destructive",
       });
       return;
@@ -351,13 +350,13 @@ export default function ValidationPage(): ReactNode {
       const result = await saveValidatedIdeaAction(form.getValues('idea'), validationResult);
       if (result.success) {
         toast({
-          title: "Proposal Saved!",
-          description: result.message || "Your research proposal has been saved to the dashboard.",
+          title: "Idea Saved!",
+          description: result.message || "Your idea has been saved to the dashboard.",
         });
       } else {
         toast({
           title: "Save Failed",
-          description: result.message || "Could not save the proposal.",
+          description: result.message || "Could not save the idea.",
           variant: "destructive",
         });
       }
@@ -387,10 +386,10 @@ export default function ValidationPage(): ReactNode {
       <Card className="mb-8 shadow-xl bg-card">
         <CardHeader>
           <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
-            <Zap className="mr-3 text-primary" size={32} /> AI Proposal Refinement & Analysis
+            <Zap className="mr-3 text-primary" size={32} /> AI Idea Refinement & Analysis
           </CardTitle>
           <CardDescription>
-            Submit your research question to our AI for refinement into a testable hypothesis, exploration of related concepts, and a preview of its potential impact.
+            Submit your idea to our AI for refinement into a testable hypothesis or concept, exploration of related topics, and a preview of its potential impact.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -401,10 +400,10 @@ export default function ValidationPage(): ReactNode {
                 name="idea"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Your Research Question/Idea</FormLabel>
+                    <FormLabel>Your Idea, Concept, or Research Question</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Describe your research question in detail... What is the core problem? What is your proposed approach?"
+                        placeholder="Describe your idea in detail... What is the core problem? What is your proposed solution or approach?"
                         {...field}
                         rows={5}
                       />
@@ -425,12 +424,12 @@ export default function ValidationPage(): ReactNode {
                       <FormLabel>Context / Related Work (Optional)</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="e.g., Based on 'Concrete Problems in AI Safety'..."
+                          placeholder="e.g., 'Competes with...', 'Based on paper X...'"
                           {...field}
                         />
                       </FormControl>
                        <FormDescription>
-                        Any specific papers, researchers, or context you have.
+                        Any specific competitors, papers, or context you have.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -444,7 +443,7 @@ export default function ValidationPage(): ReactNode {
                       <FormLabel>Focus Keywords (Optional)</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="e.g., Deceptive alignment, mechanistic interpretability"
+                          placeholder="e.g., Deceptive alignment, B2B SaaS, sustainable fashion"
                           {...field}
                         />
                       </FormControl>
@@ -460,7 +459,7 @@ export default function ValidationPage(): ReactNode {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Analyzing Your Proposal...
+                    Analyzing Your Idea...
                   </>
                 ) : (
                   <>
@@ -509,7 +508,7 @@ export default function ValidationPage(): ReactNode {
                 <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-primary">
                   <Lightbulb size={28} className="mr-3"/> AI Refinement & Strategic Insights
                 </CardTitle>
-                <CardDescription>Review the AI's analysis of your research proposal below. Save it to develop an experimental plan.</CardDescription>
+                <CardDescription>Review the AI's analysis of your idea below. Save it to develop it further.</CardDescription>
               </div>
               <Button onClick={handleSaveIdea} disabled={isSaving || isLoading} size="lg" className="w-full sm:w-auto">
                 {isSaving ? (
@@ -523,7 +522,7 @@ export default function ValidationPage(): ReactNode {
               <div>
                 <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground flex items-center">
                   <CheckCircle size={22} className="mr-2 text-green-500"/>
-                  Refined Hypothesis {selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}:
+                  Refined Idea/Hypothesis {selectedLanguage !== 'en' && getLanguageName(selectedLanguage) ? `(Translated to ${getLanguageName(selectedLanguage)})` : ''}:
                 </h3>
                 {isTranslating ? (
                   <div className="flex items-center space-x-2 bg-muted/30 p-4 rounded-md border">
@@ -532,7 +531,7 @@ export default function ValidationPage(): ReactNode {
                   </div>
                 ) : (
                   <p className="text-foreground/90 text-base leading-relaxed bg-muted/30 p-4 rounded-md border">
-                    {displayedRefinedIdea || "Enter a research question above to see the refined hypothesis here."}
+                    {displayedRefinedIdea || "Enter an idea above to see the refined version here."}
                   </p>
                 )}
               </div>
@@ -550,7 +549,7 @@ export default function ValidationPage(): ReactNode {
 
               {validationResult.potentialPivots && validationResult.potentialPivots.length > 0 && (
                  <div>
-                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground flex items-center"><TestTube size={20} className="mr-2 text-accent"/>Potential Experiments / Pivots:</h3>
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground flex items-center"><TestTube size={20} className="mr-2 text-accent"/>Potential Pivots / Experiments:</h3>
                    <div className="flex flex-wrap gap-2">
                     {validationResult.potentialPivots.map((pivot, index) => (
                       <Badge key={index} variant="outline" className="text-xs sm:text-sm px-2 sm:px-3 py-1 bg-accent/10 border-accent text-accent-foreground hover:bg-accent/20">{pivot}</Badge>
@@ -568,7 +567,7 @@ export default function ValidationPage(): ReactNode {
                 <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-primary">
                     <ShieldCheck size={28} className="mr-3" /> AI-Generated Analysis
                 </CardTitle>
-                <CardDescription>AI-driven viability metrics and strategic considerations for your research proposal.</CardDescription>
+                <CardDescription>AI-driven viability metrics and strategic considerations for your idea.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
@@ -581,7 +580,7 @@ export default function ValidationPage(): ReactNode {
                                 <Progress value={validationResult.marketPotentialScore} className="w-full h-3 sm:h-4" />
                                 <span className="font-bold text-xl sm:text-2xl text-primary">{validationResult.marketPotentialScore}%</span>
                             </div>
-                            <p className="text-xs text-muted-foreground">AI's estimated potential for impact on reducing AI x-risk.</p>
+                            <p className="text-xs text-muted-foreground">AI's estimated potential for market success or research impact.</p>
                         </CardContent>
                     </Card>
                      <Card className="bg-card/80 backdrop-blur-sm">
@@ -596,11 +595,11 @@ export default function ValidationPage(): ReactNode {
                 </div>
                  <Card className="bg-card/80 backdrop-blur-sm">
                     <CardHeader>
-                        <CardTitle className="text-base sm:text-lg flex items-center"><Search size={20} className="mr-2 text-primary"/>Related Work Teaser</CardTitle>
+                        <CardTitle className="text-base sm:text-lg flex items-center"><Search size={20} className="mr-2 text-primary"/>Competitor/Related Work Teaser</CardTitle>
                     </CardHeader>
                     <CardContent>
                          <p className="text-foreground/90 text-sm p-3 bg-muted/50 rounded-md border border-dashed">{validationResult.competitorTeaser}</p>
-                         <p className="text-xs text-muted-foreground mt-2">Initial AI insight into the current research landscape.</p>
+                         <p className="text-xs text-muted-foreground mt-2">Initial AI insight into the current market or research landscape.</p>
                     </CardContent>
                 </Card>
 
@@ -612,11 +611,11 @@ export default function ValidationPage(): ReactNode {
                     <CardContent>
                       <img 
                         src={validationResult.conceptualImageUrl} 
-                        alt="AI-generated conceptual diagram for the research idea" 
+                        alt="AI-generated conceptual diagram for the idea" 
                         className="w-full h-auto max-h-80 object-contain rounded-lg border bg-muted/20 shadow-sm"
-                        data-ai-hint="research diagram abstract"
+                        data-ai-hint="diagram abstract concept"
                       />
-                       <p className="text-xs text-muted-foreground mt-2">An AI-generated visual representation of the refined hypothesis.</p>
+                       <p className="text-xs text-muted-foreground mt-2">An AI-generated visual representation of the refined concept.</p>
                     </CardContent>
                   </Card>
                 )}
@@ -659,7 +658,7 @@ export default function ValidationPage(): ReactNode {
                         </ChartContainer>
                       </div>
                       <p className="text-xs text-muted-foreground mt-2">
-                        This chart displays AI-estimated scores for key viability factors related to your research proposal.
+                        This chart displays AI-estimated scores for key viability factors related to your idea.
                       </p>
                     </CardContent>
                   </Card>
@@ -676,7 +675,7 @@ export default function ValidationPage(): ReactNode {
             </CardContent>
             <CardFooter className="pt-4">
                  <p className="text-sm text-muted-foreground max-w-md">
-                    The AI has analyzed your proposal based on the provided inputs.
+                    The AI has analyzed your idea based on the provided inputs.
                 </p>
             </CardFooter>
           </Card>
@@ -685,8 +684,8 @@ export default function ValidationPage(): ReactNode {
          {!isLoading && !validationResult && (
           <div className="text-center py-16 text-muted-foreground min-h-[70vh] flex flex-col justify-center items-center bg-card shadow-md rounded-lg mt-8">
               <Beaker size={48} className="mx-auto mb-4 text-primary/50" />
-              <p className="text-base sm:text-lg">Enter your research question above and let our AI provide valuable insights.</p>
-              <p className="text-xs sm:text-sm">The analysis results and refined hypothesis will appear here.</p>
+              <p className="text-base sm:text-lg">Enter your idea or research question above and let our AI provide valuable insights.</p>
+              <p className="text-xs sm:text-sm">The analysis results and refined concept will appear here.</p>
           </div>
         )}
       </div>

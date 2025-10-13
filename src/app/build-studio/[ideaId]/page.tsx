@@ -44,9 +44,9 @@ export default async function BuildStudioIdeaServerPage({ params }: BuildStudioI
       <Card className="mb-8 shadow-xl bg-card border-primary/30">
         <CardHeader>
           <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
-            <Hammer className="mr-3 text-primary" size={32} /> AI Development Guide for Your Idea
+            <Hammer className="mr-3 text-primary" size={32} /> Build Studio
           </CardTitle>
-          <CardDescription>Input key details about your project, then let AI generate a step-by-step development guide.</CardDescription>
+          <CardDescription>Input key details about your project, then let AI generate a step-by-step development guide or a full business proposal.</CardDescription>
         </CardHeader>
         <CardContent>
             <div className="p-4 mb-6 bg-muted/50 rounded-lg border border-primary/20">
