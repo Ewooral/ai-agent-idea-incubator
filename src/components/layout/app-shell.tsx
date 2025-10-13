@@ -252,8 +252,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {desktopSidebarContent}
         </Sidebar>
 
-        <SidebarInset className="flex-1 overflow-y-auto relative">
-           <div className="px-4 pt-6 md:pt-6 lg:pt-8 pb-6 w-full max-w-7xl mx-auto">
+        <SidebarInset className="flex-1 overflow-y-auto relative flex justify-center">
+           <div className="px-4 pt-6 md:pt-6 lg:pt-8 pb-6 w-full max-w-7xl">
               {children}
           </div>
         </SidebarInset>
