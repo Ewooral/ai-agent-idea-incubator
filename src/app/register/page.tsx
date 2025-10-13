@@ -16,6 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, UserPlus, LogIn } from 'lucide-react';
 import { FeatherLogo } from '@/components/icons/feather-logo';
 
+const API_BASE_URL = 'https://bfam-backend-api.ewooral.com';
 
 const registerSchema = z.object({
   fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
@@ -52,10 +53,11 @@ export default function RegisterPage() {
   const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
           full_name: data.fullName,
@@ -65,11 +67,21 @@ export default function RegisterPage() {
         }),
       });
 
-      const responseData = await response.json();
-
       if (!response.ok) {
-        throw new Error(responseData.message || 'Registration failed. Please try again.');
+        let errorMsg = 'Registration failed. Please try again.';
+        try {
+            const errorData = await response.json();
+            // API might return error in `detail` field
+            errorMsg = errorData.detail || 'An unknown error occurred.';
+        } catch(e) {
+            // The response was not JSON
+        }
+        throw new Error(errorMsg);
       }
+
+      // The response body on successful registration contains user details but no token.
+      // So we just confirm success and redirect to login.
+      // const responseData = await response.json();
 
       toast({
         title: "Registration Successful!",

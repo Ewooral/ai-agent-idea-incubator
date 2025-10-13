@@ -17,6 +17,7 @@ import { Loader2, LogIn, UserPlus } from 'lucide-react';
 import { FeatherLogo } from '@/components/icons/feather-logo';
 import { useAuth } from '@/contexts/auth-context';
 
+const API_BASE_URL = 'https://bfam-backend-api.ewooral.com';
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -43,10 +44,12 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/auth/login', {
+      // Step 1: Log in to get the access token
+      const loginResponse = await fetch(`${API_BASE_URL}/api/auth/login`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
+              'Accept': 'application/json',
           },
           body: JSON.stringify({
               email: data.email,
@@ -54,23 +57,41 @@ export default function LoginPage() {
           }),
       });
 
-      const responseData = await response.json();
-
-      if (!response.ok) {
-          throw new Error(responseData.message || 'Login failed. Please check your credentials.');
+      if (!loginResponse.ok) {
+          let errorMsg = 'Login failed. Please check your credentials.';
+          try {
+            const errorData = await loginResponse.json();
+            errorMsg = errorData.detail || errorMsg;
+          } catch (e) {
+            // response was not json
+          }
+          throw new Error(errorMsg);
       }
       
-      // Assuming the response contains user and token
-      if(responseData.user && responseData.token) {
-        login(responseData.user, responseData.token);
-        toast({
-          title: "Login Successful",
-          description: "Welcome back!",
-        });
-        router.push('/'); // Redirect to a protected page
-      } else {
-        throw new Error('Invalid response from server.');
+      const { access_token } = await loginResponse.json();
+
+      // Step 2: Fetch user details using the access token
+      const userResponse = await fetch(`${API_BASE_URL}/api/users/me`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${access_token}`,
+          'Accept': 'application/json',
+        }
+      });
+
+      if (!userResponse.ok) {
+        throw new Error('Failed to fetch user details after login.');
       }
+
+      const userData = await userResponse.json();
+      
+      // Step 3: Update auth context and redirect
+      login(userData, access_token);
+      toast({
+        title: "Login Successful",
+        description: "Welcome back!",
+      });
+      router.push('/'); 
 
     } catch (error: any) {
         toast({
