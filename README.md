@@ -1,4 +1,4 @@
-# AI Safety Idea Incubator: A Tool for Accelerated Research
+# Idea Incubator: A Tool for Accelerated Research
 
 ## Abstract
 
