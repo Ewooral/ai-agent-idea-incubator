@@ -7,6 +7,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -14,6 +15,8 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, LogIn, UserPlus } from 'lucide-react';
 import { FeatherLogo } from '@/components/icons/feather-logo';
+import { useAuth } from '@/contexts/auth-context';
+
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -25,6 +28,9 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login } = useAuth();
+  const router = useRouter();
+
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -36,16 +42,45 @@ export default function LoginPage() {
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     setIsSubmitting(true);
-    // Placeholder for actual login logic
-    console.log("Login data:", data);
-    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+    try {
+      const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              email: data.email,
+              password: data.password,
+          }),
+      });
 
-    toast({
-      title: "Login Submitted (Placeholder)",
-      description: "Authentication is not yet implemented. Check console for data.",
-    });
-    setIsSubmitting(false);
-    // form.reset(); // Optionally reset form
+      const responseData = await response.json();
+
+      if (!response.ok) {
+          throw new Error(responseData.message || 'Login failed. Please check your credentials.');
+      }
+      
+      // Assuming the response contains user and token
+      if(responseData.user && responseData.token) {
+        login(responseData.user, responseData.token);
+        toast({
+          title: "Login Successful",
+          description: "Welcome back!",
+        });
+        router.push('/'); // Redirect to a protected page
+      } else {
+        throw new Error('Invalid response from server.');
+      }
+
+    } catch (error: any) {
+        toast({
+            title: "Login Error",
+            description: error.message || "An unexpected error occurred.",
+            variant: "destructive",
+        });
+    } finally {
+        setIsSubmitting(false);
+    }
   };
 
   return (

@@ -6,6 +6,9 @@ import { AppShell } from "@/components/layout/app-shell";
 import { Toaster } from "@/components/ui/toaster";
 import { LanguageProvider } from '@/contexts/language-context';
 import { ThemeProvider } from '@/components/theme-provider';
+import { AuthProvider } from '@/contexts/auth-context';
+import AuthGuard from '@/components/auth-guard';
+
 
 export const metadata: Metadata = {
   title: 'Idea Incubator',
@@ -32,11 +35,15 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LanguageProvider>
-            <SidebarProvider defaultOpen={true}>
-              <AppShell>
-                {children}
-              </AppShell>
-            </SidebarProvider>
+            <AuthProvider>
+              <SidebarProvider defaultOpen={true}>
+                <AppShell>
+                  <AuthGuard>
+                    {children}
+                  </AuthGuard>
+                </AppShell>
+              </SidebarProvider>
+            </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
         <Toaster />

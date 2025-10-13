@@ -7,6 +7,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
@@ -15,7 +16,9 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, UserPlus, LogIn } from 'lucide-react';
 import { FeatherLogo } from '@/components/icons/feather-logo';
 
+
 const registerSchema = z.object({
+  fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(8, { message: "Password must be at least 8 characters." })
     .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter." })
@@ -33,10 +36,13 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function RegisterPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
+      fullName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -45,16 +51,42 @@ export default function RegisterPage() {
 
   const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
     setIsSubmitting(true);
-    // Placeholder for actual registration logic
-    console.log("Registration data:", data);
-    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          full_name: data.fullName,
+          email: data.email,
+          password: data.password,
+          role: "customer" // Hardcoded role as per API spec
+        }),
+      });
 
-    toast({
-      title: "Registration Submitted (Placeholder)",
-      description: "Account registration is not yet implemented. Check console for data.",
-    });
-    setIsSubmitting(false);
-    // form.reset(); // Optionally reset form
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Registration failed. Please try again.');
+      }
+
+      toast({
+        title: "Registration Successful!",
+        description: "You can now log in with your credentials.",
+      });
+
+      router.push('/login');
+
+    } catch (error: any) {
+      toast({
+        title: "Registration Error",
+        description: error.message || "An unexpected error occurred.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -74,6 +106,19 @@ export default function RegisterPage() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
