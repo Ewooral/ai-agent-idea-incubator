@@ -623,12 +623,12 @@ export default function ValidationPage(): ReactNode {
                 {validationResult.viabilityFactorsChartData && validationResult.viabilityFactorsChartData.length > 0 ? (
                   <Card className="bg-card/80 backdrop-blur-sm">
                     <CardHeader>
-                      <CardTitle className="text-base sm:text-lg flex items-center"><BarChart3 size={20} className="mr-2 text-primary"/>AI-Generated Viability Factors</CardTitle>
+                      <CardTitle className="text-base sm:text-lg flex items-center"><BarChart3 size={20} className="mr-2 text-primary"/>AI-Generated Market Viability Factors</CardTitle>
                     </CardHeader>
                     <CardContent className="text-center">
                       <div className="h-64 sm:h-80 w-full rounded-lg bg-muted/30 border border-dashed p-4">
                         <ChartContainer config={dynamicChartConfig} className="w-full h-full">
-                          <BarChart accessibilityLayer data={validationResult.viabilityFactorsChartData} margin={{ top: 5, right: 20, left: -20, bottom: 20 }}>
+                          <BarChart accessibilityLayer data={validationResult.viabilityFactorsChartData} margin={{ top: 5, right: 5, left: -25, bottom: 20 }}>
                             <CartesianGrid vertical={false} strokeDasharray="3 3" />
                             <XAxis
                               dataKey="name"
@@ -639,7 +639,7 @@ export default function ValidationPage(): ReactNode {
                               textAnchor="end"
                               height={50}
                               interval={0}
-                              tickFormatter={(value) => value.length > 10 ? `${value.substring(0,9)}...` : value}
+                              tickFormatter={(value) => value.length > 12 ? `${value.substring(0,10)}...` : value}
                               className="text-xs"
                             />
                             <YAxis 
@@ -653,6 +653,7 @@ export default function ValidationPage(): ReactNode {
                               cursor={false}
                               content={<ChartTooltipContent />}
                             />
+                            <ChartLegend content={<ChartLegendContent wrapperStyle={{ fontSize: '0.75rem' }} />} />
                             <Bar dataKey="score" fill="var(--color-score)" radius={chartRadius} />
                           </BarChart>
                         </ChartContainer>
@@ -665,10 +666,10 @@ export default function ValidationPage(): ReactNode {
                 ) : (
                   <Card className="bg-card/80 backdrop-blur-sm">
                     <CardHeader>
-                      <CardTitle className="text-base sm:text-lg flex items-center"><BarChart3 size={20} className="mr-2 text-primary"/>Viability Factors</CardTitle>
+                      <CardTitle className="text-base sm:text-lg flex items-center"><BarChart3 size={20} className="mr-2 text-primary"/>Market Viability Factors</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted-foreground">Detailed chart data for viability factors was not generated. Try refining your input.</p>
+                      <p className="text-sm text-muted-foreground">Detailed chart data for viability factors was not generated for this idea. Try refining your input.</p>
                     </CardContent>
                   </Card>
                 )}
