@@ -70,8 +70,8 @@ export default function LoginPage() {
       
       const { access_token } = await loginResponse.json();
 
-      // Step 2: Fetch user details using the access token
-      const userResponse = await fetch(`${API_BASE_URL}/api/users/me`, {
+      // Step 2: Fetch user details using the access token from the correct endpoint
+      const userResponse = await fetch(`${API_BASE_URL}/api/auth/me`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${access_token}`,

@@ -12,7 +12,6 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
-  SidebarInset,
 } from "@/components/ui/sidebar";
 import {
   Sheet,
@@ -30,6 +29,7 @@ import { ChatbotDialog } from '@/components/chatbot/chatbot-dialog';
 import { Button } from "@/components/ui/button";
 import { useSidebar as useSidebarContextHook } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/auth-context";
+import { SidebarInset } from "../ui/sidebar";
 
 
 const mainNavItems = [

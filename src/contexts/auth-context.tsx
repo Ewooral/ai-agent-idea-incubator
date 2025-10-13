@@ -5,14 +5,14 @@ import React, { createContext, useContext, useState, useEffect, type ReactNode }
 
 // Define the user object structure based on your API response
 interface User {
-  id: number; // Changed from string based on swagger
-  uuid: string; // Added based on swagger
+  id: number;
+  uuid: string;
   email: string;
   full_name: string;
-  role: string;
-  is_active: boolean; // Added based on swagger
-  is_admin: boolean; // Added based on swagger
-  permissions: string[]; // Added based on swagger
+  is_active: boolean;
+  is_admin: boolean;
+  roles: string[];
+  permissions: string[];
 }
 
 interface AuthContextType {
