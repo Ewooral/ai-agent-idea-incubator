@@ -1,3 +1,4 @@
+
 // src/app/api/image-analysis/route.ts
 import { NextResponse, type NextRequest } from 'next/server';
 import { analyzeImageForInsights } from '@/ai/flows/analyze-image-for-insights';

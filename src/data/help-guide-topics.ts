@@ -1,6 +1,5 @@
-
 // src/data/help-guide-topics.ts
-import { Lightbulb, CheckCircle, LayoutDashboard, Hammer, Users, Settings, Palette, Globe, HelpCircle, Info, TestTube, type Icon as LucideIcon } from 'lucide-react';
+import { Lightbulb, CheckCircle, LayoutDashboard, Hammer, Users, Settings, Palette, Globe, HelpCircle, Info, TestTube, ShieldAlert, type Icon as LucideIcon } from 'lucide-react';
 
 export interface HelpTopic {
   id: string;
@@ -17,7 +16,7 @@ export const helpTopics: HelpTopic[] = [
     content: `
 Welcome to the **Idea Incubator**! This application is designed to accelerate your innovation workflow, helping you:
 - **Generate** novel ideas, from business concepts to research proposals, using AI.
-- **Analyze & Refine** these ideas with AI-driven analysis and strategic insights.
+- **Analyze & Refine** these ideas with AI-driven analysis, strategic insights, and safety evaluations.
 - **Develop** detailed, step-by-step development guides or experiment plans for your validated concepts.
 - **Connect** with a community of fellow innovators (feature in development).
 
@@ -68,18 +67,43 @@ The **Analyze Idea** page (CheckCircle icon) helps you flesh out an idea into a 
     *   **Context / Related Work (Optional)**: Add any known competitors, papers, or market context.
     *   **Focus Keywords (Optional)**: Add keywords to guide the AI's refinement.
 2.  **AI Analysis**:
-    *   Click "Analyze & Refine with AI".
+    *   Click "Analyze & Refine with AI". The AI will generate a refined hypothesis, strategic insights, and then automatically trigger a safety analysis.
 3.  **Review AI Output**:
     *   **Refined Idea/Hypothesis**: A more polished and specific version of your concept.
-    *   **Potential Pivots/Experiments**: Alternative directions to explore.
-    *   **AI-Generated Analysis**:
-        *   **Potential Impact Score**: An AI-estimated score (0-100) of the idea's potential.
-        *   **Related Work/Competitor Teaser**: A brief summary of the landscape.
-        *   **Viability Factors Chart**: A chart showing scores for factors like 'Tractability' and 'Market Size'.
+    *   **AI-Generated Analysis**: Includes a "Potential Impact Score", "Competitor Teaser", and a "Viability Factors Chart".
+    *   **Safety & Ethics Analysis**: A critical evaluation of dual-use risks, alignment challenges, and ethical considerations appears after the main analysis is complete.
 4.  **Save Idea**:
     *   Click "Save to Dashboard" to keep a record of the refined concept.
 
-**Key Takeaway**: This page provides a structured, AI-driven critique to strengthen your initial idea.
+**Key Takeaway**: This page provides a structured, AI-driven critique to strengthen your initial idea and proactively consider its safety implications.
+    `,
+  },
+  {
+    id: 'safety-analysis',
+    title: 'Safety & Ethics Analysis',
+    icon: ShieldAlert,
+    content: `
+A core feature of the Idea Incubator is the automated **Safety & Ethics Analysis** on the Analyze Idea page. This is designed to encourage responsible innovation.
+
+![Safety Analysis Preview](https://placehold.co/600x300.png?text=Safety+Analysis+Section)
+<p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Safety Analysis Section</p>
+
+**What it Does:**
+After you refine an idea, a specialized AI agent automatically analyzes it from a safety perspective. The analysis is broken down into three key areas:
+
+1.  **Potential for Misuse (Dual-Use Risks)**:
+    *   Identifies how the research or technology could be leveraged for harmful purposes by malicious actors.
+
+2.  **Safety & Alignment Risks**:
+    *   Examines potential new AI safety challenges, such as dangerous emergent capabilities, reward hacking, or issues with model control and interpretability.
+
+3.  **Ethical Considerations**:
+    *   Explores broader societal issues, including fairness, bias, economic impact, and effects on human autonomy.
+
+**Why it Matters:**
+This feature helps researchers and builders proactively identify and consider potential negative consequences of their work. For fields like AI Safety, thinking about these risks from the very beginning of a project is critical.
+
+**Key Takeaway**: Use this analysis as a crucial starting point for a deeper, human-led review of your project's potential impact on the world.
     `,
   },
   {
@@ -119,13 +143,13 @@ The **Build Studio** page (Hammer icon) helps you create a detailed, AI-generate
     ![Build Studio Form Preview](https://placehold.co/600x400.png?text=Build+Studio+Form)
     <p class="text-xs text-center text-muted-foreground mt-1" data-ai-hint="app screenshot">Build Studio Input Form</p>
 
-3.  **Generate Development Guide**:
-    *   Click **"Generate Development Guide"**.
-    *   The AI will create a step-by-step guide for building your project or conducting research.
+3.  **Generate Documents**:
+    *   **Generate Development Guide**: The AI will create a step-by-step guide for building your project or conducting research.
+    *   **Generate Business Proposal**: The AI will generate a comprehensive business proposal and a pitch deck outline, ideal for securing funding or stakeholder buy-in.
 4.  **Review and Use**:
-    *   The guide covers setup, development phases, data analysis, and potential challenges, serving as a first draft for a full project plan.
+    *   The generated documents serve as excellent first drafts for full project plans or investor pitches.
 
-**Key Takeaway**: This tool transforms your refined idea into an actionable development or research plan.
+**Key Takeaway**: This tool transforms your refined idea into actionable development plans and professional proposals.
     `,
   },
   {
@@ -174,7 +198,7 @@ You can customize your viewing experience using the controls in the sidebar foot
 
 **Language Selection (Globe Icon):**
 - Choose a language from the dropdown.
-- AI-generated content will be translated to your selected language.
+- AI-generated content like refined ideas and development guides will be translated to your selected language.
 
 **Key Takeaway**: Personalize the app's appearance and content language to suit your preferences.
     `,

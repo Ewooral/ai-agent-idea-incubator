@@ -1,4 +1,3 @@
-
 // src/app/validation/page.tsx
 "use client";
 
@@ -7,7 +6,7 @@ import { refineIdea } from '@/ai/flows/refine-idea-with-ai';
 import { saveValidatedIdeaAction } from '@/app/actions/ideaActions';
 import { translateTextAction } from '@/app/actions/translationActions';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CheckCircle, Loader2, BarChart3, Tag, Lightbulb, TrendingUp, ShieldCheck, Search, Zap, Save, Image as ImageIcon, Upload, BrainCircuit, X, TestTube, Beaker } from 'lucide-react';
+import { CheckCircle, Loader2, BarChart3, Tag, Lightbulb, TrendingUp, ShieldCheck, Search, Zap, Save, Image as ImageIcon, Upload, BrainCircuit, X, TestTube, Beaker, ShieldAlert } from 'lucide-react';
 import { useState, type ReactNode, useEffect, useMemo, useCallback } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
@@ -24,8 +23,9 @@ import { Progress } from '@/components/ui/progress';
 import { useLanguage } from '@/contexts/language-context';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-import type { AnalyzeImageOutput } from '@/ai/flows/analyze-image-for-insights';
+import type { AnalyzeImageOutput } from '@/app/schemas/image-analysis.schemas';
 import { Label } from '@/components/ui/label';
+import { analyzeIdeaSafety, type AnalyzeIdeaSafetyInput, type AnalyzeIdeaSafetyOutput } from '@/ai/flows/analyze-idea-safety';
 
 
 const validationSchema = z.object({
@@ -217,11 +217,45 @@ function ImageAnalysisSection() {
     );
 }
 
+// New component for Safety Analysis
+function SafetyAnalysisSection({ result }: { result: AnalyzeIdeaSafetyOutput | null }) {
+  if (!result) return null;
+
+  return (
+    <Card className="mt-8 shadow-xl bg-card border-destructive/50">
+      <CardHeader>
+        <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-destructive">
+          <ShieldAlert size={28} className="mr-3" /> Safety &amp; Ethics Analysis
+        </CardTitle>
+        <CardDescription>An AI-generated analysis of potential dual-use risks, safety challenges, and ethical considerations associated with your idea.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div>
+          <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground flex items-center">Potential for Misuse (Dual-Use Risks)</h3>
+          <p className="text-sm sm:text-base text-foreground/90 leading-relaxed prose prose-sm dark:prose-invert max-w-none">{result.potentialMisuse}</p>
+        </div>
+        <div>
+          <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground flex items-center">Safety &amp; Alignment Risks</h3>
+          <p className="text-sm sm:text-base text-foreground/90 leading-relaxed prose prose-sm dark:prose-invert max-w-none">{result.safetyAndAlignmentRisks}</p>
+        </div>
+        <div>
+          <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground flex items-center">Ethical Considerations</h3>
+          <p className="text-sm sm:text-base text-foreground/90 leading-relaxed prose prose-sm dark:prose-invert max-w-none">{result.ethicalConsiderations}</p>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <p className="text-xs text-muted-foreground">This analysis is AI-generated and should be used as a starting point for a deeper, human-led safety review.</p>
+      </CardFooter>
+    </Card>
+  );
+}
 
 export default function ValidationPage(): ReactNode {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [validationResult, setValidationResult] = useState<RefineIdeaOutput | null>(null);
+  const [safetyAnalysisResult, setSafetyAnalysisResult] = useState<AnalyzeIdeaSafetyOutput | null>(null);
+  const [isAnalyzingSafety, setIsAnalyzingSafety] = useState<boolean>(false);
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const { selectedLanguage, getLanguageName } = useLanguage();
@@ -255,6 +289,34 @@ export default function ValidationPage(): ReactNode {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Effect to run safety analysis after refinement is complete
+  useEffect(() => {
+    if (validationResult?.refinedIdea) {
+      const runSafetyAnalysis = async () => {
+        setIsAnalyzingSafety(true);
+        try {
+          const safetyInput: AnalyzeIdeaSafetyInput = {
+            refinedIdea: validationResult.refinedIdea,
+            associatedConcepts: validationResult.associatedConcepts,
+          };
+          const result = await analyzeIdeaSafety(safetyInput);
+          setSafetyAnalysisResult(result);
+        } catch (error) {
+          console.error("Error during safety analysis:", error);
+          toast({
+            title: "Safety Analysis Failed",
+            description: "Could not complete the safety and ethics analysis.",
+            variant: "destructive"
+          });
+        } finally {
+          setIsAnalyzingSafety(false);
+        }
+      };
+      runSafetyAnalysis();
+    }
+  }, [validationResult, toast]);
+
 
   useEffect(() => {
     if (selectedLanguage === 'en' || !validationResult?.refinedIdea) {
@@ -302,6 +364,7 @@ export default function ValidationPage(): ReactNode {
   const onSubmit: SubmitHandler<ValidationFormValues> = async (data) => {
     setIsLoading(true);
     setValidationResult(null);
+    setSafetyAnalysisResult(null);
     setTranslatedRefinedIdea(null); 
     
     setTimeout(() => {
@@ -322,7 +385,7 @@ export default function ValidationPage(): ReactNode {
       setValidationResult(result);
       toast({
         title: "Idea Refined & Analyzed!",
-        description: "AI has provided strategic insights for your idea.",
+        description: "AI has provided strategic insights for your idea. Safety analysis is now running.",
       });
     } catch (error) {
       console.error("Error validating idea:", error);
@@ -386,7 +449,7 @@ export default function ValidationPage(): ReactNode {
       <Card className="mb-8 shadow-xl bg-card">
         <CardHeader>
           <CardTitle className="font-headline text-2xl sm:text-3xl flex items-center">
-            <Zap className="mr-3 text-primary" size={32} /> AI Idea Refinement & Analysis
+            <Zap className="mr-3 text-primary" size={32} /> AI Idea Refinement &amp; Analysis
           </CardTitle>
           <CardDescription>
             Submit your idea to our AI for refinement into a testable hypothesis or concept, exploration of related topics, and a preview of its potential impact.
@@ -464,7 +527,7 @@ export default function ValidationPage(): ReactNode {
                 ) : (
                   <>
                     <Zap className="mr-2 h-5 w-5" />
-                    Analyze & Refine with AI
+                    Analyze &amp; Refine with AI
                   </>
                 )}
               </Button>
@@ -506,7 +569,7 @@ export default function ValidationPage(): ReactNode {
             <CardHeader className="flex flex-col sm:flex-row justify-between items-start gap-4">
               <div>
                 <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-primary">
-                  <Lightbulb size={28} className="mr-3"/> AI Refinement & Strategic Insights
+                  <Lightbulb size={28} className="mr-3"/> AI Refinement &amp; Strategic Insights
                 </CardTitle>
                 <CardDescription>Review the AI's analysis of your idea below. Save it to develop it further.</CardDescription>
               </div>
@@ -680,6 +743,18 @@ export default function ValidationPage(): ReactNode {
                 </p>
             </CardFooter>
           </Card>
+          
+          {isAnalyzingSafety && (
+              <div className="mt-8 flex flex-col items-center justify-center space-y-2 text-muted-foreground">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  <p>Running Safety &amp; Ethics Analysis...</p>
+              </div>
+          )}
+
+          {!isAnalyzingSafety && safetyAnalysisResult && (
+              <SafetyAnalysisSection result={safetyAnalysisResult} />
+          )}
+
           </>
         )}
          {!isLoading && !validationResult && (
