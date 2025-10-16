@@ -1,8 +1,10 @@
 # Idea Incubator: A Tool for Accelerated Research
 
-## Abstract
+## About This Project
 
-The field of AI safety is one of the most critical and fastest moving areas of research today. The complexity of the challenges, from scalable oversight to detecting deception in advanced models, requires a rapid and continuous flow of novel research ideas. However, the process of brainstorming, refining, and validating these ideas can be a significant bottleneck. The AI Safety Idea Incubator is a web application built to address this specific problem. It leverages generative AI to act as a collaborative partner for researchers, helping them generate novel research questions, refine those questions into testable hypotheses, and outline preliminary development or experiment plans. This project serves as a proof of concept for using AI to accelerate the meta-problem of AI safety research itself.
+This project began as a personal exploration—a way for me to practice building modern, agentic applications with AI at their core. Initially, it was a simple "idea generator." However, after a review with my CEO, Mr. Emmanuel, he saw the potential for something more impactful and encouraged me to develop it into a tool that could genuinely serve the research community.
+
+This is the result of that evolution. The project is still under development, and I welcome anyone who is interested to contribute, share feedback, and help shape its future. My goal is to create something truly useful for innovators and researchers.
 
 ## Project Vision and Motivation
 
@@ -22,6 +24,6 @@ The application is designed around a clear, three-stage workflow that mirrors th
 
 ## My Contribution
 
-My contribution to this project was that of the architect and director. I defined the project's vision, from the initial concept of an "idea incubator" to the specific pivot towards serving the AI safety research community. I designed the application's features and the user workflow, ensuring that each stage provided tangible value to a researcher. I then partnered with an advanced AI development assistant, guiding it with high-level directives, iterative feedback, and precise instructions to build and refine the full-stack application. My role was to ensure that all the components, from the frontend interface to the backend AI flows, came together to create a cohesive and impactful tool.
+I served as the sole architect and engineer for this project, from the initial frontend design to the final deployment. My work involved defining the project's vision, designing the application's features and user workflow, and then partnering with an advanced AI development assistant to build and refine the full-stack application. My role was to ensure that all the components—the frontend interface, the backend AI flows, and the deployment infrastructure—came together to create a cohesive and impactful tool.
 
-This project represents my ability to not only understand the technical landscape of AI but also to think strategically about how to apply these powerful tools to solve meaningful problems within the AI safety domain.
+This project represents my ability to not only understand the technical landscape of AI but also to think strategically about how to apply these powerful tools to solve meaningful problems.
