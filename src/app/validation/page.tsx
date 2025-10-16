@@ -6,7 +6,7 @@ import { refineIdea } from '@/ai/flows/refine-idea-with-ai';
 import { saveValidatedIdeaAction } from '@/app/actions/ideaActions';
 import { translateTextAction } from '@/app/actions/translationActions';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CheckCircle, Loader2, BarChart3, Tag, Lightbulb, TrendingUp, ShieldCheck, Search, Zap, Save, Image as ImageIcon, Upload, BrainCircuit, X, TestTube, Beaker, ShieldAlert } from 'lucide-react';
+import { CheckCircle, Loader2, BarChart3, Tag, Lightbulb, TrendingUp, ShieldCheck, Search, Zap, Save, Image as ImageIcon, Upload, BrainCircuit, X, TestTube, Beaker, ShieldAlert, ShieldOff, Scale } from 'lucide-react';
 import { useState, type ReactNode, useEffect, useMemo, useCallback } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
@@ -26,6 +26,7 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 
 import type { AnalyzeImageOutput } from '@/app/schemas/image-analysis.schemas';
 import { Label } from '@/components/ui/label';
 import { analyzeIdeaSafety, type AnalyzeIdeaSafetyInput, type AnalyzeIdeaSafetyOutput } from '@/ai/flows/analyze-idea-safety';
+import { MarkdownDisplay } from '@/components/markdown-display';
 
 
 const validationSchema = z.object({
@@ -223,29 +224,49 @@ function SafetyAnalysisSection({ result }: { result: AnalyzeIdeaSafetyOutput | n
 
   return (
     <Card className="mt-8 shadow-xl bg-card border-destructive/50">
-      <CardHeader>
-        <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-destructive">
-          <ShieldAlert size={28} className="mr-3" /> Safety &amp; Ethics Analysis
-        </CardTitle>
-        <CardDescription>An AI-generated analysis of potential dual-use risks, safety challenges, and ethical considerations associated with your idea.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div>
-          <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground flex items-center">Potential for Misuse (Dual-Use Risks)</h3>
-          <p className="text-sm sm:text-base text-foreground/90 leading-relaxed prose prose-sm dark:prose-invert max-w-none">{result.potentialMisuse}</p>
-        </div>
-        <div>
-          <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground flex items-center">Safety &amp; Alignment Risks</h3>
-          <p className="text-sm sm:text-base text-foreground/90 leading-relaxed prose prose-sm dark:prose-invert max-w-none">{result.safetyAndAlignmentRisks}</p>
-        </div>
-        <div>
-          <h3 className="text-base sm:text-lg font-semibold mb-2 text-foreground flex items-center">Ethical Considerations</h3>
-          <p className="text-sm sm:text-base text-foreground/90 leading-relaxed prose prose-sm dark:prose-invert max-w-none">{result.ethicalConsiderations}</p>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <p className="text-xs text-muted-foreground">This analysis is AI-generated and should be used as a starting point for a deeper, human-led safety review.</p>
-      </CardFooter>
+        <CardHeader>
+            <CardTitle className="font-headline text-xl sm:text-2xl flex items-center text-destructive">
+            <ShieldAlert size={28} className="mr-3" /> Safety &amp; Ethics Analysis
+            </CardTitle>
+            <CardDescription>An AI-generated analysis of potential dual-use risks, safety challenges, and ethical considerations associated with your idea.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+            <Card className="bg-red-500/10 border-red-500/30">
+                <CardHeader>
+                    <CardTitle className="text-base sm:text-lg text-red-800 dark:text-red-300 flex items-center">
+                        <ShieldOff size={20} className="mr-2"/> Potential for Misuse (Dual-Use Risks)
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <MarkdownDisplay content={result.potentialMisuse} />
+                </CardContent>
+            </Card>
+
+            <Card className="bg-yellow-500/10 border-yellow-500/30">
+                <CardHeader>
+                    <CardTitle className="text-base sm:text-lg text-yellow-800 dark:text-yellow-300 flex items-center">
+                        <Zap size={20} className="mr-2"/> Safety &amp; Alignment Risks
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                     <MarkdownDisplay content={result.safetyAndAlignmentRisks} />
+                </CardContent>
+            </Card>
+
+            <Card className="bg-blue-500/10 border-blue-500/30">
+                <CardHeader>
+                    <CardTitle className="text-base sm:text-lg text-blue-800 dark:text-blue-300 flex items-center">
+                        <Scale size={20} className="mr-2"/> Ethical Considerations
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <MarkdownDisplay content={result.ethicalConsiderations} />
+                </CardContent>
+            </Card>
+        </CardContent>
+        <CardFooter>
+            <p className="text-xs text-muted-foreground">This analysis is AI-generated and should be used as a starting point for a deeper, human-led safety review.</p>
+        </CardFooter>
     </Card>
   );
 }
