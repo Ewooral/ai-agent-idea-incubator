@@ -14,7 +14,7 @@ This led to the creation of the Idea Incubator. The vision was to build a platfo
 
 ## Application Features and Workflow
 
-The application is designed around a clear, three-stage workflow that mirrors the early stages of a research project.
+The application is designed around a clear, three-stage workflow that mirrors the early stages of  research project.
 
 1.  **Novel Idea Generation**: The user starts by either entering a general problem area (like "making model reasoning more transparent") or a few keywords (like "mechanistic interpretability, sparse autoencoders"). The application’s AI then generates a set of novel research questions, each with a "novelty score" to indicate how original the concept is. The user can also explore predefined topics that are highly relevant to AI safety.
 
